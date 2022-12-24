@@ -25,15 +25,48 @@
         @csrf
         <!-- Name -->
         <div>
-            <label for="email" >Name</label>
+            <label for="name" >Name</label>
 
-            <input id="email" class="block mt-1 w-full" type="text" name="name" required autofocus />
+            <input id="name" class="block mt-1 w-full" type="text" name="name" required autofocus />
+            @error('name')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
         <!-- Email Address -->
         <div>
             <label for="email" >Email</label>
 
             <input id="email" class="block mt-1 w-full" type="email" name="email" required />
+            @error('email')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <!-- Mobile Number -->
+        <div class="mt-4">
+            <label for="primary_contact_number">Mobile Number</label>
+
+            <input id="primary_contact_number" class="block mt-1 w-full"
+                   type="tel"
+                   name="primary_contact_number"
+                   required
+            />
+            @error('primary_contact_number')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <!-- Other contact number -->
+        <div class="mt-4">
+            <label for="secondary_contact_number">Other Contact Number</label>
+
+            <input id="secondary_contact_number" class="block mt-1 w-full"
+                   type="tel"
+                   name="secondary_contact_number"
+            />
+            @error('secondary_contact_number')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
 
         <!-- Password -->
@@ -41,18 +74,22 @@
             <label for="password">Password</label>
 
             <input id="password" class="block mt-1 w-full"
-               type="password"
-               name="password"
-               required />
+                   type="password"
+                   name="password"
+                   required
+            />
+            @error('password')
+            <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
         </div>
-
         <div class="mt-4">
             <label for="password">Confirm Password</label>
 
             <input id="password" class="block mt-1 w-full"
                type="password"
                name="password_confirmation"
-               required />
+               required
+            />
         </div>
 
         <div class="flex items-center justify-end mt-4">

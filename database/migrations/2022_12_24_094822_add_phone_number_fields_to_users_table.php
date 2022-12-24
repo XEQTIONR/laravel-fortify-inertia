@@ -17,12 +17,12 @@ return new class extends Migration
 
             $table->string('primary_contact_number', 20)
                 ->after('remember_token');
-            $table->string('other_contact_number', 20)->nullable()
+            $table->string('secondary_contact_number', 20)->nullable()
                 ->after('primary_contact_number');
             $table->string('sms_verification_code', 10)
-                ->after('other_contact_number');
+                ->after('secondary_contact_number');
             $table->timestamp('sms_verified_at')->nullable()
-                ->after('other_contact_number');
+                ->after('sms_verification_code');
         });
     }
 
@@ -36,7 +36,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'primary_contact_number',
-                'other_contact_number',
+                'secondary_contact_number',
                 'sms_verification_code',
                 'sms_verified_at'
             ]);
