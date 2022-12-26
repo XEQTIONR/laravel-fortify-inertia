@@ -30,9 +30,16 @@ class CreateNewUser implements CreatesNewUsers
                 'max:255',
                 Rule::unique(User::class),
             ],
-            'primary_contact_number' => ['required', 'string', 'max:20'],
+            'primary_contact_number' => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique(User::class),
+            ],
             'secondary_contact_number' => ['nullable','string','max:20'],
             'password' => $this->passwordRules(),
+        ], [
+            'primary_contact_number' => 'This mobile number is already registered.'
         ])->validate();
 
         return User::create([

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
 
             $table->string('primary_contact_number', 20)
-                ->after('remember_token');
+                ->after('remember_token')->unique();
             $table->string('secondary_contact_number', 20)->nullable()
                 ->after('primary_contact_number');
             $table->string('sms_verification_code', 10)
