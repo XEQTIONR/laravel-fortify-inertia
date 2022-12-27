@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Laravel\Fortify\Rules\Password;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,8 +45,8 @@ Route::post('/forgot-password-request', function(Request $request) {
     $validated = $request->validate(['primary_contact_number' => 'required|string|max:20|exists:users'],
         ['primary_contact_number' => 'This mobile number is not registered.']);
 
-    $verification_code = strval( random_int(10000000, 99999999) );
-//    $verification_code = 123456;
+//    $verification_code = strval( random_int(10000000, 99999999) );
+    $verification_code = 123456;
     DB::table('password_resets')->insert([
         'email'      => $validated['primary_contact_number'],
         'token'      => Hash::make( $verification_code ),
@@ -67,26 +69,52 @@ Route::post('/forgot-password-code', function(Request $request) {
 
     $validated = $validator->validated();
 
+    // mobile number should always exist.
     $mobile_number = $request->session()->get('primary_contact_number', false);
 
-    if ($mobile_number) {
-        $record = DB::table('password_resets')
-                ->where('email', $mobile_number)
-                ->orderByDesc('created_at')
-                ->first();
+    $record = DB::table('password_resets')
+            ->where('email', $mobile_number)
+            ->orderByDesc('created_at')
+            ->first();
 
-        if ($record && Hash::check($validated['code'], $record->token)) {
-            return ['hash match'];
-        } else {
-            $request->session()->flash('code-mismatch-message', 'SMS code is invalid');
-            return view('auth.forgot-password-code');
-        }
+    if ($record && Hash::check($validated['code'], $record->token)) {
+        return redirect()->route('reset-password-new', ['code' => $validated['code']]);
     }
-
-    return [ 'not found' ];
-    //return [$request->session()->get('primary_contact_number'), $request->code];
+    $request->session()->flash('code-mismatch-message', 'SMS code is invalid');
+    return view('auth.forgot-password-code');
 
 })->name('forgot-password-code');
+
+Route::get('/reset-password-new/{code}', function(Request $request){
+
+    return view('auth.reset-password');
+})->name('reset-password-new');
+
+Route::post('/reset-password-new/{code}', function(Request $request, $code){
+
+    $validated = $request->validate([
+        'password' => ['required', 'string', new Password, 'confirmed'],
+    ]);
+
+    $mobile_number = $request->session()->get('primary_contact_number');
+    $record = DB::table('password_resets')
+        ->where('email', $mobile_number)
+        ->orderByDesc('created_at')
+        ->first();
+
+    if ( $record && Hash::check($code, $record->token) ) {
+
+        $user = User::where('primary_contact_number', $record->email)->first();
+        if ( $user ) {
+            $user->password = Hash::make($validated['password']);
+            $user->save();
+
+            return redirect(route('login'));
+            // redirect with flash message
+        }
+    }
+});
+
 
 Route::get('/', function () {
     return view('welcome');

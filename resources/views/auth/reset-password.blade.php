@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Register</title>
+    <title>Reset Password</title>
 
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -21,28 +21,39 @@
     </style>
 </head>
 <body class="antialiased">
-<form method="POST" action="{{route('forgot-password-code')}}">
+<form method="POST" action="/reset-password-new/{{request()->route('code')}}">
     @csrf
-    <!-- SMS Code -->
-    <div class="mt-4">
-        <label for="code">Code</label>
+    <input type="hidden" name="code" value="{{request()->route('code')}}" />
 
-        <input id="code" class="block mt-1 w-full"
-               type="tel"
-               name="code"
+    <!-- Password -->
+    <div class="mt-4">
+        <label for="password">Password</label>
+
+        <input id="password" class="block mt-1 w-full"
+               type="password"
+               name="password"
                required
         />
-        @error('code')
+        @error('password')
         <div class="alert alert-danger">{{ $message }}</div>
         @enderror
-        @if(session()->has('code-mismatch-message'))
-            <div class="alert alert-danger">{{ session()->get('code-mismatch-message') }}</div>
-        @endif
-
     </div>
+    <div class="mt-4">
+        <label for="password_confirmation">Confirm Password</label>
+
+        <input id="password" class="block mt-1 w-full"
+               type="password"
+               name="password_confirmation"
+               required
+        />
+        @error('password_confirmation')
+        <div class="alert alert-danger">{{ $message }}</div>
+        @enderror
+    </div>
+
     <div class="flex items-center justify-end mt-4">
         <button class="ml-3" type="submit">
-            {{ __('Verify Code') }}
+            {{ __('Reset Password') }}
         </button>
     </div>
 </form>
