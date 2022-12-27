@@ -36,7 +36,7 @@
         <div>
             <label for="email" >Email</label>
 
-            <input id="email" class="block mt-1 w-full" type="email" name="email" required />
+            <input id="email" class="block mt-1 w-full" type="email" name="email" />
             @error('email')
             <div class="alert alert-danger">{{ $message }}</div>
             @enderror
