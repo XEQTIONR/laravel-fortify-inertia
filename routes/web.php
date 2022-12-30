@@ -120,6 +120,10 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/inertiatest', function () {
+    return \Inertia\Inertia::render('Test');
+})->name('welcome');
+
 Route::get('/home', function () {
     return view('home');
 })->middleware('auth')->name('home');
