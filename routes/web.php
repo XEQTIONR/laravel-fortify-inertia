@@ -126,7 +126,7 @@ Route::get('/inertiatest', function () {
 
 Route::get('/home', function () {
     return \Inertia\Inertia::render('Home');
-})->middleware('auth')->name('home');
+})->middleware(['auth', 'verified.phone'])->name('home');
 
 Route::get('/test', function () {
     echo lang_path('en/auth.php');
