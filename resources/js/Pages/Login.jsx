@@ -1,66 +1,63 @@
-import { Inertia } from '@inertiajs/inertia'
-import React, { useState } from 'react'
-import useInput from "../hooks/useInput";
+import { useForm } from '@inertiajs/inertia-react'
 
-export default function Login ({errors}) {
+export default function Login () {
 
-    const [values, handleChange] = useInput({
-        email: "",
-        password: "",
+    const { data, setData, post, processing, errors } = useForm({
+        email: '',
+        password: '',
         remember: false,
-    });
+    })
 
     function handleSubmit(e) {
         e.preventDefault();
-        Inertia.post(route('login'), values);
+        post(route('login'),{
+            onError: () => setData('password', '')
+        });
     }
     return (
         <>
             { errors.email && <div>{ errors.email }</div> }
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email">{ trans('labels.Email or phone number') }</label>
                     <input
-                        id="email"
                         type="text"
-                        name="email"
                         required
                         autoFocus
-                        value={values.email}
-                        onChange={handleChange}
+                        value={data.email}
+                        onChange={e => setData('email', e.target.value)}
                     />
                 </div>
 
                 <div className="mt-4">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">{ trans('labels.Password') }</label>
                     <input
-                        id="password"
                         type="password"
-                        name="password"
                         required
-                        value={values.password}
-                        onChange={handleChange}
+                        value={data.password}
+                        onChange={e => setData('password', e.target.value)}
                     />
                 </div>
 
                 <div className="block mt-4">
                     <label htmlFor="remember">
                     <input
-                        id="remember"
                         type="checkbox"
-                        name="remember"
-                        checked={values.remember}
-                        onChange={handleChange}
+                        checked={data.remember}
+                        onChange={e => setData('remember', e.target.value)}
                     />
-                    Remember me
+                        { trans('labels.Remember me')}
                     </label>
                 </div>
 
 
 
                 <div>
-                    <button type="submit">
-                        Log In
+                    <button
+                        type="submit"
+                        disabled={processing}
+                    >
+                        { trans('labels.Log in') }
                     </button>
                 </div>
             </form>
