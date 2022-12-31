@@ -127,3 +127,34 @@ Route::get('/inertiatest', function () {
 Route::get('/home', function () {
     return \Inertia\Inertia::render('Home');
 })->middleware('auth')->name('home');
+
+Route::get('/test', function () {
+    echo lang_path('en/auth.php');
+});
+
+Route::get('/forget', function() {
+   \Illuminate\Support\Facades\Cache::forget('lang_en.js');
+   echo 'forgot';
+});
+
+Route::get('js/translations.js', function () {
+    $lang = config('app.locale');
+    $strings = \Illuminate\Support\Facades\Cache::rememberForever('lang_'.$lang.'.js', function () use($lang) {
+        $files = [
+            lang_path($lang . '/auth.php'),
+            lang_path($lang . '/pagination.php'),
+            lang_path($lang . '/labels.php'),
+        ];
+        $strings = [];
+
+        foreach ($files as $file) {
+            $name = basename($file, '.php');
+            $strings[$name] = require $file;
+        }
+
+        return $strings;
+    });
+    header('Content-Type: text/javascript');
+    echo('window.i18n = ' . json_encode($strings) . ';');
+    exit();
+})->name('translations');
