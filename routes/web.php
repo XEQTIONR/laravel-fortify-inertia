@@ -125,5 +125,5 @@ Route::get('/inertiatest', function () {
 })->name('welcome');
 
 Route::get('/home', function () {
-    return view('home');
+    return \Inertia\Inertia::render('Home');
 })->middleware('auth')->name('home');
