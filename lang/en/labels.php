@@ -11,4 +11,7 @@ return [
     'Password' => 'Password',
     'Register' => 'Register',
     'Remember me' => 'Remember me',
+    'Resend verification code' => 'Resend verification code',
+    'Verification code' => 'Verification code',
+    'Verify' => 'Verify'
 ];

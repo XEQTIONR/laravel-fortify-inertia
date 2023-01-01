@@ -11,4 +11,7 @@ return [
     'Password' => 'পাসওয়ার্ড',
     'Register' => 'নিবন্ধন করুন',
     'Remember me' => 'আমাকে মনে রাখো',
+    'Resend verification code' => 'যাচাইকরণ কোড আবার পাঠান',
+    'Verification code' => 'যাচাইকরণ কোড',
+    'Verify' => 'যাচাই করুন'
 ];

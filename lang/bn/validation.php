@@ -145,6 +145,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'ulid' => 'The :attribute must be a valid ULID.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'verification_code_match' => 'প্রদত্ত যাচাইকরণ কোডটি ভুল।',
 
     /*
     |--------------------------------------------------------------------------

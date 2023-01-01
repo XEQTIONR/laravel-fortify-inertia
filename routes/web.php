@@ -19,14 +19,14 @@ use Laravel\Fortify\Rules\Password;
 
 Route::get('/phone-verification', function(Request $request) {
     $request->session()->reflash();
-    return view('auth.verify-phone');
+    return \Inertia\Inertia::render('PhoneVerification');
 })->name('verify-phone');
 
 Route::post('/phone-verification', function(\Illuminate\Http\Request $request) {
     if ( $request->verification_code !== $request->user()->sms_verification_code) {
         $request->session()->reflash();
         return back()->withErrors([
-            'verification_code' => ['The provided verification_code does not match our records.']
+            'verification_code' => [trans('validation.verification_code_match')]
         ]);
     } else {
         $user = $request->user();
@@ -80,7 +80,7 @@ Route::post('/forgot-password-code', function(Request $request) {
     if ($record && Hash::check($validated['code'], $record->token)) {
         return redirect()->route('reset-password-new', ['code' => $validated['code']]);
     }
-    $request->session()->flash('code-mismatch-message', 'SMS code is invalid');
+    $request->session()->flash('code-mismatch-message', trans('validation.verification_code_match'));
     return view('auth.forgot-password-code');
 
 })->name('forgot-password-code');
@@ -120,8 +120,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/inertiatest', function () {
-    return \Inertia\Inertia::render('Test');
+Route::get('/translationtest', function () {
+    return view('page2');
 })->name('welcome');
 
 Route::get('/home', function () {
@@ -133,7 +133,7 @@ Route::get('/test', function () {
 });
 
 Route::get('/forget', function() {
-   \Illuminate\Support\Facades\Cache::forget('lang_en.js');
+   \Illuminate\Support\Facades\Cache::forget('lang_'.config('app.locale').'.js');
    echo 'forgot';
 });
 
