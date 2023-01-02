@@ -42,8 +42,9 @@ Route::post('/phone-verification', function(\Illuminate\Http\Request $request) {
 // Rest of reset password is in FortifyServiceProvider
 Route::post('/forgot-password-request', function(Request $request) {
 
-    $validated = $request->validate(['primary_contact_number' => 'required|string|max:20|exists:users'],
-        ['primary_contact_number' => 'This mobile number is not registered.']);
+    $validated = $request->validate(['primary_contact_number' => 'required|string|max:20|exists:users'],[
+        'primary_contact_number' => trans('validation.exists', ['attribute' => strtolower(trans('labels.Mobile number'))])
+    ]);
 
 //    $verification_code = strval( random_int(10000000, 99999999) );
     $verification_code = 123456;
@@ -53,12 +54,11 @@ Route::post('/forgot-password-request', function(Request $request) {
         'created_at' => now(),
     ]);
     $request->session()->put('primary_contact_number', $validated['primary_contact_number']);
-    return view('auth.forgot-password-code');
+    return \Inertia\Inertia::render('ForgotPasswordCode');
 
 })->name('forgot-password-request');
 
 Route::post('/forgot-password-code', function(Request $request) {
-
     $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
         'code' => 'required|string'
     ]);
@@ -80,14 +80,12 @@ Route::post('/forgot-password-code', function(Request $request) {
     if ($record && Hash::check($validated['code'], $record->token)) {
         return redirect()->route('reset-password-new', ['code' => $validated['code']]);
     }
-    $request->session()->flash('code-mismatch-message', trans('validation.verification_code_match'));
-    return view('auth.forgot-password-code');
 
+    return \Inertia\Inertia::render('ForgotPasswordCode', ['code_mismatch_message' => trans('validation.verification_code_match')]);
 })->name('forgot-password-code');
 
-Route::get('/reset-password-new/{code}', function(Request $request){
-
-    return view('auth.reset-password');
+Route::get('/reset-password-new/{code}', function($code){
+    return \Inertia\Inertia::render( 'ResetPassword', ['code' => $code] );
 })->name('reset-password-new');
 
 Route::post('/reset-password-new/{code}', function(Request $request, $code){

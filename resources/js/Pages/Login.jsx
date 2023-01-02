@@ -1,4 +1,5 @@
-import { useForm } from '@inertiajs/inertia-react'
+import { useForm, Link } from '@inertiajs/inertia-react'
+
 
 export default function Login () {
 
@@ -59,6 +60,9 @@ export default function Login () {
                     >
                         { trans('labels.Log in') }
                     </button>
+
+                    <Link href={route('password.request')}>Forgot my password</Link>
+
                 </div>
             </form>
         </>
