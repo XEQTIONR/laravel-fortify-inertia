@@ -12,4 +12,9 @@ export default defineConfig({
         }),
         react()
     ],
+    resolve: {
+        alias: {
+            '@mui/styled-engine': '@mui/styled-engine-sc'
+        },
+    },
 });
