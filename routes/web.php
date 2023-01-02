@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -162,11 +163,18 @@ Route::prefix('admin')->name('admin.')->group(function() {
        return \Inertia\Inertia::render('Login', [ 'loginRoute' => route('admin.login') ]);
     })->name('login');
 
-    Route::post('/login', [\App\Http\Controllers\Admin\AuthController::class, 'authenticate']);
-    Route::get('/user', [\App\Http\Controllers\Admin\AuthController::class, 'user']);
+    Route::post('/login', [AuthController::class, 'authenticate']);
+    Route::get('/user', [AuthController::class, 'user']);
 
-    Route::post('/logout',[\App\Http\Controllers\Admin\AuthController::class, 'logout'] );
-    Route::get('/protected', function() {
-       return \Inertia\Inertia::render('Test');
-    })->middleware('auth.admin:staff');
+    Route::post('/logout', [AuthController::class, 'logout'] );
+
+
+    Route::middleware('auth.admin:staff')->group(function() {
+        Route::get('/dashboard', function() {
+            return \Inertia\Inertia::render('Admin/Dashboard');
+        });
+        Route::get('/protected', function() {
+            return \Inertia\Inertia::render('Test');
+        });
+    });
 });

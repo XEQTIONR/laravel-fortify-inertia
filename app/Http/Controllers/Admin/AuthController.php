@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public const HOME = '';
+    public const HOME = '/admin/dashboard';
     /**
      * Handle an authentication attempt.
      *
