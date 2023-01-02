@@ -1,7 +1,7 @@
 import { useForm, Link } from '@inertiajs/inertia-react'
 
 
-export default function Login () {
+export default function Login ({ loginRoute }) {
 
     const { data, setData, post, processing, errors } = useForm({
         email: '',
@@ -11,7 +11,7 @@ export default function Login () {
 
     function handleSubmit(e) {
         e.preventDefault();
-        post(route('login'),{
+        post( loginRoute ?? route('login'),{
             onError: () => setData('password', '')
         });
     }

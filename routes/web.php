@@ -156,3 +156,17 @@ Route::get('js/translations.js', function () {
     echo('window.i18n = ' . json_encode($strings) . ';');
     exit();
 })->name('translations');
+
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('/login', function() {
+       return \Inertia\Inertia::render('Login', [ 'loginRoute' => route('admin.login') ]);
+    })->name('login');
+
+    Route::post('/login', [\App\Http\Controllers\Admin\AuthController::class, 'authenticate']);
+    Route::get('/user', [\App\Http\Controllers\Admin\AuthController::class, 'user']);
+
+    Route::post('/logout',[\App\Http\Controllers\Admin\AuthController::class, 'logout'] );
+    Route::get('/protected', function() {
+       return \Inertia\Inertia::render('Test');
+    })->middleware('auth.admin:staff');
+});
