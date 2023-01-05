@@ -14,10 +14,22 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from "@mui/icons-material/Menu";
-import {IconButton} from "@mui/material";
-import Slide from '@mui/material/Slide';
+import {createTheme, IconButton} from "@mui/material";
 
 const drawerWidth = 240;
+const mainWidth = window.innerWidth - drawerWidth;
+const theme = createTheme({
+    transitions: {
+        easing: {
+            // The sharp curve is used by objects that may return to the screen at any time.
+            sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
+        },
+        duration: {
+            // recommended when something is leaving screen
+            leavingScreen: 195,
+        },
+    },
+});
 
 export default function Dashboard2() {
 
@@ -81,10 +93,15 @@ export default function Dashboard2() {
                         </List>
                     </Box>
                 </Drawer>
-
             <Box
+                style={{
+                    transition: theme.transitions.create("all", {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.leavingScreen }),
+                    width: show ? mainWidth : mainWidth + drawerWidth,
+                }}
                 component="main"
-                sx={{ flexGrow: 1, p: 3 }}
+                sx={{ flexShrink: 0, p: 3 }}
             >
                 <Toolbar />
                 <Typography paragraph>
