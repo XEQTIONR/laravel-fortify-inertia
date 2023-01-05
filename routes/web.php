@@ -166,13 +166,22 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('/login', [AuthController::class, 'authenticate']);
     Route::get('/user', [AuthController::class, 'user']);
 
-    Route::post('/logout', [AuthController::class, 'logout'] );
+    Route::get('/logout', [AuthController::class, 'logout'] );
 
+
+    Route::get('/dashboard3', function() {
+        return \Inertia\Inertia::render('Admin/Dashboard3');
+    });
+    Route::get('/dashboard2', function() {
+        return \Inertia\Inertia::render('Admin/Dashboard2');
+    });
+    Route::get('/dashboard', function() {
+        return \Inertia\Inertia::render('Admin/Dashboard');
+    });
 
     Route::middleware('auth.admin:staff')->group(function() {
-        Route::get('/dashboard', function() {
-            return \Inertia\Inertia::render('Admin/Dashboard');
-        });
+
+
         Route::get('/protected', function() {
             return \Inertia\Inertia::render('Test');
         });

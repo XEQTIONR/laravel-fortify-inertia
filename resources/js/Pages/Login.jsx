@@ -1,5 +1,5 @@
 import { useForm, Link } from '@inertiajs/inertia-react'
-
+import Button from '@mui/material/Button';
 
 export default function Login ({ loginRoute }) {
 
@@ -54,12 +54,15 @@ export default function Login ({ loginRoute }) {
 
 
                 <div>
-                    <button
+                    <Button
+                        className=""
+                        size="medium"
+                        variant="contained"
                         type="submit"
                         disabled={processing}
                     >
                         { trans('labels.Log in') }
-                    </button>
+                    </Button>
 
                     <Link href={route('password.request')}>Forgot my password</Link>
 
