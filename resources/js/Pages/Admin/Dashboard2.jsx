@@ -42,10 +42,10 @@ export default function Dashboard2() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Slide direction="right" in={show}>
-                <Drawer
 
-                    variant="permanent"
+                <Drawer
+                    open={show}
+                    variant="persistent"
                     sx={{
                         width: drawerWidth,//show ? drawerWidth : 0,
                         flexShrink: 0,
@@ -81,7 +81,7 @@ export default function Dashboard2() {
                         </List>
                     </Box>
                 </Drawer>
-            </Slide>
+
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <Toolbar />
                 <Typography paragraph>
