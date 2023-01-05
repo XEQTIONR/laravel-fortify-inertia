@@ -47,7 +47,7 @@ export default function Dashboard2() {
                     open={show}
                     variant="persistent"
                     sx={{
-                        width: drawerWidth,//show ? drawerWidth : 0,
+                        width: show ? drawerWidth : 0,
                         flexShrink: 0,
                         [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
                     }}
@@ -82,7 +82,10 @@ export default function Dashboard2() {
                     </Box>
                 </Drawer>
 
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <Box
+                component="main"
+                sx={{ flexGrow: 1, p: 3 }}
+            >
                 <Toolbar />
                 <Typography paragraph>
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
