@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -17,7 +17,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import {createTheme, IconButton} from "@mui/material";
 
 const drawerWidth = 240;
-const mainWidth = window.innerWidth - drawerWidth;
+
 const theme = createTheme({
     transitions: {
         easing: {
@@ -33,7 +33,20 @@ const theme = createTheme({
 
 export default function Dashboard2() {
 
-    const [ show, setShow ] = useState(true);
+    const [ show, setShow ] = useState(false);
+    const [ mainWidth, setMainWidth ] = useState(window.innerWidth);
+    const [ menuType, setMenuType ] = useState((window.innerWidth > 800) ? 'persistent' : 'temporary');
+    useEffect(() => {
+        function handleResize() {
+            setMainWidth(window.innerWidth);
+            if (window.innerWidth <= 800 && menuType === 'persistent' ) {
+                setMenuType('temporary');
+            } else if (window.innerWidth > 800 && menuType === 'temporary' ) {
+                setMenuType('persistent');
+            }
+        }
+        window.addEventListener('resize', handleResize)
+    });
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -57,7 +70,8 @@ export default function Dashboard2() {
 
                 <Drawer
                     open={show}
-                    variant="persistent"
+                    variant={menuType}
+                    onClose={() => (mainWidth < 800) && setShow(false)}
                     sx={{
                         width: show ? drawerWidth : 0,
                         flexShrink: 0,
@@ -98,7 +112,7 @@ export default function Dashboard2() {
                     transition: theme.transitions.create("all", {
                         easing: theme.transitions.easing.sharp,
                         duration: theme.transitions.duration.leavingScreen }),
-                    width: show ? mainWidth : mainWidth + drawerWidth,
+                    width: (show && menuType === 'persistent') ? mainWidth - drawerWidth : mainWidth,
                 }}
                 component="main"
                 sx={{ flexShrink: 0, p: 3 }}
