@@ -4,10 +4,17 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/XEQTIONR/banglafaker"
+        }
+    ],
     "require": {
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.4",
+        "jzonta/faker-restaurant": "^2.0",
         "laravel/fortify": "^1.14",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
@@ -21,7 +28,8 @@
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "spatie/laravel-ignition": "^1.0",
+        "xeqtionr/banglafaker": "dev-master"
     },
     "autoload": {
         "psr-4": {
