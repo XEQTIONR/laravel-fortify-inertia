@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from '@inertiajs/inertia-react';
 import {
     AppBar,
     Box,
@@ -90,10 +91,12 @@ export default function Dashboard({ children, navLinks }) {
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
                                 <ListItemButton>
-                                    <ListItemIcon>
-                                        {item.icon}
-                                    </ListItemIcon>
-                                    <ListItemText primary={item.label} />
+                                    <Link href={item.link} class="flex w-full">
+                                        <ListItemIcon>
+                                            {item.icon}
+                                        </ListItemIcon>
+                                        <ListItemText primary={item.label} />
+                                    </Link>
                                 </ListItemButton>
                             </ListItem>
                         ))}

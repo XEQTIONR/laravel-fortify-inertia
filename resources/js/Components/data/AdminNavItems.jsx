@@ -7,12 +7,12 @@ export default [
     {
         label: 'Products',
         icon: <FastfoodIcon />,
-        link: '#'
+        link: '/admin/dashboard'
     },
     {
         label: 'Orders',
         icon: <ListIcon />,
-        link: '#'
+        link: '/admin/second'
     },
     {
         label: 'Customers',
