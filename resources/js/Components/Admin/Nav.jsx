@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from '@inertiajs/inertia-react';
+import { Inertia } from '@inertiajs/inertia'
+
 import {
     AppBar,
     Box,
@@ -40,20 +41,30 @@ const theme = createTheme({
 
 export default function Dashboard({ children, navLinks }) {
 
-    const [ show, setShow ] = useState(false);
+    const [ show, setShow ] = useState(window.innerWidth <= 800
+        ? false
+        : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
+    );
     const [ mainWidth, setMainWidth ] = useState(window.innerWidth);
     const [ menuType, setMenuType ] = useState((window.innerWidth > 800) ? 'persistent' : 'temporary');
     useEffect(() => {
         function handleResize() {
             setMainWidth(window.innerWidth);
             if (window.innerWidth <= 800 && menuType === 'persistent' ) {
+                setShow(false)
                 setMenuType('temporary');
             } else if (window.innerWidth > 800 && menuType === 'temporary' ) {
+                setShow(true)
                 setMenuType('persistent');
             }
         }
         window.addEventListener('resize', handleResize)
     });
+
+    useEffect( () => {
+        window.localStorage.setItem('showSidebar', show);
+    }, [show]);
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -90,13 +101,13 @@ export default function Dashboard({ children, navLinks }) {
                     <List>
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
-                                <ListItemButton>
-                                    <Link href={item.link} class="flex w-full">
+                                <ListItemButton
+                                    onClick={ () => setTimeout( () => Inertia.get(item.link), 300) }
+                                >
                                         <ListItemIcon>
                                             {item.icon}
                                         </ListItemIcon>
                                         <ListItemText primary={item.label} />
-                                    </Link>
                                 </ListItemButton>
                             </ListItem>
                         ))}
@@ -118,6 +129,7 @@ export default function Dashboard({ children, navLinks }) {
             </Drawer>
             <Box
                 style={{
+                    // may choose to remove this transition.
                     transition: theme.transitions.create("all", {
                         easing: theme.transitions.easing.sharp,
                         duration: theme.transitions.duration.leavingScreen }),
