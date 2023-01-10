@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Rules\Password;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -177,4 +179,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
             return \Inertia\Inertia::render('Admin/Second');
         });
     });
+
+    Route::resource('products', ProductController::class);
 });

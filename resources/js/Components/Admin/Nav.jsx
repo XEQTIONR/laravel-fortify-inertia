@@ -130,15 +130,20 @@ export default function Dashboard({ children, navLinks }) {
             <Box
                 style={{
                     // may choose to remove this transition.
-                    transition: theme.transitions.create("all", {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.leavingScreen }),
+                    // transition: theme.transitions.create("all", {
+                    //     easing: theme.transitions.easing.sharp,
+                    //     duration: theme.transitions.duration.leavingScreen }),
                     width: (show && menuType === 'persistent') ? mainWidth - drawerWidth : mainWidth,
                 }}
                 component="main"
-                sx={{ flexShrink: 0, p: 3 }}
+                sx={{
+                     //flexShrink: 0, if using transition
+                    height: '100vh',
+                    pt: 10,
+                    px: 3,
+                    pb: 2,
+                }}
             >
-                <Toolbar />
                 { children }
             </Box>
         </Box>
