@@ -171,14 +171,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout'] );
 
 
-    Route::middleware('auth.admin:staff')->group(function() {
+    Route::middleware('auth:staff')->group(function() {
         Route::get('/dashboard', function() {
             return \Inertia\Inertia::render('Admin/Dashboard');
         });
         Route::get('/second', function() {
             return \Inertia\Inertia::render('Admin/Second');
         });
+        Route::resource('products', ProductController::class);
     });
-
-    Route::resource('products', ProductController::class);
 });
