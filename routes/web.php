@@ -172,6 +172,24 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
 
     Route::middleware('auth:staff')->group(function() {
+
+        Route::get('/token', function(Request $request) {
+
+            \Illuminate\Support\Facades\Log::info(json_encode( $request->getAcceptableContentTypes()));
+            $accept = $request->getAcceptableContentTypes();
+
+            if( count( $accept ) === 1 && $accept[0] === 'application/json' ) {
+                $request->user()->tokens()->delete();
+                $token = $request->user()->createToken('default staff token');
+                return $token->plainTextToken;
+            }
+
+            return response('Bad Request', 400)
+                ->header('Content-Type', 'text/plain');
+
+
+        })->name('token');
+
         Route::get('/dashboard', function() {
             return \Inertia\Inertia::render('Admin/Dashboard');
         });

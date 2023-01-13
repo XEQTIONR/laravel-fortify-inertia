@@ -1,9 +1,24 @@
+import { useEffect } from 'react';
 import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
 
 export default function Products({ products }) {
+
+    useEffect(() => {
+        if ( ! window.localStorage.getItem('api-token') ) {
+            axios.get(route('admin.token'), { headers: { Accept: 'application/json' } })
+                .then(({data}) => {
+                    data && window.localStorage.setItem('api-token', data);
+                })
+                .catch( (e) => {
+                    console.log('error');
+                    console.log(e);
+                });
+        }
+    });
+
 
     const columns = [
         { field: 'id', headerName: 'ID', width: 90 },

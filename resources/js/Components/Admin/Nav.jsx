@@ -39,7 +39,7 @@ const theme = createTheme({
     },
 });
 
-export default function Dashboard({ children, navLinks }) {
+export default function Nav({ children, navLinks }) {
 
     const [ show, setShow ] = useState(window.innerWidth <= 800
         ? false
