@@ -7,7 +7,7 @@ export default [
     {
         label: 'Products',
         icon: <FastfoodIcon />,
-        link: '/admin/dashboard'
+        link: route('admin.products.index')
     },
     {
         label: 'Orders',

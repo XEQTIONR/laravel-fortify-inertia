@@ -17,9 +17,16 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->perPage ?? 10;
-        $products = Product::paginate($perPage);
-        $products->appends(compact('perPage'));
-        return ProductResource::collection($products);
+        $orderBy = $request->orderBy ?? 'id';
+        $order = $request->order ?? 'asc';
+
+
+        $products = Product::orderBy($orderBy, $order)->paginate($perPage);
+        $products->appends(compact('perPage', 'orderBy', 'order'));
+
+        return ProductResource::collection($products)->additional([
+            'meta' => compact( 'orderBy', 'order' )
+        ]);
     }
 
     /**
