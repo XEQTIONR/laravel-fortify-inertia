@@ -14,11 +14,11 @@ class ProductController extends Controller
      *
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //return parent::index();
+        $products = parent::index($request);
 
-        return Inertia::render('Admin/Products');
+        return Inertia::render('Admin/Products', compact('products'));
     }
 
     /**
