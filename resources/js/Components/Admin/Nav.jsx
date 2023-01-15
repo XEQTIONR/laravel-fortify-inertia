@@ -140,7 +140,7 @@ export default function Nav({ children, navLinks }) {
                      //flexShrink: 0, if using transition
                     height: '100vh',
                     pt: 10,
-                    px: 3,
+                    px: 2,
                     pb: 2,
                 }}
             >

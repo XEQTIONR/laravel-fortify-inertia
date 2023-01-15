@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
+
+import { Add, Delete, Edit } from "@mui/icons-material";
+import { Box, Fab, Tooltip } from '@mui/material'
 
 export default function Products({ products }) {
 
     const [isLoading, setIsLoading] = useState(false)
     const [rows, setRows] = useState(products);
-
+    const [ selected, setSelected ] =  useState([]);
     const columns = [
         {
             field: 'id',
@@ -41,6 +44,14 @@ export default function Products({ products }) {
         },
     ];
     useEffect(() => {
+
+        setTimeout(() => {
+            const addButton = document.querySelector('#addButton');
+            addButton.classList.remove('scale-0');
+        }, 125)
+
+
+
         if ( ! window.localStorage.getItem('api-token') ) {
             axios.get(route('admin.token'), { headers: { Accept: 'application/json' } })
                 .then(({data}) => {
@@ -81,13 +92,59 @@ export default function Products({ products }) {
     }
     return (
         <Nav navLinks={ navItems }>
+            <Box
+                className="flex flex-row-reverse justify-between items-end"
+                sx={{ height: '100%' }}
+            >
+                <Box
+                    className="flex flex-col justify-end"
+                    sx={{ height: '100%' }}
+                >
+                        <Tooltip title="Edit selected product." placement="right">
+                            <Fab
+                                className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                                color="warning"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Edit />
+                            </Fab>
+                        </Tooltip>
+                        <Tooltip title="Delete selected products." placement="right">
+                            <Fab
+                                className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                                color="error"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Delete />
+                            </Fab>
+                        </Tooltip>
+                        <Tooltip title="Add a new product." placement="right"
+                        >
+                            <Fab
+                                id="addButton"
+                                className="transition hover:scale-125 duration-200 scale-0"
+                                color="primary"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Add />
+                            </Fab>
+                        </Tooltip>
+                </Box>
             <DataGrid
+                keepNonExistentRowsSelected
                 checkboxSelection
                 columns={ columns }
                 disableColumnMenu
                 disableSelectionOnClick
                 experimentalFeatures={ { newEditingApi: true } }
                 loading={ isLoading }
+                onSelectionModelChange={ (items) => setSelected(items)}
                 onPageSizeChange={ (newPageSize) =>
                     paginate(rows.meta.current_page, newPageSize, rows.meta.orderBy, rows.meta.order)
                 }
@@ -106,6 +163,7 @@ export default function Products({ products }) {
                 rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => rows.meta.total >= perPage) }
                 sortingMode="server"
             />
+            </Box>
         </Nav>
     )
 }
