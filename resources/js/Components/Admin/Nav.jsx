@@ -66,8 +66,9 @@ export default function Nav({ children, navLinks }) {
     }, [show]);
 
     return (
+        <>
+        <CssBaseline />
         <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="px-1">
                     <IconButton
@@ -147,5 +148,6 @@ export default function Nav({ children, navLinks }) {
                 { children }
             </Box>
         </Box>
+        </>
     );
 }
