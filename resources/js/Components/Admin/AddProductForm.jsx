@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { grey } from '@mui/material/colors';
 import {
     Box,
     Button,
@@ -76,35 +77,40 @@ export default function AddProductForm ({ uom }) {
                         label="Name (Bangla)"
                         variant="standard"
                     />
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end'}}>
-                        <Typography sx={{ mr: 1 }}>৳</Typography>
-                        <TextField
-                            onChange={({target}) => setData('current_selling_price', target.value)}
-                            required
-                            id="outlined-required"
-                            label="Current Selling Price"
-                            variant="standard"
-                        />
-                    </Box>
-                    <FormControl variant="standard" sx={{ m: 1 }}>
-                        <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
-                        <Select
-                            onChange={ ({target}) => setData('uom', target.value) }
-                            id="select-input-id"
-                            value={data.uom}
-                            label="Age"
-                        >
-                            <MenuItem value="" key={'None'}>None</MenuItem>
-                            { Object.keys(uom).map( (key) => {
-                                return <MenuItem value={key} key={key}>{uom[key]}</MenuItem>
-                            } ) }
-                        </Select>
-                    </FormControl>
-
-                    <Stack spacing={2} sx={{ height: 1/3}}>
-                        <Typography>Product Image</Typography>
-                        <Stack direction="row" sx={{ height: 1/2 }}>
-                            <Box sx={{ width: 1/2 }}>
+                    <Stack direction="row" spacing={2}>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end', width: "50%" }}>
+                            <Typography sx={{ mr: 1 }}>৳</Typography>
+                            <TextField
+                                onChange={({target}) => setData('current_selling_price', target.value)}
+                                required
+                                id="outlined-required"
+                                label="Current Selling Price"
+                                variant="standard"
+                            />
+                        </Box>
+                        <FormControl variant="standard" sx={{ width: "50%"}}>
+                            <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
+                            <Select
+                                onChange={ ({target}) => setData('uom', target.value) }
+                                id="select-input-id"
+                                value={data.uom}
+                                label="Age"
+                            >
+                                <MenuItem value="" key={'None'}>
+                                    <em>None</em>
+                                </MenuItem>
+                                { Object.keys(uom).map( (key) =>
+                                    <MenuItem value={key} key={key}>
+                                        {uom[key]}
+                                    </MenuItem>
+                                )}
+                            </Select>
+                        </FormControl>
+                    </Stack>
+                    <Box  sx={{ display: "flex", justifyContent: "space-between", height: 1/4}}>
+                        <Stack spacing={2} sx={{ height: 1/2, width: 1/2 }}>
+                            <Typography color={grey[700]}>Product Image</Typography>
+                            <Box sx={{ width: "100%" }}>
                                 {   uploadedImageUrl
                                     ? (
                                         <Button
@@ -115,7 +121,7 @@ export default function AddProductForm ({ uom }) {
                                         </Button>
                                     )
                                     : (
-                                        <Button sx={{ mr: 2 }} variant="outlined" component="label">
+                                        <Button variant="outlined" component="label">
                                             Select Image
                                             <input hidden accept="image/*" type="file" onChange={(e) => {
                                                 setData('image', e.target.files[0])
@@ -125,27 +131,23 @@ export default function AddProductForm ({ uom }) {
                                     )
                                 }
                             </Box>
-                            <Box style={{
-                                width: "50%",
+                        </Stack>
+                        <Box sx={{ width: 1/2 }}>
+                            <Box sx={{
+                                backgroundColor: uploadedImageUrl ? "transparent" : grey[300],
+                                backgroundPosition: "center",
+                                backgroundSize: "cover",
+                                width: "100%",
+                                height: "0",
+                                paddingTop: "100%",
+                                position: "relative",
+                                backgroundImage: uploadedImageUrl ? `url(${uploadedImageUrl})` : 'none',
                             }}>
-                                <Box sx={{
-                                    backgroundColor: "#eee",
-                                    width: "100%",
-                                    height: "0",
-                                    paddingTop: "100%",
-                                    position: "relative"
-                                }}>
-                                    {   uploadedImageUrl
-                                        ? <img
-                                            style={{
-                                                position: 'absolute',
-                                                top: "50%",
-                                                left: "50%",
-                                                transform: "translate(-50%, -50%)",
-                                            }}
-                                            src={uploadedImageUrl}
-                                        /> :
-                                        (<Box sx={{
+
+                                { uploadedImageUrl
+                                    ? null
+                                    : (
+                                        <Box sx={{
                                             position: 'absolute',
                                             top: "50%",
                                             left: "50%",
@@ -155,17 +157,16 @@ export default function AddProductForm ({ uom }) {
                                             justifyContent: "center",
                                             alignItems: "center",
                                         }}>
-                                            <InsertPhotoIcon sx={{
-                                                fontSize: '3rem',
-                                                color: '#999',
-                                            }} />
-                                            <Typography color="#888" align="center" variant="button">No Image Selected</Typography>
-                                        </Box>)
-                                    }
-                                </Box>
+                                            <InsertPhotoIcon sx={{ fontSize: '3rem', color: grey[500] }} />
+                                            <Typography color="#888" align="center"
+                                                variant="button">No Image Selected
+                                            </Typography>
+                                        </Box>
+                                    )
+                                }
                             </Box>
-                        </Stack>
-                    </Stack>
+                        </Box>
+                    </Box>
                     <Stack sx={{ pt: 2 }}>
                         <Button type="submit" variant="contained">Submit</Button>
                     </Stack>
