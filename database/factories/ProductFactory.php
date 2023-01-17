@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,10 +21,11 @@ class ProductFactory extends Factory
         $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
         $bangla_faker = new \Xeqtionr\BanglaFaker\BanglaFaker();
         $name = $faker->vegetableName();
+        $uoms = array_keys( Product::$unitsOfMeasurement );
         return [
             'english_name' => $name,
             'bangla_name' => $bangla_faker->words(rand(1,3), true),
-            'uom' => rand(1,5),
+            'uom' => $uoms[rand(0, count($uoms) - 1)],
             'current_selling_price' => rand(10, 500) * 100,
             'in_stock' => rand(0, 100),
             'image' => fake()->imageUrl(500, 500, $name)

@@ -192,7 +192,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
         Route::get('/dashboard', function() {
             return \Inertia\Inertia::render('Admin/Dashboard');
-        });
+        })->name('dashboard');
         Route::get('/second', function() {
             return \Inertia\Inertia::render('Admin/Second');
         });

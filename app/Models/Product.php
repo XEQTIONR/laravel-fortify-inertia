@@ -11,7 +11,7 @@ class Product extends Model
 
     public static $unitsOfMeasurement = [
         'pc'     => 'pieces',
-        'dozen'  => 'dozens',
+        'dz'     => 'dozens',
         'pk'     => 'packs',
         'box'    => 'boxes',
         'bottle' => 'bottles',

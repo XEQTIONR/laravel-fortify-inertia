@@ -37,10 +37,10 @@ export default function AddProductForm ({ uom }) {
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null);
 
     const { data, setData, post, processing, errors } = useForm({
-        'english_name' : null,
-        'bangla_name' : null,
-        'uom' : null,
-        'current_selling_price' : null,
+        'english_name' : '',
+        'bangla_name' : '',
+        'uom' : '',
+        'current_selling_price' : '',
         'image' : null,
     });
 
@@ -91,10 +91,12 @@ export default function AddProductForm ({ uom }) {
                         <Select
                             onChange={ ({target}) => setData('uom', target.value) }
                             id="select-input-id"
+                            value={data.uom}
                             label="Age"
                         >
+                            <MenuItem value="" key={'None'}>None</MenuItem>
                             { Object.keys(uom).map( (key) => {
-                                return <MenuItem value={key}>{uom[key]}</MenuItem>
+                                return <MenuItem value={key} key={key}>{uom[key]}</MenuItem>
                             } ) }
                         </Select>
                     </FormControl>

@@ -18,8 +18,10 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'english_name' => $this->english_name,
             'bangla_name' => $this->bangla_name,
+            'uom' => $this->uom,
             'current_selling_price' => $this->current_selling_price/100.0,
             'in_stock' => $this->in_stock,
+            'image' => $this->image,
         ];
     }
 }

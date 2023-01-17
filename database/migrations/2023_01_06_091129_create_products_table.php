@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('english_description')->nullable();
             $table->string('bangla_description')->nullable();
             $table->string('notes')->nullable();
-            $table->unsignedBigInteger('uom')->nullable();
+            $table->string('uom');
             $table->integer('current_selling_price')->nullable();
             $table->integer('in_stock')->nullable();
             $table->string('image')->nullable();

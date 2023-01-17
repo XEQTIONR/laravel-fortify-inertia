@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -37,12 +38,29 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         Log::info(json_encode($request->all()));
-        Storage::put('public', $request->image);
+
+        $validated = $request->validate([
+            'english_name' => 'required|string|max:50',
+            'bangla_name' => 'required|string|max:50',
+            'uom' => [
+                'required',
+                Rule::in( array_keys(Product::$unitsOfMeasurement))
+            ],
+            'current_selling_price' => 'required|numeric|min:0.01',
+            'image' => 'required|file|mimes:jpg,png',
+        ]);
+
+        Storage::put('public', $validated['image']);
+
+        return redirect( route('admin.products.index') )->with([
+            'message' => 'The product was created.',
+            'status' => \Illuminate\Http\Response::HTTP_CREATED,
+        ]);
     }
 
     /**
