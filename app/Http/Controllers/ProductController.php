@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
 use Illuminate\Support\Facades\Log;
@@ -19,8 +20,8 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $products = parent::index($request);
-
-        return Inertia::render('Admin/Products', compact('products'));
+        $uom = Product::$unitsOfMeasurement;
+        return Inertia::render('Admin/Products', compact('products', 'uom'));
     }
 
     /**

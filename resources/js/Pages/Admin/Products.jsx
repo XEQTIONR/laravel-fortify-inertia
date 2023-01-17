@@ -52,7 +52,7 @@ const AddProductForm = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function Products({ products }) {
+export default function Products({ products, uom }) {
 
 
     const [isLoading, setIsLoading] = useState(false)
@@ -194,30 +194,40 @@ export default function Products({ products }) {
                             label="Name (Bangla)"
                             variant="standard"
                         />
-                        <FormControl fullWidth sx={{ m: 1 }}>
-                            <InputLabel htmlFor="outlined-adornment-amount">Current Selling Price</InputLabel>
-                            <Input
-                                onChange={({target}) => setData('current_selling_price', target.value)}
-                                type="number"
-                                inputProps={{min: 0, step: 0.01, style: { textAlign: 'right' }}}
-                                id="outlined-adornment-amount"
-                                startAdornment={<InputAdornment position="start">৳</InputAdornment>}
-                                label="Amount"
-                            />
-                        </FormControl>
-                        {/*<FormControl variant="standard" sx={{ m: 1 }}>*/}
-                        {/*    <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>*/}
-                        {/*    <Select*/}
-                        {/*        onChange={ ({target}) => setData('uom', target.value) }*/}
-                        {/*        id="select-input-id"*/}
-                        {/*        label="Age"*/}
-                        {/*    >*/}
-                        {/*        <MenuItem value="none">None</MenuItem>*/}
-                        {/*        <MenuItem value="ten">Ten</MenuItem>*/}
-                        {/*        <MenuItem value="twenty">Twenty</MenuItem>*/}
-                        {/*        <MenuItem value="thirty">Thirty</MenuItem>*/}
-                        {/*    </Select>*/}
+                        {/*<FormControl fullWidth sx={{ m: 1 }}>*/}
+                            {/*<InputLabel htmlFor="outlined-adornment-amount">Current Selling Price</InputLabel>*/}
+                            <Box sx={{ display: 'flex', alignItems: 'flex-end'}}>
+                                <Typography sx={{ mr: 1 }}>৳</Typography>
+                                <TextField
+                                    onChange={({target}) => setData('current_selling_price', target.value)}
+                                    required
+                                    id="outlined-required"
+                                    label="Current Selling Price"
+                                    variant="standard"
+                                />
+                            </Box>
+                            {/*<Input*/}
+                            {/*    onChange={({target}) => setData('current_selling_price', target.value)}*/}
+                            {/*    type="number"*/}
+                            {/*    inputProps={{min: 0, step: 0.01, style: { textAlign: 'right' }}}*/}
+                            {/*    id="outlined-adornment-amount"*/}
+                            {/*    startAdornment={<InputAdornment position="start">৳</InputAdornment>}*/}
+                            {/*    label="Amount"*/}
+                            {/*/>*/}
                         {/*</FormControl>*/}
+                        <FormControl variant="standard" sx={{ m: 1 }}>
+                            <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
+                            <Select
+                                onChange={ ({target}) => setData('uom', target.value) }
+                                id="select-input-id"
+                                label="Age"
+                            >
+                                <MenuItem value="none">None</MenuItem>
+                                <MenuItem value="ten">Ten</MenuItem>
+                                <MenuItem value="twenty">Twenty</MenuItem>
+                                <MenuItem value="thirty">Thirty</MenuItem>
+                            </Select>
+                        </FormControl>
 
                         <Stack spacing={2} sx={{ height: 1/3}}>
                             <Typography>Product Image</Typography>
