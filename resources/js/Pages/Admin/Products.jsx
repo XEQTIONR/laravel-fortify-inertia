@@ -18,6 +18,7 @@ export default function Products({ products, uom }) {
     const [rows, setRows] = useState(products);
     const [ selected, setSelected ] =  useState([]);
     const [ showAddForm, setShowAddForm ] = useState(false);
+    const [ working, setWorking ] = useState(false);
 
     const columns = [
         {
@@ -110,7 +111,7 @@ export default function Products({ products, uom }) {
         <Nav navLinks={ navItems }>
             <Modal
                 open={showAddForm}
-                onClose={()=> setShowAddForm(false)}
+                onClose={()=> ! working && setShowAddForm(false) }
                 style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -118,7 +119,7 @@ export default function Products({ products, uom }) {
                 }}
             >
                 <Box sx={{ my: 2 }}>
-                    <AddProductForm uom={uom} />
+                    <AddProductForm uom={uom} amWorking={setWorking} />
                 </Box>
             </Modal>
             <Box

@@ -6,6 +6,7 @@ import {
     Divider,
     FormControl,
     InputLabel,
+    LinearProgress,
     MenuItem,
     Paper,
     Select,
@@ -33,11 +34,11 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function AddProductForm ({ uom }) {
+export default function AddProductForm ({ uom, amWorking }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null);
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing, progress, errors } = useForm({
         'english_name' : '',
         'bangla_name' : '',
         'uom' : '',
@@ -47,6 +48,7 @@ export default function AddProductForm ({ uom }) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        amWorking(true);
         post( route('admin.products.store'), {
             onError: (err) => {
                 console.log('submit error');
@@ -168,7 +170,8 @@ export default function AddProductForm ({ uom }) {
                         </Box>
                     </Box>
                     <Stack sx={{ pt: 2 }}>
-                        <Button type="submit" variant="contained">Submit</Button>
+                        { progress ? (<LinearProgress variant="determinate" value={progress.percentage} /> ) : null }
+                        <Button disabled={processing} type="submit" variant="contained">Submit</Button>
                     </Stack>
                 </Stack>
             </form>
