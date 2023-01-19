@@ -42,22 +42,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 
-        $validated = $request->validate([
-            'english_name' => 'required|string|max:50',
-            'bangla_name' => 'required|string|max:50',
-            'uom' => [
-                'required',
-                Rule::in( array_keys(Product::$unitsOfMeasurement))
-            ],
-            'current_selling_price' => 'required|numeric|min:0.01',
-            'image' => 'required|file|mimes:jpg,png',
-        ]);
-
-        $filename = Storage::putFile('public', $validated['image']);
-
-        $validated['image'] = basename($filename);
-        $validated['current_selling_price'] =   (int) ($validated['current_selling_price'] * 100);
-        $product = Product::create( $validated );
+        $product = parent::store($request);
 
         return redirect( route('admin.products.index') )->with([
             'message' => "The product was created. ID: $product->id.",
