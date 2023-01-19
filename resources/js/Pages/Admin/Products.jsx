@@ -61,14 +61,10 @@ export default function Products({ products, uom }) {
     useEffect( () => {
         if (flash.status === HTTP_CREATED) {
             setShowSnackbar(true);
-            if( showAddForm === true ) {
-                setShowAddForm(false);
-                setWorking(false);
-            }
         }
     }, [flash])
+
     useEffect(() => {
-        console.log('useEffect called')
         setTimeout(() => {
             const addButton = document.querySelector('#addButton');
             addButton.classList.remove('scale-0');
@@ -138,7 +134,7 @@ export default function Products({ products, uom }) {
                 }}
             >
                 <Box sx={{ my: 2 }}>
-                    <AddProductForm uom={uom} amWorking={setWorking} />
+                    <AddProductForm uom={uom} amWorking={setWorking} amVisible={setShowAddForm} />
                 </Box>
             </Modal>
             <Box

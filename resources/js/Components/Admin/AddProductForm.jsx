@@ -34,7 +34,7 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function AddProductForm ({ uom, amWorking }) {
+export default function AddProductForm ({ uom, amWorking, amVisible }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null);
 
@@ -52,8 +52,11 @@ export default function AddProductForm ({ uom, amWorking }) {
         post( route('admin.products.store'), {
             onError: (err) => {
                 amWorking(false);
-                console.log('submit error');
                 console.log(err);
+            },
+            onSuccess: () => {
+                amWorking(false);
+                amVisible(false);
             }
         })
     }
