@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { grey } from '@mui/material/colors';
+import { grey, red } from '@mui/material/colors';
 import {
     Box,
     Button,
@@ -51,6 +51,7 @@ export default function AddProductForm ({ uom, amWorking }) {
         amWorking(true);
         post( route('admin.products.store'), {
             onError: (err) => {
+                amWorking(false);
                 console.log('submit error');
                 console.log(err);
             }
@@ -80,9 +81,11 @@ export default function AddProductForm ({ uom, amWorking }) {
                         variant="standard"
                     />
                     <Stack direction="row" spacing={2}>
-                        <Box sx={{ display: 'flex', alignItems: 'flex-end', width: "50%" }}>
+                        <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end', width: "50%" }}>
                             <Typography sx={{ mr: 1 }}>৳</Typography>
                             <TextField
+                                error={!!errors.current_selling_price}
+                                helperText={errors?.current_selling_price}
                                 onChange={({target}) => setData('current_selling_price', target.value)}
                                 required
                                 id="outlined-required"
@@ -90,7 +93,7 @@ export default function AddProductForm ({ uom, amWorking }) {
                                 variant="standard"
                             />
                         </Box>
-                        <FormControl variant="standard" sx={{ width: "50%"}}>
+                        <FormControl required variant="standard" sx={{ width: "50%"}}>
                             <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
                             <Select
                                 onChange={ ({target}) => setData('uom', target.value) }
@@ -117,7 +120,10 @@ export default function AddProductForm ({ uom, amWorking }) {
                                     ? (
                                         <Button
                                             variant="outlined"
-                                            onClick={() => setUploadedImageUrl(null)}
+                                            onClick={() => {
+                                                setUploadedImageUrl(null);
+                                                setData('image', null);
+                                            }}
                                         >
                                             Remove Image
                                         </Button>
@@ -133,6 +139,7 @@ export default function AddProductForm ({ uom, amWorking }) {
                                     )
                                 }
                             </Box>
+                            {errors.image ? (<Typography color={red[500]}>{errors.image}</Typography>) : null }
                         </Stack>
                         <Box sx={{ width: 1/2 }}>
                             <Box sx={{
@@ -160,7 +167,7 @@ export default function AddProductForm ({ uom, amWorking }) {
                                             alignItems: "center",
                                         }}>
                                             <InsertPhotoIcon sx={{ fontSize: '3rem', color: grey[500] }} />
-                                            <Typography color="#888" align="center"
+                                            <Typography color={grey[500]} align="center"
                                                 variant="button">No Image Selected
                                             </Typography>
                                         </Box>

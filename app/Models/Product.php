@@ -9,6 +9,14 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'english_name',
+        'bangla_name',
+        'uom',
+        'current_selling_price',
+        'image',
+    ];
+
     public static $unitsOfMeasurement = [
         'pc'     => 'pieces',
         'dz'     => 'dozens',

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Storage;
@@ -42,7 +41,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info(json_encode($request->all()));
 
         $validated = $request->validate([
             'english_name' => 'required|string|max:50',
@@ -55,10 +53,14 @@ class ProductController extends Controller
             'image' => 'required|file|mimes:jpg,png',
         ]);
 
-        Storage::put('public', $validated['image']);
+        $filename = Storage::putFile('public', $validated['image']);
+
+        $validated['image'] = basename($filename);
+        $validated['current_selling_price'] =   (int) ($validated['current_selling_price'] * 100);
+        $product = Product::create( $validated );
 
         return redirect( route('admin.products.index') )->with([
-            'message' => 'The product was created.',
+            'message' => "The product was created. ID : $product->id.",
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
         ]);
     }

@@ -56,9 +56,11 @@ export default function Products({ products, uom }) {
     useEffect( () => {
         if (flash.status === HTTP_CREATED && showAddForm === true ) {
             setShowAddForm(false);
+            setWorking(false);
         }
     }, [flash])
     useEffect(() => {
+        console.log('useEffect called')
         setTimeout(() => {
             const addButton = document.querySelector('#addButton');
             addButton.classList.remove('scale-0');
