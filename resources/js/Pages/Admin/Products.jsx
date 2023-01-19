@@ -14,8 +14,9 @@ export default function Products({ products, uom }) {
 
     const { flash } = usePage().props;
 
-    const [isLoading, setIsLoading] = useState(false)
-    const [rows, setRows] = useState(products);
+    const [isLoading, setIsLoading] = useState(false);
+    const [rows, setRows] = useState(products.data);
+    const [meta, setMeta] = useState(products.meta);
     const [ selected, setSelected ] =  useState([]);
     const [ showAddForm, setShowAddForm ] = useState(false);
     const [ working, setWorking ] = useState(false);
@@ -62,15 +63,18 @@ export default function Products({ products, uom }) {
         if (flash.status === HTTP_CREATED) {
             setShowSnackbar(true);
         }
-    }, [flash])
+
+    }, [flash] );
+
+    useEffect( () => {
+        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+    }, [products] );
 
     useEffect(() => {
         setTimeout(() => {
             const addButton = document.querySelector('#addButton');
             addButton.classList.remove('scale-0');
-        }, 125)
-
-
+        }, 125);
 
         if ( ! window.localStorage.getItem('api-token') ) {
             axios.get(route('admin.token'), { headers: { Accept: 'application/json' } })
@@ -101,7 +105,8 @@ export default function Products({ products, uom }) {
         })
         .then( ({data, status}) => {
             if ( status === 200 ) {
-                setRows(data);
+                setRows(data.data);
+                setMeta(data.meta);
             }
         })
         .catch( (e) => {
@@ -191,21 +196,21 @@ export default function Products({ products, uom }) {
                     loading={ isLoading }
                     onSelectionModelChange={ (items) => setSelected(items)}
                     onPageSizeChange={ (newPageSize) =>
-                        paginate(rows.meta.current_page, newPageSize, rows.meta.orderBy, rows.meta.order)
+                        paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
                     }
                     onPageChange={ (newPage) =>
-                        paginate(newPage+1, rows.meta.per_page, rows.meta.orderBy, rows.meta.order)
+                        paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
                     }
                     onSortModelChange={ ([gridSortItem]) => {
                         if(gridSortItem) {
-                            paginate(rows.meta.current_page, rows.meta.per_page, gridSortItem.field, gridSortItem.sort)
+                            paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
                         }
-                    }}
-                    pageSize={ rows.meta.per_page }
+                    } }
+                    pageSize={ meta.per_page }
                     paginationMode="server"
-                    rows={ rows.data }
-                    rowCount={ rows.meta.total }
-                    rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => rows.meta.total >= perPage) }
+                    rows={ rows }
+                    rowCount={ meta.total }
+                    rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => meta.total >= perPage) }
                     sortingMode="server"
                 />
             </Box>
