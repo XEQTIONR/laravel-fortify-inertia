@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
 import AddProductForm from '@/Components/Admin/AddProductForm';
@@ -6,8 +6,8 @@ import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { Box, Fab, Tooltip, Modal } from '@mui/material'
-
+import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
+import MuiAlert from '@mui/material/Alert';
 const HTTP_CREATED = 201;
 
 export default function Products({ products, uom }) {
@@ -19,6 +19,7 @@ export default function Products({ products, uom }) {
     const [ selected, setSelected ] =  useState([]);
     const [ showAddForm, setShowAddForm ] = useState(false);
     const [ working, setWorking ] = useState(false);
+    const [ showSnackbar, setShowSnackbar ] = useState( false );
 
     const columns = [
         {
@@ -53,10 +54,17 @@ export default function Products({ products, uom }) {
         },
     ];
 
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
     useEffect( () => {
-        if (flash.status === HTTP_CREATED && showAddForm === true ) {
-            setShowAddForm(false);
-            setWorking(false);
+        if (flash.status === HTTP_CREATED) {
+            setShowSnackbar(true);
+            if( showAddForm === true ) {
+                setShowAddForm(false);
+                setWorking(false);
+            }
         }
     }, [flash])
     useEffect(() => {
@@ -79,7 +87,6 @@ export default function Products({ products, uom }) {
                 });
         }
     });
-
 
 
     function paginate(page, perPage = null, orderBy = null, order = null) {
@@ -111,6 +118,16 @@ export default function Products({ products, uom }) {
 
     return (
         <Nav navLinks={ navItems }>
+            <Snackbar
+                open={showSnackbar}
+                autoHideDuration={5000}
+                onClose={() => setShowSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                    {flash.message}
+                </Alert>
+            </Snackbar>
             <Modal
                 open={showAddForm}
                 onClose={()=> ! working && setShowAddForm(false) }

@@ -60,7 +60,7 @@ class ProductController extends Controller
         $product = Product::create( $validated );
 
         return redirect( route('admin.products.index') )->with([
-            'message' => "The product was created. ID : $product->id.",
+            'message' => "The product was created. ID: $product->id.",
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
         ]);
     }
