@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
-import AddProductForm from '@/Components/Admin/AddProductForm';
+import AddSupplierForm from "../../Components/Admin/AddSupplierForm";
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
+
 const HTTP_CREATED = 201;
 
 export default function Suppliers({ suppliers }) {
@@ -29,20 +30,20 @@ export default function Suppliers({ suppliers }) {
             width: 90
         },
         {
-            field: 'business_name',
-            headerName: 'Business Name',
-            width: 150,
-            editable: true,
-        },
-        {
             field: 'contact_name',
             headerName: 'Contact Name',
             width: 150,
             editable: true,
         },
         {
-            field: 'email',
-            headerName: 'Email',
+            field: 'business_name',
+            headerName: 'Business Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'address',
+            headerName: 'Address',
             width: 250,
             editable: true,
         },
@@ -145,7 +146,7 @@ export default function Suppliers({ suppliers }) {
                 }}
             >
                 <Box sx={{ my: 2 }}>
-                    <h1>New Supplier form goes here</h1>
+                    <AddSupplierForm amWorking={setWorking} amVisible={setShowAddForm} />
                 </Box>
             </Modal>
             <Box

@@ -13,9 +13,9 @@ class Supplier extends Model
         'contact_name',
         'business_name',
         'address',
-        'email_address',
-        'cell_phone',
-        'business_phone_number',
+        'email',
+        'primary_contact_number',
+        'secondary_contact_number',
         'notes',
         'status',
         'meta'

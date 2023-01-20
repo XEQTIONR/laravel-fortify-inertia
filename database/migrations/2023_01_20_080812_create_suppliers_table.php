@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('business_name')->nullable();
             $table->text('address')->nullable();
             $table->string('email')->nullable();
-            $table->string('primary_contact_number')->nullable();
-            $table->string('secondary_phone_number')->nullable();
+            $table->string('primary_contact_number');
+            $table->string('secondary_contact_number')->nullable();
             $table->text('notes')->nullable();
             $table->string('status');
             $table->json('meta')->nullable();

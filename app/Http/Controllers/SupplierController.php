@@ -22,4 +22,21 @@ class SupplierController extends Controller
 
         return Inertia::render('Admin/Suppliers', compact('suppliers'));
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
+
+        $supplier = parent::store($request);
+
+        return redirect( route('admin.suppliers.index') )->with([
+            'message' => "The supplier was created. ID: $supplier->id.",
+            'status' => \Illuminate\Http\Response::HTTP_CREATED,
+        ]);
+    }
 }

@@ -39,6 +39,17 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         //
+        $validated = $request->validate([
+            'contact_name'             => 'required|string|max:50',
+            'business_name'            => 'nullable|string|max:50',
+            'address'                  => 'nullable|string|max:100',
+            'email'                    => 'nullable|string|max:50',
+            'primary_contact_number'   => 'required|string|max:20',
+            'secondary_contact_number' => 'nullable|string|max:20',
+            'status'                   => 'required|string|in:active,inactive'
+        ]);
+
+        return Supplier::create( $validated );
     }
 
     /**
