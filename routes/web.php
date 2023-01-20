@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SupplierController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -197,5 +198,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
             return \Inertia\Inertia::render('Admin/Second');
         });
         Route::resource('products', ProductController::class);
+        Route::resource('suppliers', SupplierController::class);
     });
 });

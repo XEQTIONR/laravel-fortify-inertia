@@ -22,6 +22,6 @@ export default [
     {
         label: 'Suppliers',
         icon: <SupervisedUserCircleIcon />,
-        link: '#'
+        link: route('admin.suppliers.index')
     },
 ]

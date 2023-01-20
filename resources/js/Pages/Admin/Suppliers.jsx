@@ -1,0 +1,225 @@
+import React, { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/inertia-react';
+import Nav from '@/Components/Admin/Nav';
+import AddProductForm from '@/Components/Admin/AddProductForm';
+import navItems from  '@/Components/data/AdminNavItems';
+import { DataGrid } from '@mui/x-data-grid';
+
+import { Add, Delete, Edit } from "@mui/icons-material";
+import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
+import MuiAlert from '@mui/material/Alert';
+const HTTP_CREATED = 201;
+
+export default function Suppliers({ suppliers }) {
+
+    const { flash } = usePage().props;
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [rows, setRows] = useState(suppliers.data);
+    const [meta, setMeta] = useState(suppliers.meta);
+    const [ selected, setSelected ] =  useState([]);
+    const [ showAddForm, setShowAddForm ] = useState(false);
+    const [ working, setWorking ] = useState(false);
+    const [ showSnackbar, setShowSnackbar ] = useState( false );
+
+    const columns = [
+        {
+            field: 'id',
+            headerName: 'ID',
+            width: 90
+        },
+        {
+            field: 'business_name',
+            headerName: 'Business Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'contact_name',
+            headerName: 'Contact Name',
+            width: 150,
+            editable: true,
+        },
+        {
+            field: 'email',
+            headerName: 'Email',
+            width: 250,
+            editable: true,
+        },
+        {
+            field: 'primary_contact_number',
+            headerName: 'Mobile Number',
+            width: 160,
+            editable: true,
+        },
+        {
+            field: 'status',
+            headerName: 'Status',
+            sortable: true,
+            width: 110,
+        },
+    ];
+
+    const Alert = React.forwardRef(function Alert(props, ref) {
+        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    });
+
+    useEffect( () => {
+        if (flash.status === HTTP_CREATED) {
+            setShowSnackbar(true);
+        }
+
+    }, [flash] );
+
+    useEffect( () => {
+        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+    }, [suppliers] );
+
+    useEffect(() => {
+        setTimeout(() => {
+            const addButton = document.querySelector('#addButton');
+            addButton.classList.remove('scale-0');
+        }, 125);
+
+        if ( ! window.localStorage.getItem('api-token') ) {
+            axios.get(route('admin.token'), { headers: { Accept: 'application/json' } })
+                .then(({data}) => {
+                    data && window.localStorage.setItem('api-token', data);
+                })
+                .catch( (e) => {
+                    console.log('error');
+                    console.log(e);
+                });
+        }
+    });
+
+
+    function paginate(page, perPage = null, orderBy = null, order = null) {
+        setIsLoading(true);
+        const params = {
+            page,
+            perPage,
+            orderBy,
+            order
+        }
+        axios.get( route('api.suppliers.index'), {
+            headers: {
+                Authorization: 'Bearer ' + window.localStorage.getItem('api-token'),
+            },
+            params
+        })
+            .then( ({data, status}) => {
+                if ( status === 200 ) {
+                    setRows(data.data);
+                    setMeta(data.meta);
+                }
+            })
+            .catch( (e) => {
+                console.log('pagination exception');
+                console.log(e);
+            })
+            .finally(() => setIsLoading(false));
+
+    }
+
+    return (
+        <Nav navLinks={ navItems }>
+            <Snackbar
+                open={showSnackbar}
+                autoHideDuration={5000}
+                onClose={() => setShowSnackbar(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                    {flash.message}
+                </Alert>
+            </Snackbar>
+            <Modal
+                disableRestoreFocus={true}
+                open={showAddForm}
+                onClose={()=> ! working && setShowAddForm(false) }
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}
+            >
+                <Box sx={{ my: 2 }}>
+                    <h1>New Supplier form goes here</h1>
+                </Box>
+            </Modal>
+            <Box
+                className="flex flex-row-reverse justify-between items-end"
+                sx={{ height: '100%' }}
+            >
+                <Box
+                    className="flex flex-col justify-end"
+                    sx={{ height: '100%' }}
+                >
+                    <Tooltip title="Edit selected supplier." placement="right">
+                        <Fab
+                            className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            color="warning"
+                            size="medium"
+                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <Edit />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Delete selected supplier." placement="right">
+                        <Fab
+                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            color="error"
+                            size="medium"
+                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <Delete />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Add a new supplier." placement="right">
+                        <Fab
+                            onClick={() => setShowAddForm(true)}
+                            id="addButton"
+                            className="transition hover:scale-125 duration-200 scale-0"
+                            color="primary"
+                            size="medium"
+                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <Add />
+                        </Fab>
+                    </Tooltip>
+                </Box>
+                <DataGrid
+                    keepNonExistentRowsSelected
+                    checkboxSelection
+                    columns={ columns }
+                    disableColumnMenu
+                    disableSelectionOnClick
+                    experimentalFeatures={ { newEditingApi: true } }
+                    loading={ isLoading }
+                    onSelectionModelChange={ (items) => setSelected(items)}
+                    onPageSizeChange={ (newPageSize) =>
+                        paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
+                    }
+                    onPageChange={ (newPage) =>
+                        paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
+                    }
+                    onSortModelChange={ ([gridSortItem]) => {
+                        if(gridSortItem) {
+                            paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                        }
+                    } }
+                    pageSize={ meta.per_page }
+                    paginationMode="server"
+                    rows={ rows }
+                    rowCount={ meta.total }
+                    rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => meta.total >= perPage) }
+                    sortingMode="server"
+                />
+            </Box>
+        </Nav>
+    )
+}

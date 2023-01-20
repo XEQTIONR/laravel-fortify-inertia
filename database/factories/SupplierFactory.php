@@ -17,12 +17,12 @@ class SupplierFactory extends Factory
     public function definition()
     {
         return [
-            'contact_name' => fake()->name(),
-            'business_name' => fake()->company(),
-            'address' =>  fake()->streetAddress(),
-            'email' => fake()->email(),
+            'contact_name'           => fake()->name(),
+            'business_name'          => fake()->company(),
+            'address'                =>  fake()->streetAddress(),
+            'email'                  => fake()->email(),
             'primary_contact_number' => fake()->phoneNumber(),
-            'status' => 'new'
+            'status'                 => 'new'
         ];
     }
 }
