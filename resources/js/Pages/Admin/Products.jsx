@@ -48,10 +48,16 @@ export default function Products({ products, uom }) {
             editable: true,
         },
         {
+            field: 'uom',
+            headerName: 'Unit of Measure',
+            width: 160,
+            editable: true,
+        },
+        {
             field: 'in_stock',
             headerName: '# in stock',
             sortable: true,
-            width: 160,
+            width: 110,
         },
     ];
 
@@ -130,6 +136,7 @@ export default function Products({ products, uom }) {
                 </Alert>
             </Snackbar>
             <Modal
+                disableRestoreFocus={true}
                 open={showAddForm}
                 onClose={()=> ! working && setShowAddForm(false) }
                 style={{
