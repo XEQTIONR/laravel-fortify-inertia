@@ -1,16 +1,16 @@
+import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
-import AddProductForm from '@/Components/Admin/AddProductForm';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
+import { Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
 const HTTP_CREATED = 201;
 
-export default function Products({ products, uom }) {
+export default function Products({ products }) {
 
     const { flash } = usePage().props;
 
@@ -135,20 +135,6 @@ export default function Products({ products, uom }) {
                     {flash.message}
                 </Alert>
             </Snackbar>
-            <Modal
-                disableRestoreFocus={true}
-                open={showAddForm}
-                onClose={()=> ! working && setShowAddForm(false) }
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-            >
-                <Box sx={{ my: 2 }}>
-                    <AddProductForm uom={uom} amWorking={setWorking} amVisible={setShowAddForm} />
-                </Box>
-            </Modal>
             <Box
                 className="flex flex-row-reverse justify-between items-end"
                 sx={{ height: '100%' }}
@@ -181,7 +167,7 @@ export default function Products({ products, uom }) {
                     </Tooltip>
                     <Tooltip title="Add a new product." placement="right">
                         <Fab
-                            onClick={() => setShowAddForm(true)}
+                            onClick={() => Inertia.visit(route('admin.products.create')) }
                             id="addButton"
                             className="transition hover:scale-125 duration-200 scale-0"
                             color="primary"

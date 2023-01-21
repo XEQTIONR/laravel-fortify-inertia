@@ -34,7 +34,7 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function AddProductForm ({ uom, amWorking, amVisible }) {
+export default function AddProductForm ({ uom }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null);
 
@@ -48,25 +48,17 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        amWorking(true);
         post( route('admin.products.store'), {
             onError: (err) => {
-                amWorking(false);
                 console.log(err);
             },
-            onSuccess: () => {
-                amWorking(false);
-                amVisible(false);
-            }
         })
     }
 
     return(
         <FormWrapper elevation={24}>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={2}
-                       sx={{ p: 5, backgroundColor: 'white', borderRadius: 1 }}
-                >
+                <Stack spacing={1} className="p-10">
                     <Typography align="center" variant="h6" sx={{ fontWeight: 'bold' }}>Add a new product</Typography>
                     <Divider />
                     <TextField
@@ -85,7 +77,7 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
                     />
                     <Stack direction="row" spacing={2}>
                         <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end', width: "50%" }}>
-                            <Typography sx={{ mr: 1 }}>৳</Typography>
+                            <Typography className="mr-1">৳</Typography>
                             <TextField
                                 error={!!errors.current_selling_price}
                                 helperText={errors?.current_selling_price}
@@ -96,7 +88,7 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
                                 variant="standard"
                             />
                         </Box>
-                        <FormControl required variant="standard" sx={{ width: "50%"}}>
+                        <FormControl required variant="standard" className="w-1/2">
                             <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
                             <Select
                                 onChange={ ({target}) => setData('uom', target.value) }
@@ -115,10 +107,10 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
                             </Select>
                         </FormControl>
                     </Stack>
-                    <Box  sx={{ display: "flex", justifyContent: "space-between", height: 1/4}}>
-                        <Stack spacing={2} sx={{ height: 1/2, width: 1/2 }}>
+                    <Box  className="flex justify-between h-1/4">
+                        <Stack spacing={2} className="w-1/2 h-1/2">
                             <Typography color={grey[700]}>Product Image</Typography>
-                            <Box sx={{ width: "100%" }}>
+                            <Box className="w-full">
                                 {   uploadedImageUrl
                                     ? (
                                         <Button
@@ -145,33 +137,27 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
                             {errors.image ? (<Typography color={red[500]}>{errors.image}</Typography>) : null }
                         </Stack>
                         <Box sx={{ width: 1/2 }}>
-                            <Box sx={{
+                            <Box
+                                className="bg-center bg-cover w-full h-0 relative"
+                                sx={{
                                 backgroundColor: uploadedImageUrl ? "transparent" : grey[300],
-                                backgroundPosition: "center",
-                                backgroundSize: "cover",
-                                width: "100%",
-                                height: "0",
                                 paddingTop: "100%",
-                                position: "relative",
                                 backgroundImage: uploadedImageUrl ? `url(${uploadedImageUrl})` : 'none',
                             }}>
 
                                 { uploadedImageUrl
                                     ? null
                                     : (
-                                        <Box sx={{
-                                            position: 'absolute',
-                                            top: "50%",
-                                            left: "50%",
-                                            transform: "translate(-50%, -50%)",
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            justifyContent: "center",
-                                            alignItems: "center",
-                                        }}>
-                                            <InsertPhotoIcon sx={{ fontSize: '3rem', color: grey[500] }} />
-                                            <Typography color={grey[500]} align="center"
-                                                variant="button">No Image Selected
+                                        <Box
+                                            sx={{transform: "translate(-50%, -50%)",}}
+                                            className="absolute top-1/2 left-1/2 flex flex-col justify-center items-center"
+                                        >
+                                            <InsertPhotoIcon
+                                                className="text-5xl"
+                                                sx={{ color: grey[500] }}
+                                            />
+                                            <Typography color={grey[500]} align="center" variant="button">
+                                                No Image Selected
                                             </Typography>
                                         </Box>
                                     )
@@ -179,8 +165,8 @@ export default function AddProductForm ({ uom, amWorking, amVisible }) {
                             </Box>
                         </Box>
                     </Box>
-                    <Stack sx={{ pt: 2 }}>
-                        { progress ? (<LinearProgress variant="determinate" value={progress.percentage} /> ) : null }
+                    <Stack className="pt-4">
+                        { progress ? ( <LinearProgress variant="determinate" value={progress.percentage} /> ) : null }
                         <Button disabled={processing} type="submit" variant="contained">Submit</Button>
                     </Stack>
                 </Stack>

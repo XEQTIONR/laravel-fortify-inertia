@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -27,10 +25,12 @@ class ProductController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create(Request $request)
     {
+        $uom = Product::$unitsOfMeasurement;
+        return Inertia::render('Admin/AddProduct', compact('uom'));
     }
 
     /**
