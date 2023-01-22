@@ -24,6 +24,16 @@ class SupplierController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create(Request $request)
+    {
+        return Inertia::render('Admin/AddSupplier');
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request

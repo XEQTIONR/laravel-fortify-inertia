@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import Nav from '@/Components/Admin/Nav';
-import AddProductForm from '@/Components/Admin/AddProductForm';
+import AddSupplierForm from '@/Components/Admin/AddSupplierForm';
 import navItems from  '@/Components/data/AdminNavItems';
 
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Fab, Tooltip } from '@mui/material'
 
-export default function AddProduct({ uom }) {
+export default function AddSupplier() {
 
     useEffect( () => {
         setTimeout(() => {
@@ -18,7 +18,7 @@ export default function AddProduct({ uom }) {
         <Nav navLinks={ navItems }>
             <Box className="flex flex-row-reverse justify-between items-center h-full">
                 <Box className="flex flex-col justify-end h-full">
-                    <Tooltip title="Back to all products." placement="right">
+                    <Tooltip title="Back to all suppliers." placement="right">
                         <Fab
                             onClick={() => window.history.back()}
                             id="backButton"
@@ -32,7 +32,7 @@ export default function AddProduct({ uom }) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <AddProductForm uom={uom} />
+                    <AddSupplierForm />
                 </Box>
             </Box>
         </Nav>

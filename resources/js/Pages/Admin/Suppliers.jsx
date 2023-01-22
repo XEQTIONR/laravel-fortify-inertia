@@ -1,7 +1,7 @@
+import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
-import AddSupplierForm from "../../Components/Admin/AddSupplierForm";
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -19,8 +19,6 @@ export default function Suppliers({ suppliers }) {
     const [rows, setRows] = useState(suppliers.data);
     const [meta, setMeta] = useState(suppliers.meta);
     const [ selected, setSelected ] =  useState([]);
-    const [ showAddForm, setShowAddForm ] = useState(false);
-    const [ working, setWorking ] = useState(false);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
 
     const columns = [
@@ -131,27 +129,15 @@ export default function Suppliers({ suppliers }) {
                 onClose={() => setShowSnackbar(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                <Alert className="w-full"
+                    onClose={() => setShowSnackbar(false)}
+                    severity="success"
+                >
                     {flash.message}
                 </Alert>
             </Snackbar>
-            <Modal
-                disableRestoreFocus={true}
-                open={showAddForm}
-                onClose={()=> ! working && setShowAddForm(false) }
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}
-            >
-                <Box sx={{ my: 2 }}>
-                    <AddSupplierForm amWorking={setWorking} amVisible={setShowAddForm} />
-                </Box>
-            </Modal>
             <Box
-                className="flex flex-row-reverse justify-between items-end"
-                sx={{ height: '100%' }}
+                className="flex flex-row-reverse justify-between items-end h-full"
             >
                 <Box
                     className="flex flex-col justify-end"
@@ -159,35 +145,32 @@ export default function Suppliers({ suppliers }) {
                 >
                     <Tooltip title="Edit selected supplier." placement="right">
                         <Fab
-                            className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
                             color="warning"
                             size="medium"
                             aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Edit />
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Delete selected supplier." placement="right">
                         <Fab
-                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            className={`ml-4 mt-4 transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
                             color="error"
                             size="medium"
                             aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Delete />
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Add a new supplier." placement="right">
                         <Fab
-                            onClick={() => setShowAddForm(true)}
+                            onClick={() => Inertia.visit(route('admin.suppliers.create'))}
                             id="addButton"
-                            className="transition hover:scale-125 duration-200 scale-0"
+                            className="ml-4 mt-4 transition hover:scale-125 duration-200 scale-0"
                             color="primary"
                             size="medium"
                             aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Add />
                         </Fab>
