@@ -20,4 +20,8 @@ class Supplier extends Model
         'status',
         'meta'
     ];
+
+    public function products() {
+        $this->belongsToMany( Product::class, 'supplier_products' );
+    }
 }

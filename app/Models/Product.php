@@ -30,4 +30,8 @@ class Product extends Model
         'ltr'    => 'litres',
         'ml'     => 'millilitres',
     ];
+
+    public function suppliers() {
+        $this->belongsToMany( Supplier::class, 'supplier_products' );
+    }
 }
