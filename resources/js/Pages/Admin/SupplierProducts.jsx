@@ -123,14 +123,11 @@ export default function SupplierProducts({supplier, products}) {
                                 [...currentProducts].map( product =>
                                     <Chip
                                         color="info"
-                                        // onDelete={() => {
-                                        //     currentProducts.delete(product);
-                                        //     setCurrentProducts(new Set([...currentProducts]));
-                                        // }}
+                                        onDelete={() => setCurrentProducts(currentProducts.filter((item) => item !== product))}
                                         className="mr-1 mb-1"
                                         clickable={true}
                                         key={product.id}
-                                        label={product.english_name+'/'+product.bangla_name}
+                                        label={product.english_name + '/' + product.bangla_name}
                                     />
                                 )
                             }
@@ -145,17 +142,18 @@ export default function SupplierProducts({supplier, products}) {
                             disableSelectionOnClick
                             selectionModel={currentProducts.map( item => item.id )}
                             onSelectionModelChange={ (newModel) => {
+                                const itemsToAdd = []
                                 setCurrentProducts(
                                     currentProducts.filter( elem => newModel.some( (id) => id === elem.id ))
                                 )
                                 newModel.forEach( id => {
-                                    const match = currentProducts.find( element => element.id === id )
-                                    console.log(match);
-                                    if( match === undefined ) {
-                                        const toBeAdded = products.find( elem => elem.id === id )
-                                        setCurrentProducts([...currentProducts, toBeAdded]);
+                                    if( currentProducts.find( element => element.id === id ) === undefined ) {
+                                        itemsToAdd.push( products.find( elem => elem.id === id ) )
                                     }
                                 });
+                                if( itemsToAdd.length > 0 ) {
+                                    setCurrentProducts([...currentProducts, ...itemsToAdd])
+                                }
                             }}
                             rows={products}
                             rowsPerPageOptions={ [5, 10, 25, 50, 100] }
