@@ -32,6 +32,6 @@ class Product extends Model
     ];
 
     public function suppliers() {
-        $this->belongsToMany( Supplier::class, 'supplier_products' );
+        return $this->belongsToMany( Supplier::class, 'supplier_products' );
     }
 }

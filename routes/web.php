@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplierProductsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -199,5 +200,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
         });
         Route::resource('products', ProductController::class);
         Route::resource('suppliers', SupplierController::class);
+
+        Route::resource('suppliers.products', SupplierProductsController::class);
+
+        //Route::
     });
 });
