@@ -14,7 +14,7 @@ export default function SupplierProducts({supplier, products}) {
 
     const { flash } = usePage().props;
 
-    const [ currentProducts, setCurrentProducts ] = useState(new Set(supplier.products));
+    const [ currentProducts, setCurrentProducts ] = useState(supplier.products);
     // const [isLoading, setIsLoading] = useState(false);
     //  const [ selected, setSelected ] =  useState([]);
     // const [ showAddForm, setShowAddForm ] = useState(false);
@@ -24,6 +24,29 @@ export default function SupplierProducts({supplier, products}) {
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
     });
+
+    const columns = [
+        {
+            field: 'id',
+            headerName: 'ID',
+            width: 90
+        },
+        {
+            field: 'english_name',
+            headerName: 'Name',
+            width: 150,
+        },
+        {
+            field: 'bangla_name',
+            headerName: 'Name (Bangla)',
+            width: 150,
+        },
+        {
+            field: 'uom',
+            headerName: 'Unit of Measure',
+            width: 160,
+        },
+    ];
 
     useEffect( () => {
         if (flash.status === HTTP_CREATED) {
@@ -100,10 +123,10 @@ export default function SupplierProducts({supplier, products}) {
                                 [...currentProducts].map( product =>
                                     <Chip
                                         color="info"
-                                        onDelete={() => {
-                                            currentProducts.delete(product);
-                                            setCurrentProducts(new Set([...currentProducts]));
-                                        }}
+                                        // onDelete={() => {
+                                        //     currentProducts.delete(product);
+                                        //     setCurrentProducts(new Set([...currentProducts]));
+                                        // }}
                                         className="mr-1 mb-1"
                                         clickable={true}
                                         key={product.id}
@@ -113,24 +136,30 @@ export default function SupplierProducts({supplier, products}) {
                             }
                         </Box>
                     </Stack>
-                    <Box className="w-full flex flex-wrap">
-                        { products.map(product =>
-                            <Chip
-                                variant={ currentProducts.has(product) ? 'filled' : 'outlined' }
-                                className="mr-1 mb-1"
-                                clickable={true}
-                                onClick={() => {
-                                    if( currentProducts.has(product) ) {
-                                        currentProducts.delete(product);
-                                        setCurrentProducts(new Set([...currentProducts]));
-                                    } else {
-                                        setCurrentProducts(new Set([...currentProducts, product]));
+                    <Box className="w-full h-2/3">
+                        <DataGrid
+                            className="w-full"
+                            keepNonExistentRowsSelected
+                            checkboxSelection
+                            columns={ columns }
+                            disableSelectionOnClick
+                            selectionModel={currentProducts.map( item => item.id )}
+                            onSelectionModelChange={ (newModel) => {
+                                setCurrentProducts(
+                                    currentProducts.filter( elem => newModel.some( (id) => id === elem.id ))
+                                )
+                                newModel.forEach( id => {
+                                    const match = currentProducts.find( element => element.id === id )
+                                    console.log(match);
+                                    if( match === undefined ) {
+                                        const toBeAdded = products.find( elem => elem.id === id )
+                                        setCurrentProducts([...currentProducts, toBeAdded]);
                                     }
-                                }}
-                                key={product.id}
-                                label={product.english_name+'/'+product.bangla_name}
-                            />)
-                        }
+                                });
+                            }}
+                            rows={products}
+                            rowsPerPageOptions={ [5, 10, 25, 50, 100] }
+                        />
                     </Box>
                 </Stack>
             </Box>
