@@ -6,20 +6,25 @@ import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { Add, Delete, Edit } from "@mui/icons-material";
-import { Box, Chip, Fab, Tooltip, Snackbar, Stack, Typography } from '@mui/material'
+import { Box, Chip, Divider, Fab, Tooltip, Snackbar, Stack, Typography } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
+
+import usePaginate from '@/hooks/usePaginate';
+
 const HTTP_CREATED = 201;
 
-export default function SupplierProducts({supplier, products}) {
+export default function SupplierProducts({supplier}) {
 
     const { flash } = usePage().props;
 
+    const [isLoading, setIsLoading] = useState(false);
+    const [rows, setRows] = useState([]);
+    const [meta, setMeta] = useState({});
+
     const [ currentProducts, setCurrentProducts ] = useState(supplier.products);
-    // const [isLoading, setIsLoading] = useState(false);
-    //  const [ selected, setSelected ] =  useState([]);
-    // const [ showAddForm, setShowAddForm ] = useState(false);
-    // const [ working, setWorking ] = useState(false);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
+
+    const paginate = usePaginate( route('api.products.index'), setIsLoading, setRows, setMeta );
 
     const Alert = React.forwardRef(function Alert(props, ref) {
         return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -29,7 +34,7 @@ export default function SupplierProducts({supplier, products}) {
         {
             field: 'id',
             headerName: 'ID',
-            width: 90
+            width: 75
         },
         {
             field: 'english_name',
@@ -44,7 +49,7 @@ export default function SupplierProducts({supplier, products}) {
         {
             field: 'uom',
             headerName: 'Unit of Measure',
-            width: 160,
+            width: 120,
         },
     ];
 
@@ -53,6 +58,10 @@ export default function SupplierProducts({supplier, products}) {
             setShowSnackbar(true);
         }
     }, [flash] );
+
+    useEffect( () => {
+        paginate(1);
+    }, []); // once
 
 
     useEffect(() => {
@@ -101,24 +110,22 @@ export default function SupplierProducts({supplier, products}) {
                         </Fab>
                     </Tooltip>
                 </Box>
-                <Stack className="h-full w-full">
-                    <Stack className="w-full h-1/3" direction="row">
-                        <Box className="w-1/2 h-full">
-                            <Typography variant="overline">{supplier.business_name}</Typography>
-                            <Typography variant="subtitle2">{supplier.contact_name}</Typography>
-                            <p>{
-                                supplier.address.split('\n').map( (line) =>
-                                    <span className="text-xs leading-none" style={{ lineHeight: "normal"}}>
-                                        {line}
-                                        <br />
-                                    </span>
-                                )
-                            }</p>
-                            <Typography variant="caption">{supplier.primary_contact_number}</Typography>
-                            <br />
-                            <Typography variant="caption">{supplier.secondary_contact_number}</Typography>
-                        </Box>
-                        <Box className="w-1/2 h-full flex flex-wrap items-start justify-start content-start overflow-y-scroll">
+                <Stack className="h-full w-full" direction="row">
+                    <Stack className="w-2/5 h-full mr-2">
+                        <Typography variant="overline">{supplier.business_name}</Typography>
+                        <Typography variant="subtitle2">{supplier.contact_name}</Typography>
+                        <p>{
+                            supplier.address.split('\n').map( (line) =>
+                                <span className="text-xs leading-none" style={{ lineHeight: "normal"}}>
+                                    {line}
+                                    <br />
+                                </span>
+                            )
+                        }</p>
+                        <Typography variant="caption">{supplier.primary_contact_number}</Typography>
+                        <Typography variant="caption">{supplier.secondary_contact_number}</Typography>
+                        <Divider className="my-2" />
+                        <Box className="w-full h-full flex flex-wrap items-start justify-start content-start overflow-y-scroll">
                             {
                                 [...currentProducts].map( product =>
                                     <Chip
@@ -133,13 +140,14 @@ export default function SupplierProducts({supplier, products}) {
                             }
                         </Box>
                     </Stack>
-                    <Box className="w-full h-2/3">
+                    <Box className="w-3/5 h-full flex flex-wrap items-start justify-start content-start overflow-y-scroll">
                         <DataGrid
-                            className="w-full"
                             keepNonExistentRowsSelected
                             checkboxSelection
                             columns={ columns }
+                            disableColumnMenu
                             disableSelectionOnClick
+                            loading={ isLoading }
                             selectionModel={currentProducts.map( item => item.id )}
                             onSelectionModelChange={ (newModel) => {
                                 const itemsToAdd = []
@@ -148,15 +156,30 @@ export default function SupplierProducts({supplier, products}) {
                                 )
                                 newModel.forEach( id => {
                                     if( currentProducts.find( element => element.id === id ) === undefined ) {
-                                        itemsToAdd.push( products.find( elem => elem.id === id ) )
+                                        itemsToAdd.push( rows.find( elem => elem.id === id ) )
                                     }
                                 });
                                 if( itemsToAdd.length > 0 ) {
                                     setCurrentProducts([...currentProducts, ...itemsToAdd])
                                 }
                             }}
-                            rows={products}
+                            onPageSizeChange={ (newPageSize) =>
+                                paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
+                            }
+                            onPageChange={ (newPage) =>
+                                paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
+                            }
+                            onSortModelChange={ ([gridSortItem]) => {
+                                if(gridSortItem) {
+                                    paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                                }
+                            } }
+                            pageSize={ meta.per_page }
+                            paginationMode="server"
+                            rows={ rows }
+                            rowCount={ meta.total }
                             rowsPerPageOptions={ [5, 10, 25, 50, 100] }
+                            sortingMode="server"
                         />
                     </Box>
                 </Stack>

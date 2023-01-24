@@ -17,8 +17,7 @@ class SupplierProductsController extends Controller
     public function index(Supplier $supplier)
     {
         $supplier->load('products');
-        $products = Product::all();
-        return Inertia::render( 'Admin/SupplierProducts', compact('supplier', 'products') );
+        return Inertia::render( 'Admin/SupplierProducts', compact('supplier') );
     }
 
     /**
