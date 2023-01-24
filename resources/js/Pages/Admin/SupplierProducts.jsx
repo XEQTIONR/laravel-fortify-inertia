@@ -13,7 +13,7 @@ import usePaginate from '@/hooks/usePaginate';
 
 const HTTP_CREATED = 201;
 
-export default function SupplierProducts({supplier}) {
+export default function SupplierProducts({ supplier }) {
 
     const { flash } = usePage().props;
 
@@ -177,7 +177,7 @@ export default function SupplierProducts({supplier}) {
                             pageSize={ meta.per_page }
                             paginationMode="server"
                             rows={ rows }
-                            rowCount={ meta.total }
+                            rowCount={ meta.total ?? 0 }
                             rowsPerPageOptions={ [5, 10, 25, 50, 100] }
                             sortingMode="server"
                         />

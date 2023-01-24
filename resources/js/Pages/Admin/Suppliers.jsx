@@ -200,7 +200,7 @@ export default function Suppliers({ suppliers }) {
                     paginationMode="server"
                     rows={ rows }
                     rowCount={ meta.total }
-                    rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => meta.total >= perPage) }
+                    rowsPerPageOptions={ [5, 10, 25, 50, 100] }
                     sortingMode="server"
                 />
             </Box>

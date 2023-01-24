@@ -1,34 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\SupplierProductsController as Controller;
-use App\Models\Product;
+use App\Http\Controllers\Controller;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class SupplierProductsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Inertia\Response
+     * @return Supplier
      */
     public function index(Supplier $supplier)
     {
-        return Inertia::render( 'Admin/SupplierProducts',
-            ['supplier' => parent::index($supplier)] );
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $supplier->load('products');
+        return $supplier;
     }
 
     /**
@@ -49,17 +37,6 @@ class SupplierProductsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
     {
         //
     }
