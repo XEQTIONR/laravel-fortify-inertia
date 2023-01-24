@@ -8,6 +8,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
+
+import usePaginate from '@/hooks/usePaginate';
+
 const HTTP_CREATED = 201;
 
 export default function Products({ products }) {
@@ -18,9 +21,9 @@ export default function Products({ products }) {
     const [rows, setRows] = useState(products.data);
     const [meta, setMeta] = useState(products.meta);
     const [ selected, setSelected ] =  useState([]);
-    const [ showAddForm, setShowAddForm ] = useState(false);
-    const [ working, setWorking ] = useState(false);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
+
+    const paginate = usePaginate( route('api.products.index'), setIsLoading, setRows, setMeta );
 
     const columns = [
         {
@@ -93,35 +96,6 @@ export default function Products({ products }) {
                 });
         }
     });
-
-
-    function paginate(page, perPage = null, orderBy = null, order = null) {
-        setIsLoading(true);
-        const params = {
-            page,
-            perPage,
-            orderBy,
-            order
-        }
-        axios.get( route('api.products.index'), {
-            headers: {
-              Authorization: 'Bearer ' + window.localStorage.getItem('api-token'),
-            },
-            params
-        })
-        .then( ({data, status}) => {
-            if ( status === 200 ) {
-                setRows(data.data);
-                setMeta(data.meta);
-            }
-        })
-        .catch( (e) => {
-            console.log('pagination exception');
-            console.log(e);
-        })
-        .finally(() => setIsLoading(false));
-
-    }
 
     return (
         <Nav navLinks={ navItems }>
