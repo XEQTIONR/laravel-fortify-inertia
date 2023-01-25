@@ -23,11 +23,17 @@ class SupplierProductsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Supplier  $supplier
+     * @return array
      */
-    public function store(Request $request)
+    public function store(Request $request, Supplier $supplier)
     {
-        //
+        $validated = $request->validate([
+           'products' => 'required|array'
+        ]);
+        $ids = collect($validated['products'])->map( fn($item) => $item['id'] );
+
+        return $supplier->products()->sync($ids);
     }
 
     /**

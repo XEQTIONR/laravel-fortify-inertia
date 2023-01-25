@@ -10,6 +10,7 @@ import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
 
 const HTTP_CREATED = 201;
+const HTTP_OK = 200;
 
 export default function Suppliers({ suppliers }) {
 
@@ -64,7 +65,7 @@ export default function Suppliers({ suppliers }) {
     });
 
     useEffect( () => {
-        if (flash.status === HTTP_CREATED) {
+        if (flash.status === HTTP_CREATED || flash.status === HTTP_OK) {
             setShowSnackbar(true);
         }
 

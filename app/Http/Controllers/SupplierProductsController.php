@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Api\SupplierProductsController as Controller;
-use App\Models\Product;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -35,11 +34,17 @@ class SupplierProductsController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Supplier  $supplier
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request, Supplier $supplier)
     {
-        //
+        parent::store($request, $supplier);
+
+        return redirect( route('admin.suppliers.index') )->with([
+            'message' => "Supplier $supplier->id's products were updated.",
+            'status'  => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 
     /**

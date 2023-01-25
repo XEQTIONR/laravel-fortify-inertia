@@ -1,34 +1,29 @@
 import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState } from 'react';
-import { usePage } from '@inertiajs/inertia-react';
+import { useForm } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { ArrowBack, Save } from "@mui/icons-material";
 import { Box, Chip, Divider, Fab, Tooltip, Snackbar, Stack, Typography } from '@mui/material'
-import MuiAlert from '@mui/material/Alert';
 
 import usePaginate from '@/hooks/usePaginate';
 
-const HTTP_CREATED = 201;
-
 export default function SupplierProducts({ supplier }) {
-
-    const { flash } = usePage().props;
 
     const [isLoading, setIsLoading] = useState(false);
     const [rows, setRows] = useState([]);
     const [meta, setMeta] = useState({});
+    const { data, setData, post, processing, progress, errors } = useForm({
+        'products' : []
+    })
 
     const [ currentProducts, setCurrentProducts ] = useState(supplier.products);
-    const [ showSnackbar, setShowSnackbar ] = useState( false );
+
+    const [ showSaveButton, setShowSaveButton ] = useState(false);
 
     const paginate = usePaginate( route('api.products.index'), setIsLoading, setRows, setMeta );
-
-    const Alert = React.forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
 
     const columns = [
         {
@@ -53,21 +48,44 @@ export default function SupplierProducts({ supplier }) {
         },
     ];
 
-    useEffect( () => {
-        if (flash.status === HTTP_CREATED) {
-            setShowSnackbar(true);
-        }
-    }, [flash] );
+    function handleSave() {
+        post( route('admin.suppliers.products.store', { supplier: supplier }) );
+    }
 
     useEffect( () => {
         paginate(1);
     }, []); // once
 
+    useEffect( () => {
+        let same = true;
+        const sortedCurrentProducts = [...currentProducts].sort((a,b) => a.id - b.id);
+        const originalProducts = [...supplier.products].sort((a,b) => a.id - b.id);
+
+        if ( sortedCurrentProducts.length === originalProducts.length ) {
+            for (let i = 0; i < originalProducts.length; i++) {
+                if ( sortedCurrentProducts[i].id !== originalProducts[i].id ) {
+                    //not same
+                    same = false;
+                    break;
+                }
+            }
+        } else {
+            // not same
+            same = false;
+        }
+
+        if ( !same ) {
+            setData( 'products', sortedCurrentProducts );
+        }
+
+        setShowSaveButton( !same );
+
+    }, [currentProducts]);
 
     useEffect(() => {
         setTimeout(() => {
-            const addButton = document.querySelector('#addButton');
-            addButton.classList.remove('scale-0');
+            const backButton = document.querySelector('#backButton');
+            backButton.classList.remove('scale-0');
         }, 125);
 
         if ( ! window.localStorage.getItem('api-token') ) {
@@ -84,29 +102,28 @@ export default function SupplierProducts({ supplier }) {
 
     return (
         <Nav navLinks={ navItems }>
-            <Snackbar
-                open={showSnackbar}
-                autoHideDuration={5000}
-                onClose={() => setShowSnackbar(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
-                    {flash.message}
-                </Alert>
-            </Snackbar>
             <Box className="flex flex-row-reverse justify-between items-end h-full">
                 <Box className="flex flex-col justify-end h-full">
+                    <Tooltip title="Save changes" placement="right">
+                        <Fab
+                            onClick={handleSave}
+                            className={`ml-4 mt-4 transition duration-200 ${ showSaveButton ? 'hover:scale-125' : 'scale-0'}`}
+                            size="medium"
+                            color="warning"
+                        >
+                            <Save />
+                        </Fab>
+                    </Tooltip>
                     <Tooltip title="Add a new product." placement="right">
                         <Fab
-                            onClick={() => Inertia.visit(route('admin.products.create')) }
-                            id="addButton"
-                            className="transition hover:scale-125 duration-200 scale-0"
+                            onClick={() => window.history.back() }
+                            id="backButton"
+                            className="ml-4 mt-4 transition hover:scale-125 duration-200 scale-0"
                             color="primary"
                             size="medium"
-                            aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
+                            aria-label="back"
                         >
-                            <Add />
+                            <ArrowBack />
                         </Fab>
                     </Tooltip>
                 </Box>

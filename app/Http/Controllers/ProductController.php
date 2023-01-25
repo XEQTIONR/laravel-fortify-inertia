@@ -41,7 +41,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         $product = parent::store($request);
 
         return redirect( route('admin.products.index') )->with([
