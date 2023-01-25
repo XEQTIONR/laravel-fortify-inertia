@@ -24,6 +24,8 @@ return new class extends Migration
             $table->integer('current_selling_price')->nullable();
             $table->integer('in_stock')->nullable();
             $table->string('image')->nullable();
+            $table->string('status');
+            $table->json('meta')->nullable();
             $table->timestamps();
         });
     }

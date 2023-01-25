@@ -28,6 +28,7 @@ class ProductFactory extends Factory
             'uom' => $uoms[rand(0, count($uoms) - 1)],
             'current_selling_price' => rand(10, 500) * 100,
             'in_stock' => rand(0, 100),
+            'status' => 'active',
             'image' => fake()->imageUrl(500, 500, $name)
         ];
     }

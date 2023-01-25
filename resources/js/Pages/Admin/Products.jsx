@@ -62,6 +62,12 @@ export default function Products({ products }) {
             sortable: true,
             width: 110,
         },
+        {
+            field: 'status',
+            headerName: 'Status',
+            sortable: true,
+            width: 100,
+        },
     ];
 
     const Alert = React.forwardRef(function Alert(props, ref) {

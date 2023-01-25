@@ -15,6 +15,7 @@ class Product extends Model
         'uom',
         'current_selling_price',
         'image',
+        'status',
     ];
 
     public static $unitsOfMeasurement = [
@@ -32,6 +33,6 @@ class Product extends Model
     ];
 
     public function suppliers() {
-        return $this->belongsToMany( Supplier::class, 'supplier_products' );
+        return $this->belongsToMany( Supplier::class, 'supplier_products' )->withTimestamps();
     }
 }

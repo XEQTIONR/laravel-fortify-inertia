@@ -5,12 +5,15 @@ import {
     Button,
     Divider,
     FormControl,
+    FormControlLabel,
+    FormGroup,
     InputLabel,
     LinearProgress,
     MenuItem,
     Paper,
     Select,
     Stack,
+    Switch,
     TextField,
     Typography
 } from "@mui/material";
@@ -44,6 +47,7 @@ export default function AddProductForm ({ uom }) {
         'uom' : '',
         'current_selling_price' : '',
         'image' : null,
+        'status' : 'inactive',
     });
 
     function handleSubmit(e) {
@@ -106,6 +110,18 @@ export default function AddProductForm ({ uom }) {
                                 )}
                             </Select>
                         </FormControl>
+                        <FormGroup className="justify-end">
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        defaultChecked={data.status === 'active'}
+                                        onChange={({target}) =>
+                                            setData('status', target.checked ? 'active' : 'inactive')}
+                                    />
+                                }
+                                label={ data.status.substring(0,1).toUpperCase() + data.status.substring(1) }
+                            />
+                        </FormGroup>
                     </Stack>
                     <Box  className="flex justify-between h-1/4">
                         <Stack spacing={2} className="w-1/2 h-1/2">

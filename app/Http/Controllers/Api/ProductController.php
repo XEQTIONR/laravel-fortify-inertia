@@ -48,6 +48,7 @@ class ProductController extends Controller
             ],
             'current_selling_price' => 'required|numeric|min:0.01',
             'image' => 'required|file|mimes:jpg,png',
+            'status' => 'required|string|in:active,inactive'
         ]);
 
         $filename = Storage::putFile('public', $validated['image']);

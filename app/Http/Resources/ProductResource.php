@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
             'current_selling_price' => $this->current_selling_price/100.0,
             'in_stock' => $this->in_stock,
             'image' => $this->image,
+            'status' => $this->status,
         ];
     }
 }

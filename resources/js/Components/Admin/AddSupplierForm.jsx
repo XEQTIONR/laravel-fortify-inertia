@@ -39,7 +39,7 @@ export default function AddSupplierForm () {
         'email' : '',
         'primary_contact_number': '',
         'secondary_phone_number': '',
-        'status' : 'inactive'
+        'status' : 'active'
     });
 
     function handleSubmit(e) {
@@ -96,6 +96,7 @@ export default function AddSupplierForm () {
                         <FormControlLabel
                             control={
                                 <Switch
+                                    defaultChecked={ data.status === 'active' }
                                     onChange={({target}) =>
                                         setData('status', target.checked ? 'active' : 'inactive')}
                                 />
