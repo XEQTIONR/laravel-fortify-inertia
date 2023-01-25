@@ -1,27 +1,31 @@
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import ListIcon from "@mui/icons-material/List";
-import RestaurantIcon from "@mui/icons-material/Restaurant";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+
+import {
+    ShoppingBag,
+    List,
+    Restaurant,
+    SupervisedUserCircle,
+
+} from '@mui/icons-material';
 
 export default [
     {
         label: 'Products',
-        icon: <FastfoodIcon />,
+        icon: <ShoppingBag />,
         link: route('admin.products.index')
     },
     {
         label: 'Orders',
-        icon: <ListIcon />,
+        icon: <List />,
         link: '/admin/second'
     },
     {
         label: 'Customers',
-        icon: <RestaurantIcon />,
+        icon: <Restaurant />,
         link: '#'
     },
     {
         label: 'Suppliers',
-        icon: <SupervisedUserCircleIcon />,
+        icon: <SupervisedUserCircle />,
         link: route('admin.suppliers.index')
     },
 ]

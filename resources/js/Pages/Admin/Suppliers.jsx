@@ -5,9 +5,11 @@ import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit, ShoppingBag } from "@mui/icons-material";
 import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
 import MuiAlert from '@mui/material/Alert';
+
+import usePaginate from '@/hooks/usePaginate';
 
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
@@ -22,6 +24,7 @@ export default function Suppliers({ suppliers }) {
     const [ selected, setSelected ] =  useState([]);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
 
+    const paginate = usePaginate( route('api.suppliers.index'), setIsLoading, setRows, setMeta );
     const columns = [
         {
             field: 'id',
@@ -93,35 +96,6 @@ export default function Suppliers({ suppliers }) {
         }
     });
 
-
-    function paginate(page, perPage = null, orderBy = null, order = null) {
-        setIsLoading(true);
-        const params = {
-            page,
-            perPage,
-            orderBy,
-            order
-        }
-        axios.get( route('api.suppliers.index'), {
-            headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('api-token'),
-            },
-            params
-        })
-            .then( ({data, status}) => {
-                if ( status === 200 ) {
-                    setRows(data.data);
-                    setMeta(data.meta);
-                }
-            })
-            .catch( (e) => {
-                console.log('pagination exception');
-                console.log(e);
-            })
-            .finally(() => setIsLoading(false));
-
-    }
-
     return (
         <Nav navLinks={ navItems }>
             <Snackbar
@@ -144,6 +118,17 @@ export default function Suppliers({ suppliers }) {
                     className="flex flex-col justify-end"
                     sx={{ height: '100%' }}
                 >
+                    <Tooltip title="View / Edit supplier's products." placement="right">
+                        <Fab
+                            onClick={() => Inertia.visit((route('admin.suppliers.products.index', { supplier : selected[0]})))}
+                            className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            color="warning"
+                            size="medium"
+                            aria-label="add"
+                        >
+                            <ShoppingBag />
+                        </Fab>
+                    </Tooltip>
                     <Tooltip title="Edit selected supplier." placement="right">
                         <Fab
                             className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
