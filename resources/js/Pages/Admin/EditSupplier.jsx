@@ -6,7 +6,7 @@ import navItems from  '@/Components/data/AdminNavItems';
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Fab, Tooltip } from '@mui/material'
 
-export default function AddSupplier() {
+export default function EditSupplier({supplier}) {
 
     useEffect( () => {
         setTimeout(() => {
@@ -32,7 +32,7 @@ export default function AddSupplier() {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <SupplierForm action="add" />
+                    <SupplierForm action="edit" supplierData={supplier} />
                 </Box>
             </Box>
         </Nav>

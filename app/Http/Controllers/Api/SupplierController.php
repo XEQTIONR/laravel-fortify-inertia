@@ -10,6 +10,16 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class SupplierController extends Controller
 {
+
+    protected $validationRules = [
+        'contact_name'             => 'required|string|max:50',
+        'business_name'            => 'nullable|string|max:50',
+        'address'                  => 'nullable|string|max:100',
+        'email'                    => 'nullable|string|max:50',
+        'primary_contact_number'   => 'required|string|max:20',
+        'secondary_contact_number' => 'nullable|string|max:20',
+        'status'                   => 'required|string|in:active,inactive'
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -39,15 +49,7 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         //
-        $validated = $request->validate([
-            'contact_name'             => 'required|string|max:50',
-            'business_name'            => 'nullable|string|max:50',
-            'address'                  => 'nullable|string|max:100',
-            'email'                    => 'nullable|string|max:50',
-            'primary_contact_number'   => 'required|string|max:20',
-            'secondary_contact_number' => 'nullable|string|max:20',
-            'status'                   => 'required|string|in:active,inactive'
-        ]);
+        $validated = $request->validate($this->validationRules);
 
         return Supplier::create( $validated );
     }
@@ -67,12 +69,15 @@ class SupplierController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Supplier $supplier
+     * @return Supplier
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Supplier $supplier)
     {
-        //
+        $validated = $request->validate($this->validationRules);
+        $supplier->update($validated);
+
+        return $supplier;
     }
 
     /**

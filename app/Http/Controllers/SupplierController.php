@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Supplier;
 use App\Http\Controllers\Api\SupplierController as Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -32,7 +33,7 @@ class SupplierController extends Controller
     {
         return Inertia::render('Admin/AddSupplier');
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *
@@ -47,6 +48,34 @@ class SupplierController extends Controller
         return redirect( route('admin.suppliers.index') )->with([
             'message' => "The supplier was created. ID: $supplier->id.",
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Supplier $supplier
+     * @return Response
+     */
+    public function edit( Supplier $supplier )
+    {
+        return Inertia::render('Admin/EditSupplier', compact('supplier'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param Request $request
+     * @param  Supplier  $supplier
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, Supplier $supplier)
+    {
+        //
+        parent::update($request, $supplier);
+        return redirect( route('admin.suppliers.index') )->with([
+            'message' => "Supplier $supplier->id was updated.",
+            'status' => \Illuminate\Http\Response::HTTP_OK,
         ]);
     }
 
