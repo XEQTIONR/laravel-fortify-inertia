@@ -5,9 +5,8 @@ import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { Add, Delete, Edit, ShoppingBag } from "@mui/icons-material";
-import { Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
-import MuiAlert from '@mui/material/Alert';
+import { Add, Delete, Edit, ShoppingBag, ToggleOn } from "@mui/icons-material";
+import { Alert, AlertTitle, Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
 
 import usePaginate from '@/hooks/usePaginate';
 
@@ -63,8 +62,8 @@ export default function Suppliers({ suppliers }) {
         },
     ];
 
-    const Alert = React.forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    const CustomAlert = React.forwardRef(function CustomAlert(props, ref) {
+        return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
     useEffect( () => {
@@ -104,12 +103,13 @@ export default function Suppliers({ suppliers }) {
                 onClose={() => setShowSnackbar(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert className="w-full"
+                <CustomAlert className="w-full"
                     onClose={() => setShowSnackbar(false)}
                     severity="success"
                 >
+                    {flash.title && <AlertTitle>{flash.title}</AlertTitle>}
                     {flash.message}
-                </Alert>
+                </CustomAlert>
             </Snackbar>
             <Box
                 className="flex flex-row-reverse justify-between items-end h-full"
@@ -137,6 +137,18 @@ export default function Suppliers({ suppliers }) {
                             aria-label="add"
                         >
                             <Edit />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Activate/Deactivate selected suppliers." placement="right">
+                        <Fab
+                            onClick={() => Inertia.post( route('admin.suppliers.status'), { ids: selected } )}
+                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            color="success"
+                            size="medium"
+                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <ToggleOn />
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Delete selected supplier." placement="right">

@@ -201,6 +201,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('products', ProductController::class);
         Route::post('/products/status', [ ProductController::class, 'toggleActivation'])->name('products.status');
         Route::resource('suppliers', SupplierController::class);
+        Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation'])->name('suppliers.status');
 
         Route::resource('suppliers.products', SupplierProductsController::class);
 

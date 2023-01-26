@@ -85,4 +85,33 @@ class SupplierController extends Controller
     {
         //
     }
+
+    // Non standard methods
+    /**
+     * Update the specified resource's status.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function toggleActivation( Request $request ) {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+        ]);
+
+        $active = Supplier::whereIn('id', $validated['ids'])
+            ->where('status', 'active')->get();
+        $activeKeys = $active->modelKeys();
+
+        $inactive = Supplier::whereIn('id', $validated['ids'])
+            ->where('status', 'inactive')->get();
+        $inactiveKeys = $inactive->modelKeys();
+
+
+        $countInactive = Supplier::whereIn('id', $activeKeys)->update(['status' => 'inactive']);
+        $countActive = Supplier::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
+
+        $message = "$countActive activated, $countInactive deactivated.";
+
+        return compact('countActive', 'countInactive', 'message');
+    }
 }

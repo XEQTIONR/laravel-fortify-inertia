@@ -49,4 +49,22 @@ class SupplierController extends Controller
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
         ]);
     }
+
+    // Non standard methods
+    /**
+     * Update the specified resource's status.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function toggleActivation( Request $request ) {
+
+        $response = parent::toggleActivation( $request );
+
+        return redirect( route('admin.suppliers.index') )->with([
+            'title' => 'Statuses updated.',
+            'message' => $response['message'],
+            'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
+    }
 }
