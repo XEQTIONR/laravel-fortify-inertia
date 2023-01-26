@@ -36,7 +36,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -74,7 +74,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -92,5 +92,23 @@ class ProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    // Non standard methods
+    /**
+     * Update the specified resource's status.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function toggleActivation( Request $request ) {
+
+        $response = parent::toggleActivation( $request );
+
+        return redirect( route('admin.products.index') )->with([
+            'title' => 'Statuses updated.',
+            'message' => $response['message'],
+            'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 }

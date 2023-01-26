@@ -5,13 +5,13 @@ import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { Box, Fab, Tooltip, Snackbar } from '@mui/material'
-import MuiAlert from '@mui/material/Alert';
+import { Add, Delete, Edit, ToggleOn } from "@mui/icons-material";
+import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 
 import usePaginate from '@/hooks/usePaginate';
 
 const HTTP_CREATED = 201;
+const HTTP_OK = 200;
 
 export default function Products({ products }) {
 
@@ -70,12 +70,12 @@ export default function Products({ products }) {
         },
     ];
 
-    const Alert = React.forwardRef(function Alert(props, ref) {
-        return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+    const CustomAlert = React.forwardRef(function CustomAlert(props, ref) {
+        return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
     useEffect( () => {
-        if (flash.status === HTTP_CREATED) {
+        if (flash.status === HTTP_CREATED || flash.status === HTTP_OK) {
             setShowSnackbar(true);
         }
 
@@ -111,9 +111,10 @@ export default function Products({ products }) {
                 onClose={() => setShowSnackbar(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <Alert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                <CustomAlert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+                    {flash.title && <AlertTitle>{flash.title}</AlertTitle>}
                     {flash.message}
-                </Alert>
+                </CustomAlert>
             </Snackbar>
             <Box
                 className="flex flex-row-reverse justify-between items-end"
@@ -132,6 +133,18 @@ export default function Products({ products }) {
                             sx={{ ml: 2, mt: 2 }}
                         >
                             <Edit />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Activate/Deactivate selected products." placement="right">
+                        <Fab
+                            onClick={() => Inertia.post( route('admin.products.status'), { ids: selected } )}
+                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            color="success"
+                            size="medium"
+                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <ToggleOn />
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Delete selected products." placement="right">

@@ -91,4 +91,34 @@ class ProductController extends Controller
     {
         //
     }
+
+
+    // Non standard methods
+    /**
+     * Update the specified resource's status.
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function toggleActivation( Request $request ) {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+        ]);
+
+        $active = Product::whereIn('id', $validated['ids'])
+            ->where('status', 'active')->get();
+        $activeKeys = $active->modelKeys();
+
+        $inactive = Product::whereIn('id', $validated['ids'])
+            ->where('status', 'inactive')->get();
+        $inactiveKeys = $inactive->modelKeys();
+
+
+        $countInactive = Product::whereIn('id', $activeKeys)->update(['status' => 'inactive']);
+        $countActive = Product::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
+
+        $message = "$countActive activated, $countInactive deactivated.";
+
+        return compact('countActive', 'countInactive', 'message');
+    }
 }

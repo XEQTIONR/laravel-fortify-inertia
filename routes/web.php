@@ -199,6 +199,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
             return \Inertia\Inertia::render('Admin/Second');
         });
         Route::resource('products', ProductController::class);
+        Route::post('/products/status', [ ProductController::class, 'toggleActivation'])->name('products.status');
         Route::resource('suppliers', SupplierController::class);
 
         Route::resource('suppliers.products', SupplierProductsController::class);
