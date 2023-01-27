@@ -7,6 +7,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
@@ -39,7 +40,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(), [
             'english_name' => 'required|string|max:50',
             'bangla_name' => 'required|string|max:50',
             'uom' => [
@@ -49,7 +50,7 @@ class ProductController extends Controller
             'current_selling_price' => 'required|numeric|min:0.01',
             'image' => 'required|file|mimes:jpg,png',
             'status' => 'required|string|in:active,inactive'
-        ]);
+        ])->validate();
 
         $filename = Storage::putFile('public', $validated['image']);
 
@@ -74,11 +75,34 @@ class ProductController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Product
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'english_name' => 'required|string|max:50',
+            'bangla_name' => 'required|string|max:50',
+            'uom' => [
+                'required',
+                Rule::in( array_keys(Product::$unitsOfMeasurement))
+            ],
+            'current_selling_price' => 'required|numeric|min:0.01',
+            // TODO Handle case where remove image button was clicked on FE.
+            'image' => 'nullable|file|mimes:jpg,png',
+            'status' => 'required|string|in:active,inactive'
+        ])->validate();
+
+        if ( $validated['image'] ) {
+            $filename = Storage::putFile('public', $validated['image']);
+            $validated['image'] = basename($filename);
+        } else {
+            unset($validated['image']);
+        }
+
+        $validated['current_selling_price'] =   (int) ($validated['current_selling_price'] * 100);
+        $product->update( $validated );
+
+        return $product;
     }
 
     /**

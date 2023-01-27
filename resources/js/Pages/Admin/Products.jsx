@@ -126,6 +126,7 @@ export default function Products({ products }) {
                 >
                     <Tooltip title="Edit selected product." placement="right">
                         <Fab
+                            onClick={() => Inertia.visit(route('admin.products.edit', { product: selected[0] })) }
                             className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
                             color="warning"
                             size="medium"

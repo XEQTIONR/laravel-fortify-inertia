@@ -131,7 +131,7 @@ export default function Suppliers({ suppliers }) {
                     </Tooltip>
                     <Tooltip title="Edit selected supplier." placement="right">
                         <Fab
-                            onClick={() => Inertia.visit(route('admin.suppliers.edit', { supplier: selected[0]}))}
+                            onClick={() => Inertia.visit(route('admin.suppliers.edit', { supplier: selected[0] }))}
                             className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
                             color="warning"
                             size="medium"

@@ -37,26 +37,42 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function AddProductForm ({ uom }) {
+export default function ProductForm ({ action, productData, uom }) {
 
-    const [ uploadedImageUrl, setUploadedImageUrl ] = useState(null);
+    const [ uploadedImageUrl, setUploadedImageUrl ] = useState( productData ? productData.image : null );
 
-    const { data, setData, post, processing, progress, errors } = useForm({
-        'english_name' : '',
-        'bangla_name' : '',
-        'uom' : '',
-        'current_selling_price' : '',
+    const formData = {
+        'english_name' : productData ? productData.english_name : '',
+        'bangla_name' : productData ? productData.bangla_name : '',
+        'uom' : productData ? productData.uom : '',
+        'current_selling_price' : productData ? productData.current_selling_price/100 : '',
         'image' : null,
-        'status' : 'inactive',
-    });
+        'status' : productData ? productData.status : 'inactive',
+    };
+
+    if ( action === 'edit') {
+        formData._method = 'put'
+    }
+
+    const { data, setData, post, processing, progress, errors } = useForm(formData);
 
     function handleSubmit(e) {
         e.preventDefault();
-        post( route('admin.products.store'), {
-            onError: (err) => {
-                console.log(err);
-            },
-        })
+
+        if ( action === 'add' ) {
+            post(route('admin.products.store'), {
+                onError: (err) => {
+                    console.log(err);
+                },
+            });
+        } else if ( action === 'edit') {
+            // actually PUT request.
+            post(route('admin.products.update', { product: productData.id }), {
+                onError: (err) => {
+                    console.log(err);
+                },
+            });
+        }
     }
 
     return(
@@ -66,6 +82,7 @@ export default function AddProductForm ({ uom }) {
                     <Typography align="center" variant="h6" sx={{ fontWeight: 'bold' }}>Add a new product</Typography>
                     <Divider />
                     <TextField
+                        value={data.english_name}
                         onChange={({ target }) => setData('english_name', target.value)}
                         required
                         id="outlined-required"
@@ -73,6 +90,7 @@ export default function AddProductForm ({ uom }) {
                         variant="standard"
                     />
                     <TextField
+                        value={data.bangla_name}
                         onChange={({target}) => setData('bangla_name', target.value)}
                         required
                         id="outlined-required"
@@ -83,6 +101,7 @@ export default function AddProductForm ({ uom }) {
                         <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end', width: "50%" }}>
                             <Typography className="mr-1">৳</Typography>
                             <TextField
+                                value={data.current_selling_price}
                                 error={!!errors.current_selling_price}
                                 helperText={errors?.current_selling_price}
                                 onChange={({target}) => setData('current_selling_price', target.value)}

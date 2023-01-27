@@ -64,23 +64,28 @@ class ProductController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function edit($id)
+    public function edit( Product $product )
     {
-        //
+        $uom = Product::$unitsOfMeasurement;
+        return Inertia::render( 'Admin/EditProduct', compact( 'product', 'uom' ) );
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Product $product
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Product $product)
     {
-        //
+        parent::update($request, $product);
+        return redirect( route('admin.products.index') )->with([
+            'message' => "Supplier $product->id was updated.",
+            'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 
     /**
