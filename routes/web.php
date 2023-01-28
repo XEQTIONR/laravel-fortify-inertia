@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Rules\Password;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -198,8 +198,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/second', function() {
             return \Inertia\Inertia::render('Admin/Second');
         });
+
+        Route::resource('categories', CategoryController::class);
+
         Route::resource('products', ProductController::class);
         Route::post('/products/status', [ ProductController::class, 'toggleActivation'])->name('products.status');
+
         Route::resource('suppliers', SupplierController::class);
         Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation'])->name('suppliers.status');
 
