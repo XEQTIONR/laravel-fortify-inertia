@@ -45,7 +45,7 @@ export default function ProductForm ({ action, productData, uom }) {
         'english_name' : productData ? productData.english_name : '',
         'bangla_name' : productData ? productData.bangla_name : '',
         'uom' : productData ? productData.uom : '',
-        'current_selling_price' : productData ? productData.current_selling_price/100 : '',
+        'current_selling_price' : productData ? productData.current_selling_price.toFixed(2) : '',
         'image' : null,
         'status' : productData ? productData.status : 'inactive',
     };

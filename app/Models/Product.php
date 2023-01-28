@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -34,18 +35,36 @@ class Product extends Model
         'ml'     => 'millilitres',
     ];
 
-    public function suppliers() {
+    /**
+     * A Product may have many suppliers.
+     *
+     * @return BelongsToMany
+     */
+    public function suppliers(): BelongsToMany
+    {
         return $this->belongsToMany( Supplier::class, 'supplier_products' )->withTimestamps();
     }
 
     /**
-     * Get the product image.
+     * Get the image.
      *
      * @return Attribute
      */
     public function image(): Attribute {
         return Attribute::make(
             get: fn ($value) =>  str_starts_with($value, 'http') ? $value : Storage::url($value)
+        );
+    }
+
+    /**
+     * Get/Set the current_selling_price.
+     *
+     * @return Attribute
+     */
+    public function currentSellingPrice(): Attribute {
+        return Attribute::make(
+            get: fn($value) => $value / 100.0,
+            set: fn($value) => (int) ($value * 100)
         );
     }
 }

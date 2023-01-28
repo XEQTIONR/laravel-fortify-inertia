@@ -55,7 +55,7 @@ class ProductController extends Controller
         $filename = Storage::putFile('public', $validated['image']);
 
         $validated['image'] = basename($filename);
-        $validated['current_selling_price'] =   (int) ($validated['current_selling_price'] * 100);
+
         return Product::create( $validated );
     }
 
@@ -99,7 +99,6 @@ class ProductController extends Controller
             unset($validated['image']);
         }
 
-        $validated['current_selling_price'] =   (int) ($validated['current_selling_price'] * 100);
         $product->update( $validated );
 
         return $product;
