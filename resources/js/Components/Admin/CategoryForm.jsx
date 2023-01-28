@@ -37,10 +37,21 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
+const flatten = function(cats) {
+    if (cats.length === 0) {
+        return cats;
+    }
+    if (cats[0].children === null) {
+       return [cats[0], ...flatten(cats.slice(1))]
+    }
+    return [cats[0], ...flatten(cats[0].children), ...flatten(cats.slice(1))];
+}
+
 export default function CategoryForm ({ action, categoryData, existingCategories }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState( categoryData ? categoryData.image : null );
 
+     const [flattenedCategories, setFlattenedCategories] = useState( flatten(existingCategories) );
     const formData = {
         'english_name' : categoryData ? categoryData.english_name : '',
         'bangla_name' : categoryData ? categoryData.bangla_name : '',
@@ -111,9 +122,9 @@ export default function CategoryForm ({ action, categoryData, existingCategories
                                 <em>None</em>
                             </MenuItem>
                             {
-                                existingCategories.map(({ id, bangla_name, english_name }) =>
+                                flattenedCategories.map(({ id, bangla_name, english_name, level }) =>
                                     <MenuItem value={id}>
-                                        {`${english_name} (${bangla_name})`}
+                                        {'—'.repeat(level) + ` ${english_name} (${bangla_name})`}
                                     </MenuItem>
                                 )
                             }

@@ -18,7 +18,15 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $categories = Category::all();
-        return Inertia::render( 'Admin/AddCategory', compact('categories') );
+        $grouped =  $categories->groupBy('parent_id');
+        $roots = $grouped[''];
+
+        foreach ($roots as $node) {
+            $node->children = $this->getChildren($grouped, $node->id);
+            $node->level = 0;
+        }
+
+        return Inertia::render( 'Admin/AddCategory', ['categories' => $roots ] );
     }
 
     /**
@@ -35,5 +43,24 @@ class CategoryController extends Controller
             'message' => "The category was created. ID: $category->id.",
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
         ]);
+    }
+
+    /**
+     * Arrange the categories in hierarchical order.
+     *
+     * @param array $grouped
+     * @param int $id
+     * @param int $level
+     * @return array
+     */
+    protected function getChildren(array $grouped, int $id, int $level = 0) {
+        if (! isset($grouped[$id])) {
+            return null;
+        }
+        foreach ($grouped[$id] as $item) {
+            $item->children = $this->getChildren($grouped, $item->id, $level+1);
+            $item->level = $level+1;
+        }
+        return $grouped[$id];
     }
 }
