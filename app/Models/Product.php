@@ -45,7 +45,7 @@ class Product extends Model
      */
     public function image(): Attribute {
         return Attribute::make(
-            get: fn ($value) => Storage::url($value)
+            get: fn ($value) =>  str_starts_with($value, 'http') ? $value : Storage::url($value)
         );
     }
 }
