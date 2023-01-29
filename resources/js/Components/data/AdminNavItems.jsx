@@ -17,7 +17,7 @@ export default [
     {
         label: 'Categories',
         icon: <LocalOffer />,
-        link: route('admin.products.index')
+        link: route('admin.categories.index')
     },
     {
         label: 'Orders',

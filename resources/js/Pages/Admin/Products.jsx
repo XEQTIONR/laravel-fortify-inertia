@@ -80,10 +80,7 @@ export default function Products({ products }) {
         }
 
     }, [flash] );
-
-    useEffect( () => {
-        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
-    }, [products] );
+    
 
     useEffect(() => {
         setTimeout(() => {

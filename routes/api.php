@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SupplierController;
 /*
@@ -28,4 +29,9 @@ Route::middleware('auth:sanctum')
 
       Route::get('/suppliers', [ SupplierController::class, 'index' ])
           ->name('suppliers.index');
+
+        Route::get('/categories', [ CategoryController::class, 'index' ])
+            ->name('categories.index');
+
+
 });

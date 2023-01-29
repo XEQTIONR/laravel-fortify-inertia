@@ -17,8 +17,13 @@ class Category extends Model
         'parent_id',
     ];
 
-    public function subcategory()
+    public function subCategories()
     {
-        return $this->hasMany( self::class, 'parent_id');
+        return $this->hasMany( self::class, 'parent_id' );
+    }
+
+    public function parent()
+    {
+        return $this->belongsTo( self::class, 'parent_id' );
     }
 }

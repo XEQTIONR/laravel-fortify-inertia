@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,11 +14,22 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $perPage = $request->perPage ?? 10;
+        $orderBy = $request->orderBy ?? 'id';
+        $order = $request->order ?? 'asc';
+
+        $categories = Category::orderBy($orderBy, $order)->paginate($perPage);
+        $categories->appends(compact('perPage', 'orderBy', 'order'));
+
+        return CategoryResource::collection($categories)->additional([
+            'meta' => compact( 'orderBy', 'perPage', 'order' )
+        ]);
+
+
     }
 
     /**

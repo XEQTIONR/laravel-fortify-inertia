@@ -5,25 +5,26 @@ import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
-import { Add, Delete, Edit, ShoppingBag, ToggleOn } from "@mui/icons-material";
-import { Alert, AlertTitle, Box, Fab, Tooltip, Modal, Snackbar } from '@mui/material'
+import { Add, Delete, Edit, ToggleOn } from "@mui/icons-material";
+import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 
 import usePaginate from '@/hooks/usePaginate';
 
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
 
-export default function Suppliers({ suppliers }) {
+export default function Categories({ categories }) {
 
     const { flash } = usePage().props;
 
     const [isLoading, setIsLoading] = useState(false);
-    const [rows, setRows] = useState(suppliers.data);
-    const [meta, setMeta] = useState(suppliers.meta);
+    const [rows, setRows] = useState(categories.data);
+    const [meta, setMeta] = useState(categories.meta);
     const [ selected, setSelected ] =  useState([]);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
 
-    const paginate = usePaginate( route('api.suppliers.index'), setIsLoading, setRows, setMeta );
+    const paginate = usePaginate( route('api.categories.index'), setIsLoading, setRows, setMeta );
+
     const columns = [
         {
             field: 'id',
@@ -31,34 +32,30 @@ export default function Suppliers({ suppliers }) {
             width: 90
         },
         {
-            field: 'contact_name',
-            headerName: 'Contact Name',
+            field: 'english_name',
+            headerName: 'Name',
             width: 150,
             editable: true,
         },
         {
-            field: 'business_name',
-            headerName: 'Business Name',
+            field: 'bangla_name',
+            headerName: 'Name (Bangla)',
             width: 150,
             editable: true,
         },
         {
-            field: 'address',
-            headerName: 'Address',
-            width: 250,
-            editable: true,
-        },
-        {
-            field: 'primary_contact_number',
-            headerName: 'Mobile Number',
-            width: 160,
+            field: 'parent_id',
+            headerName: 'Parent',
+            type: 'number',
+            width: 150,
+            valueGetter: (params) => params.row.parent ? `(${params.row.parent.id}) ${params.row.parent.english_name}` : null,
             editable: true,
         },
         {
             field: 'status',
             headerName: 'Status',
             sortable: true,
-            width: 110,
+            width: 100,
         },
     ];
 
@@ -99,46 +96,34 @@ export default function Suppliers({ suppliers }) {
                 onClose={() => setShowSnackbar(false)}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-                <CustomAlert className="w-full"
-                    onClose={() => setShowSnackbar(false)}
-                    severity="success"
-                >
+                <CustomAlert onClose={() => setShowSnackbar(false)} severity="success" sx={{ width: '100%' }}>
                     {flash.title && <AlertTitle>{flash.title}</AlertTitle>}
                     {flash.message}
                 </CustomAlert>
             </Snackbar>
             <Box
-                className="flex flex-row-reverse justify-between items-end h-full"
+                className="flex flex-row-reverse justify-between items-end"
+                sx={{ height: '100%' }}
             >
                 <Box
                     className="flex flex-col justify-end"
                     sx={{ height: '100%' }}
                 >
-                    <Tooltip title="View / Edit supplier's products." placement="right">
+                    <Tooltip title="Edit selected categories." placement="right">
                         <Fab
-                            onClick={() => Inertia.visit(route('admin.suppliers.products.index', { supplier : selected[0]}))}
-                            className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            onClick={() => Inertia.visit(route('admin.categories.edit', { categories: selected[0] })) }
+                            className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
                             color="warning"
                             size="medium"
                             aria-label="add"
-                        >
-                            <ShoppingBag />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip title="Edit selected supplier." placement="right">
-                        <Fab
-                            onClick={() => Inertia.visit(route('admin.suppliers.edit', { supplier: selected[0] }))}
-                            className={`ml-4 mt-4 transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
-                            color="warning"
-                            size="medium"
-                            aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Edit />
                         </Fab>
                     </Tooltip>
-                    <Tooltip title="Activate/Deactivate selected suppliers." placement="right">
+                    <Tooltip title="Activate/Deactivate selected category." placement="right">
                         <Fab
-                            onClick={() => Inertia.post( route('admin.suppliers.status'), { ids: selected } )}
+                            onClick={() => Inertia.post( route('admin.categories.status'), { ids: selected } )}
                             className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
                             color="success"
                             size="medium"
@@ -148,24 +133,26 @@ export default function Suppliers({ suppliers }) {
                             <ToggleOn />
                         </Fab>
                     </Tooltip>
-                    <Tooltip title="Delete selected supplier." placement="right">
+                    <Tooltip title="Delete selected categories." placement="right">
                         <Fab
-                            className={`ml-4 mt-4 transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
                             color="error"
                             size="medium"
                             aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Delete />
                         </Fab>
                     </Tooltip>
-                    <Tooltip title="Add a new supplier." placement="right">
+                    <Tooltip title="Add a new category." placement="right">
                         <Fab
-                            onClick={() => Inertia.visit(route('admin.suppliers.create'))}
+                            onClick={() => Inertia.visit(route('admin.categories.create')) }
                             id="addButton"
-                            className="ml-4 mt-4 transition hover:scale-125 duration-200 scale-0"
+                            className="transition hover:scale-125 duration-200 scale-0"
                             color="primary"
                             size="medium"
                             aria-label="add"
+                            sx={{ ml: 2, mt: 2 }}
                         >
                             <Add />
                         </Fab>
@@ -195,7 +182,7 @@ export default function Suppliers({ suppliers }) {
                     paginationMode="server"
                     rows={ rows }
                     rowCount={ meta.total }
-                    rowsPerPageOptions={ [5, 10, 25, 50, 100] }
+                    rowsPerPageOptions={ [5, 10, 25, 50, 100].filter((perPage) => meta.total >= perPage) }
                     sortingMode="server"
                 />
             </Box>
