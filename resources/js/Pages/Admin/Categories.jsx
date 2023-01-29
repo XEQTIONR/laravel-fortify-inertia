@@ -111,7 +111,7 @@ export default function Categories({ categories }) {
                 >
                     <Tooltip title="Edit selected categories." placement="right">
                         <Fab
-                            onClick={() => Inertia.visit(route('admin.categories.edit', { categories: selected[0] })) }
+                            onClick={() => Inertia.visit(route('admin.categories.edit', { category: selected[0] })) }
                             className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
                             color="warning"
                             size="medium"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use App\Http\Controllers\Api\SupplierController as Controller;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class SupplierController extends Controller
     {
         return Inertia::render('Admin/AddSupplier');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -59,7 +60,7 @@ class SupplierController extends Controller
      */
     public function edit( Supplier $supplier )
     {
-        return Inertia::render('Admin/EditSupplier', compact('supplier'));
+        return Inertia::render('Admin/EditSupplier', ['supplier' => new SupplierResource($supplier)]);
     }
 
     /**

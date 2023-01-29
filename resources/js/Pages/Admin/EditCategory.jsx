@@ -6,7 +6,7 @@ import navItems from  '@/Components/data/AdminNavItems';
 import { ArrowBack } from "@mui/icons-material";
 import { Box, Fab, Tooltip } from '@mui/material'
 
-export default function AddCategory({ categories }) {
+export default function EditCategory({ category, categories }) {
 
     useEffect( () => {
         setTimeout(() => {
@@ -32,7 +32,7 @@ export default function AddCategory({ categories }) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <CategoryForm action="add" existingCategories={categories}  />
+                    <CategoryForm action="edit" categoryData={category.data} existingCategories={categories}  />
                 </Box>
             </Box>
         </Nav>

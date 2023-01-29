@@ -51,12 +51,12 @@ export default function CategoryForm ({ action, categoryData, existingCategories
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState( categoryData ? categoryData.image : null );
 
-     const [flattenedCategories, setFlattenedCategories] = useState( flatten(existingCategories) );
+    const [flattenedCategories] = useState( flatten(existingCategories) );
     const formData = {
         'english_name' : categoryData ? categoryData.english_name : '',
         'bangla_name' : categoryData ? categoryData.bangla_name : '',
         'image' : null,
-        'parent_id': '',
+        'parent_id': categoryData?.parent?.id ?? '',
         'status' : categoryData ? categoryData.status : 'inactive',
     };
 
@@ -75,13 +75,13 @@ export default function CategoryForm ({ action, categoryData, existingCategories
                     console.log(err);
                 },
             });
-        // } else if ( action === 'edit') {
-        //     // actually PUT request.
-        //     post(route('admin.products.update', { product: productData.id }), {
-        //         onError: (err) => {
-        //             console.log(err);
-        //         },
-        //     });
+        } else if ( action === 'edit') {
+            // actually PUT request.
+            post(route('admin.categories.update', { category: categoryData.id }), {
+                onError: (err) => {
+                    console.log(err);
+                },
+            });
         }
     }
 

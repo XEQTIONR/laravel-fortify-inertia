@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
@@ -68,8 +69,10 @@ class ProductController extends Controller
      */
     public function edit( Product $product )
     {
-        $uom = Product::$unitsOfMeasurement;
-        return Inertia::render( 'Admin/EditProduct', compact( 'product', 'uom' ) );
+        return Inertia::render( 'Admin/EditProduct', [
+            'product' => new ProductResource($product),
+            'uom' => Product::$unitsOfMeasurement
+        ]);
     }
 
     /**
@@ -83,7 +86,7 @@ class ProductController extends Controller
     {
         parent::update($request, $product);
         return redirect( route('admin.products.index') )->with([
-            'message' => "Supplier $product->id was updated.",
+            'message' => "Product $product->id was updated.",
             'status' => \Illuminate\Http\Response::HTTP_OK,
         ]);
     }

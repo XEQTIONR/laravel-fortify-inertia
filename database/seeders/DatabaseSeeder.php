@@ -59,6 +59,7 @@ class DatabaseSeeder extends Seeder
                 'english_name' => $key,
                 'bangla_name' => $key,
                 'parent_id' => $parent,
+                'image' => \Faker\Factory::create()->imageUrl(500, 500, $key, false),
                 'status' => 'active',
             ]);
             $this->traverse($val, $category->id);

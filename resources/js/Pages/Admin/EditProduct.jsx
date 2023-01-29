@@ -32,7 +32,7 @@ export default function EditProduct({ product, uom }) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <ProductForm action="edit" uom={uom} productData={product} />
+                    <ProductForm action="edit" uom={uom} productData={product.data} />
                 </Box>
             </Box>
         </Nav>

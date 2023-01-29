@@ -32,7 +32,7 @@ export default function EditSupplier({supplier}) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <SupplierForm action="edit" supplierData={supplier} />
+                    <SupplierForm action="edit" supplierData={supplier.data} />
                 </Box>
             </Box>
         </Nav>

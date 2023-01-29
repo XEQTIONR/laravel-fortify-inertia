@@ -70,12 +70,29 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Category $category
+     * @return Category
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        //
+        $validated = Validator::make($request->all(), [
+            'english_name' => 'required|string|max:50',
+            'bangla_name' => 'required|string|max:50',
+            'parent_id' => 'nullable',
+            'image' => 'nullable|file|mimes:jpg,png',
+            'status' => 'required|string|in:active,inactive'
+        ])->validate();
+
+        if ( $validated['image'] ) {
+            $filename = Storage::putFile('public', $validated['image']);
+            $validated['image'] = basename($filename);
+        } else {
+            unset($validated['image']);
+        }
+
+        $category->update($validated);
+
+        return $category;
     }
 
     /**
