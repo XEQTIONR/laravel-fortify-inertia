@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Http\Traits\HierarchicalCategoriesTrait;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
@@ -11,6 +12,7 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
+    use HierarchicalCategoriesTrait;
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +33,10 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         $uom = Product::$unitsOfMeasurement;
-        return Inertia::render('Admin/AddProduct', compact('uom'));
+        return Inertia::render('Admin/AddProduct', [
+            'uom' => $uom,
+            'categories' => $this->categoryTree(),
+        ]);
     }
 
     /**
