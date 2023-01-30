@@ -59,7 +59,7 @@ export default function ProductForm ({ action, existingCategories, productData, 
     const formData = {
         'english_name' : productData ? productData.english_name : '',
         'bangla_name' : productData ? productData.bangla_name : '',
-        'categories' : [],
+        'categories' : productData ? productData.categories.map(({id}) => id) : [],
         'uom' : productData ? productData.uom : '',
         'current_selling_price' : productData ? productData.current_selling_price.toFixed(2) : '',
         'image' : null,
@@ -132,7 +132,7 @@ export default function ProductForm ({ action, existingCategories, productData, 
                             >
                                 {
                                     flattenedCategories.map(({ id, bangla_name, english_name, level }) =>
-                                        <MenuItem value={id}>
+                                        <MenuItem key={id} value={id}>
                                             <Checkbox
                                                 checked={data.categories.find((item) => item === id) !== undefined}
                                             />

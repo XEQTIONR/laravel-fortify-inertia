@@ -19,7 +19,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'english_name' => $this->english_name,
             'bangla_name' => $this->bangla_name,
-            'parent' => new self($this->parent),
+            'parent' => new self($this->whenLoaded('parent')),
             'image' => $this->image,
             'status' => $this->status,
         ];

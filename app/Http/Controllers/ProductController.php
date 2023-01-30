@@ -32,9 +32,8 @@ class ProductController extends Controller
      */
     public function create(Request $request)
     {
-        $uom = Product::$unitsOfMeasurement;
         return Inertia::render('Admin/AddProduct', [
-            'uom' => $uom,
+            'uom' => Product::$unitsOfMeasurement,
             'categories' => $this->categoryTree(),
         ]);
     }
@@ -75,8 +74,9 @@ class ProductController extends Controller
     public function edit( Product $product )
     {
         return Inertia::render( 'Admin/EditProduct', [
-            'product' => new ProductResource($product),
-            'uom' => Product::$unitsOfMeasurement
+            'product' => new ProductResource($product->load('categories')),
+            'uom' => Product::$unitsOfMeasurement,
+            'categories' => $this->categoryTree(),
         ]);
     }
 

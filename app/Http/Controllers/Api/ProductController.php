@@ -87,6 +87,7 @@ class ProductController extends Controller
         $validated = Validator::make($request->all(), [
             'english_name' => 'required|string|max:50',
             'bangla_name' => 'required|string|max:50',
+            'categories' => 'required|array',
             'uom' => [
                 'required',
                 Rule::in( array_keys(Product::$unitsOfMeasurement))
@@ -105,6 +106,8 @@ class ProductController extends Controller
         }
 
         $product->update( $validated );
+
+        $product->categories()->sync($validated['categories']);
 
         return $product;
     }

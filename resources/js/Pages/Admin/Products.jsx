@@ -29,7 +29,7 @@ export default function Products({ products }) {
         {
             field: 'id',
             headerName: 'ID',
-            width: 90
+            width: 50
         },
         {
             field: 'english_name',
@@ -52,21 +52,22 @@ export default function Products({ products }) {
         },
         {
             field: 'uom',
-            headerName: 'Unit of Measure',
-            width: 160,
+            headerName: 'Unit',
+            width: 75,
             editable: true,
         },
         {
             field: 'in_stock',
+            type: 'number',
             headerName: '# in stock',
             sortable: true,
-            width: 110,
+            width: 85,
         },
         {
             field: 'status',
             headerName: 'Status',
             sortable: true,
-            width: 100,
+            width: 90,
         },
     ];
 
@@ -80,7 +81,7 @@ export default function Products({ products }) {
         }
 
     }, [flash] );
-    
+
 
     useEffect(() => {
         setTimeout(() => {
