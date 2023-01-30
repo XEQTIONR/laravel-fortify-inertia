@@ -40,11 +40,18 @@ class Product extends Model
      *
      * @return BelongsToMany
      */
-    public function suppliers(): BelongsToMany
-    {
+    public function suppliers(): BelongsToMany {
         return $this->belongsToMany( Supplier::class, 'supplier_products' )->withTimestamps();
     }
 
+    /**
+     * A Product may have many category terms.
+     *
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany {
+        return $this->belongsToMany( Category::class, 'product_categories' )->withTimestamps();
+    }
     /**
      * Get the image.
      *
