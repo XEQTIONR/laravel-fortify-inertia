@@ -24,7 +24,7 @@ class ProductController extends Controller
         $order = $request->order ?? 'asc';
 
 
-        $products = Product::orderBy($orderBy, $order)->paginate($perPage);
+        $products = Product::orderBy($orderBy, $order)->with('categories')->paginate($perPage);
         $products->appends(compact('perPage', 'orderBy', 'order'));
 
         return ProductResource::collection($products)->additional([

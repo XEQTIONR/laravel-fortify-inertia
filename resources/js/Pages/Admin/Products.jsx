@@ -6,7 +6,7 @@ import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
 
 import { Add, Delete, Edit, ToggleOn } from "@mui/icons-material";
-import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
+import { Alert, AlertTitle, Box, Chip, Fab, Tooltip, Snackbar } from '@mui/material'
 
 import usePaginate from '@/hooks/usePaginate';
 
@@ -68,6 +68,17 @@ export default function Products({ products }) {
             headerName: 'Status',
             sortable: true,
             width: 90,
+        },
+        {
+            field: 'categories',
+            headerName: 'Categories',
+            sortable: false,
+            width: 180,
+            renderCell: (params) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    {params.value.map((item) => <Chip key={item.id} label={item.english_name} />)}
+                </Box>
+            )
         },
     ];
 
@@ -172,6 +183,7 @@ export default function Products({ products }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    getRowHeight={() => 'auto'}
                     keepNonExistentRowsSelected
                     checkboxSelection
                     columns={ columns }
