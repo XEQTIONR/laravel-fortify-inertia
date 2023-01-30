@@ -43,6 +43,7 @@ class ProductController extends Controller
         $validated = Validator::make($request->all(), [
             'english_name' => 'required|string|max:50',
             'bangla_name' => 'required|string|max:50',
+            'categories' => 'required|array',
             'uom' => [
                 'required',
                 Rule::in( array_keys(Product::$unitsOfMeasurement))
@@ -56,7 +57,11 @@ class ProductController extends Controller
 
         $validated['image'] = basename($filename);
 
-        return Product::create( $validated );
+        $product = Product::create( $validated );
+
+        $product->categories()->attach($validated['categories']);
+
+        return $product;
     }
 
     /**

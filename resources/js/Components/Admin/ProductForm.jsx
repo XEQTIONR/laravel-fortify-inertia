@@ -3,12 +3,15 @@ import { grey, red } from '@mui/material/colors';
 import {
     Box,
     Button,
+    Checkbox,
+    Chip,
     Divider,
     FormControl,
     FormControlLabel,
     FormGroup,
     InputLabel,
     LinearProgress,
+    ListItemText,
     MenuItem,
     Paper,
     Select,
@@ -37,13 +40,26 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function ProductForm ({ action, productData, uom }) {
+const flatten = function(cats) {
+    if (cats.length === 0) {
+        return cats;
+    }
+    if (cats[0].children === null) {
+        return [cats[0], ...flatten(cats.slice(1))]
+    }
+    return [cats[0], ...flatten(cats[0].children), ...flatten(cats.slice(1))];
+}
+
+export default function ProductForm ({ action, existingCategories, productData, uom }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState( productData ? productData.image : null );
+
+    const [flattenedCategories] = useState( flatten(existingCategories) );
 
     const formData = {
         'english_name' : productData ? productData.english_name : '',
         'bangla_name' : productData ? productData.bangla_name : '',
+        'categories' : [],
         'uom' : productData ? productData.uom : '',
         'current_selling_price' : productData ? productData.current_selling_price.toFixed(2) : '',
         'image' : null,
@@ -97,54 +113,83 @@ export default function ProductForm ({ action, productData, uom }) {
                         label="Name (Bangla)"
                         variant="standard"
                     />
-                    <Stack direction="row" spacing={2}>
-                        <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end', width: "50%" }}>
-                            <Typography className="mr-1">৳</Typography>
-                            <TextField
-                                value={data.current_selling_price}
-                                error={!!errors.current_selling_price}
-                                helperText={errors?.current_selling_price}
-                                onChange={({target}) => setData('current_selling_price', target.value)}
-                                required
-                                id="outlined-required"
-                                label="Current Selling Price"
-                                variant="standard"
-                            />
-                        </Box>
-                        <FormControl required variant="standard" className="w-1/2">
-                            <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
+                        <FormControl required variant="standard">
+                            <InputLabel id="demo-simple-select-standard-label">Categories</InputLabel>
                             <Select
-                                onChange={ ({target}) => setData('uom', target.value) }
-                                id="select-input-id"
-                                value={data.uom}
-                                label="Age"
-                            >
-                                <MenuItem value="" key={'None'}>
-                                    <em>None</em>
-                                </MenuItem>
-                                { Object.keys(uom).map( (key) =>
-                                    <MenuItem value={key} key={key}>
-                                        {uom[key]}
-                                    </MenuItem>
+                                multiple
+                                onChange={ ({target}) => setData('categories', target.value) }
+                                id="categories"
+                                value={data.categories}
+                                label="Categories"
+                                renderValue={(selected) => (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        {selected.map((value) => {
+                                            const item = flattenedCategories.find(({id}) => id === value )
+                                            return <Chip key={item.id} label={item.english_name} />
+                                        })}
+                                    </Box>
                                 )}
+                            >
+                                {
+                                    flattenedCategories.map(({ id, bangla_name, english_name, level }) =>
+                                        <MenuItem value={id}>
+                                            <Checkbox
+                                                checked={data.categories.find((item) => item === id) !== undefined}
+                                            />
+                                            <ListItemText
+                                                primary={'—'.repeat(level) + ` ${english_name} (${bangla_name})`}
+                                            />
+                                        </MenuItem>
+                                    )
+                                }
                             </Select>
                         </FormControl>
-                        <FormGroup className="justify-end">
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        defaultChecked={data.status === 'active'}
-                                        onChange={({target}) =>
-                                            setData('status', target.checked ? 'active' : 'inactive')}
-                                    />
-                                }
-                                label={ data.status.substring(0,1).toUpperCase() + data.status.substring(1) }
-                            />
-                        </FormGroup>
-                    </Stack>
                     <Box  className="flex justify-between h-1/4">
                         <Stack spacing={2} className="w-1/2 h-1/2">
-                            <Typography color={grey[700]}>Product Image</Typography>
+                            <FormControl required variant="standard" className="mr-1">
+                                <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
+                                <Select
+                                    onChange={ ({target}) => setData('uom', target.value) }
+                                    id="uom"
+                                    value={data.uom}
+                                    label="Unit of Measure"
+                                >
+                                    <MenuItem value="" key={'None'}>
+                                        <em>None</em>
+                                    </MenuItem>
+                                    { Object.keys(uom).map( (key) =>
+                                        <MenuItem value={key} key={key}>
+                                            {uom[key]}
+                                        </MenuItem>
+                                    )}
+                                </Select>
+                            </FormControl>
+                            <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end' }}>
+                                <Typography className="mr-1">৳</Typography>
+                                <TextField
+                                    value={data.current_selling_price}
+                                    error={!!errors.current_selling_price}
+                                    helperText={errors?.current_selling_price}
+                                    onChange={({target}) => setData('current_selling_price', target.value)}
+                                    required
+                                    id="outlined-required"
+                                    label="Current Selling Price"
+                                    variant="standard"
+                                />
+                            </Box>
+                            {errors.image ? (<Typography color={red[500]}>{errors.image}</Typography>) : null }
+                            <FormGroup className="justify-end">
+                                <FormControlLabel
+                                    control={
+                                        <Switch
+                                            defaultChecked={data.status === 'active'}
+                                            onChange={({target}) =>
+                                                setData('status', target.checked ? 'active' : 'inactive')}
+                                        />
+                                    }
+                                    label={ data.status.substring(0,1).toUpperCase() + data.status.substring(1) }
+                                />
+                            </FormGroup>
                             <Box className="w-full">
                                 {   uploadedImageUrl
                                     ? (
@@ -169,9 +214,8 @@ export default function ProductForm ({ action, productData, uom }) {
                                     )
                                 }
                             </Box>
-                            {errors.image ? (<Typography color={red[500]}>{errors.image}</Typography>) : null }
                         </Stack>
-                        <Box sx={{ width: 1/2 }}>
+                        <Box className="w-1/2 self-end">
                             <Box
                                 className="bg-center bg-cover w-full h-0 relative"
                                 sx={{
