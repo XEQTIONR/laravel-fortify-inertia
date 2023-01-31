@@ -210,33 +210,5 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation'])->name('suppliers.status');
 
         Route::resource('suppliers.products', SupplierProductsController::class);
-
-        //Route::
     });
 });
-
-//function getChildren($grouped, $id, $level) {
-//
-//    if (! isset($grouped[$id])) {
-//        return null;
-//    }
-//    foreach ($grouped[$id] as $item) {
-//        $item->children = getChildren($grouped, $item->id, $level+1);
-//        $item->level = $level+1;
-//    }
-//    return $grouped[$id];
-//}
-//
-//Route::get('tree', function() {
-//    $categories = Category::all();
-//    $grouped =  $categories->groupBy('parent_id');
-//    $roots = $grouped[''];
-//
-//    foreach ($roots as $node) {
-//        $node->level = 0;
-//        $node->children = getChildren($grouped, $node->id, 0);
-//    }
-//    return $roots;
-//
-//
-//});

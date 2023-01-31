@@ -49,6 +49,7 @@ export default function Products({ products }) {
             type: 'number',
             width: 110,
             editable: true,
+            valueGetter: (params) => `৳ ${params.row.current_selling_price.toFixed(2)}`
         },
         {
             field: 'uom',
@@ -93,6 +94,9 @@ export default function Products({ products }) {
 
     }, [flash] );
 
+    useEffect( () => {
+        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+    }, [products] );
 
     useEffect(() => {
         setTimeout(() => {

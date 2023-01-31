@@ -73,6 +73,10 @@ export default function Suppliers({ suppliers }) {
 
     }, [flash] );
 
+    useEffect( () => {
+        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+    }, [suppliers] );
+
     useEffect(() => {
         setTimeout(() => {
             const addButton = document.querySelector('#addButton');
