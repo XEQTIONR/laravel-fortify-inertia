@@ -32,7 +32,7 @@ export default function AddProduct({ uom, categories }) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <ProductForm action="add" existingCategories={categories} uom={uom} />
+                    <ProductForm action="add" existingCategories={categories.data} uom={uom} />
                 </Box>
             </Box>
         </Nav>

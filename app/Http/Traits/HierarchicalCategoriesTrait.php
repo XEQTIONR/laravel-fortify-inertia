@@ -2,10 +2,17 @@
 
 namespace App\Http\Traits;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 trait HierarchicalCategoriesTrait {
+    /**
+     * Arrange the categories in hierarchical order.
+     *
+     * @return AnonymousResourceCollection
+     */
     protected function categoryTree() {
         $categories = Category::all();
         $grouped =  $categories->groupBy('parent_id');
@@ -16,15 +23,15 @@ trait HierarchicalCategoriesTrait {
             $node->level = 0;
         }
 
-        return $roots;
+        return CategoryResource::collection($roots);
     }
     /**
-     * Arrange the categories in hierarchical order.
+     * Helper for categoryTree().
      *
      * @param Collection $grouped
      * @param int $id
      * @param int $level
-     * @return array
+     * @return AnonymousResourceCollection
      */
     protected function getChildren(Collection $grouped, int $id, int $level = 0) {
         if (! isset($grouped[$id])) {
@@ -34,6 +41,6 @@ trait HierarchicalCategoriesTrait {
             $item->children = $this->getChildren($grouped, $item->id, $level+1);
             $item->level = $level+1;
         }
-        return $grouped[$id];
+        return CategoryResource::collection($grouped[$id]);
     }
 }

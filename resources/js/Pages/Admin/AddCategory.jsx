@@ -32,7 +32,7 @@ export default function AddCategory({ categories }) {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <CategoryForm action="add" existingCategories={categories}  />
+                    <CategoryForm action="add" existingCategories={categories.data}  />
                 </Box>
             </Box>
         </Nav>

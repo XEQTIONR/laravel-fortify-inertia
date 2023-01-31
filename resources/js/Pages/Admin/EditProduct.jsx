@@ -34,7 +34,7 @@ export default function EditProduct({ product, uom, categories }) {
                 <Box className="w-full flex justify-center">
                     <ProductForm
                         action="edit"
-                        existingCategories={categories}
+                        existingCategories={categories.data}
                         uom={uom}
                         productData={product.data}
                     />
