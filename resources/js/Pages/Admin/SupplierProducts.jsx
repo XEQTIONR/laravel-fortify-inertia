@@ -19,7 +19,7 @@ export default function SupplierProducts({ supplier }) {
         'products' : []
     })
 
-    const [ currentProducts, setCurrentProducts ] = useState(supplier.products);
+    const [ currentProducts, setCurrentProducts ] = useState(supplier.data.products);
 
     const [ showSaveButton, setShowSaveButton ] = useState(false);
 
@@ -49,7 +49,7 @@ export default function SupplierProducts({ supplier }) {
     ];
 
     function handleSave() {
-        post( route('admin.suppliers.products.store', { supplier: supplier }) );
+        post( route('admin.suppliers.products.store', { supplier: supplier.data }) );
     }
 
     useEffect( () => {
@@ -59,7 +59,7 @@ export default function SupplierProducts({ supplier }) {
     useEffect( () => {
         let same = true;
         const sortedCurrentProducts = [...currentProducts].sort((a,b) => a.id - b.id);
-        const originalProducts = [...supplier.products].sort((a,b) => a.id - b.id);
+        const originalProducts = [...supplier.data.products].sort((a,b) => a.id - b.id);
 
         if ( sortedCurrentProducts.length === originalProducts.length ) {
             for (let i = 0; i < originalProducts.length; i++) {
@@ -118,18 +118,18 @@ export default function SupplierProducts({ supplier }) {
                 </Box>
                 <Stack className="h-full w-full" direction="row">
                     <Stack className="w-2/5 h-full mr-2">
-                        <Typography variant="overline">{supplier.business_name}</Typography>
-                        <Typography variant="subtitle2">{supplier.contact_name}</Typography>
+                        <Typography variant="overline">{supplier.data.business_name}</Typography>
+                        <Typography variant="subtitle2">{supplier.data.contact_name}</Typography>
                         <p>{
-                            supplier.address.split('\n').map( (line) =>
+                            supplier.data.address.split('\n').map( (line) =>
                                 <span className="text-xs leading-none" style={{ lineHeight: "normal"}}>
                                     {line}
                                     <br />
                                 </span>
                             )
                         }</p>
-                        <Typography variant="caption">{supplier.primary_contact_number}</Typography>
-                        <Typography variant="caption">{supplier.secondary_contact_number}</Typography>
+                        <Typography variant="caption">{supplier.data.primary_contact_number}</Typography>
+                        <Typography variant="caption">{supplier.data.secondary_contact_number}</Typography>
                         <Divider className="my-2" />
                         <Box className="w-full h-full flex flex-wrap items-start justify-start content-start overflow-y-scroll">
                             {

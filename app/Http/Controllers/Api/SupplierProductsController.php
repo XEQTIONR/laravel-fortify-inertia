@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SupplierResource;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 
@@ -11,12 +12,12 @@ class SupplierProductsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Supplier
+     * @return SupplierResource
      */
     public function index(Supplier $supplier)
     {
         $supplier->load('products');
-        return $supplier;
+        return new SupplierResource($supplier);
     }
 
     /**

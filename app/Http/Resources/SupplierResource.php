@@ -21,6 +21,7 @@ class SupplierResource extends JsonResource
             'address'                => $this->address,
             'email'                  => $this->email,
             'primary_contact_number' => $this->primary_contact_number,
+            'products'               => $this->whenLoaded('products', ProductResource::collection($this->products)),
             'status'                 => $this->status,
         ];
     }

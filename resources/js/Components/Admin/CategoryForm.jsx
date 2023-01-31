@@ -123,7 +123,7 @@ export default function CategoryForm ({ action, categoryData, existingCategories
                             </MenuItem>
                             {
                                 flattenedCategories.map(({ id, bangla_name, english_name, level }) =>
-                                    <MenuItem value={id}>
+                                    <MenuItem key={id} value={id}>
                                         {'—'.repeat(level) + ` ${english_name} (${bangla_name})`}
                                     </MenuItem>
                                 )
