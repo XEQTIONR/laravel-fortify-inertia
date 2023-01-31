@@ -57,6 +57,7 @@ class CategoryController extends Controller
      */
     public function edit( Category $category )
     {
+        $category->load('parent');
         $resource = new CategoryResource( $category );
         return Inertia::render( 'Admin/EditCategory', [
             'category' => $resource,

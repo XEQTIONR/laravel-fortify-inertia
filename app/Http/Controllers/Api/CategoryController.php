@@ -22,7 +22,7 @@ class CategoryController extends Controller
         $orderBy = $request->orderBy ?? 'id';
         $order = $request->order ?? 'asc';
 
-        $categories = Category::orderBy($orderBy, $order)->paginate($perPage);
+        $categories = Category::with('parent')->orderBy($orderBy, $order)->paginate($perPage);
         $categories->appends(compact('perPage', 'orderBy', 'order'));
 
         return CategoryResource::collection($categories)->additional([
