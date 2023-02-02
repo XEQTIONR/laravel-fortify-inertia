@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -95,7 +96,7 @@ Route::get('/reset-password-new/{code}', function($code){
     return \Inertia\Inertia::render( 'ResetPassword', ['code' => $code] );
 })->name('reset-password-new');
 
-Route::post('/reset-password-new/{code}', function(Request $request, $code){
+Route::post('/reset-password-new/{code}', function(Request $request, $code) {
 
     $validated = $request->validate([
         'password' => ['required', 'string', new Password, 'confirmed'],
@@ -118,12 +119,11 @@ Route::post('/reset-password-new/{code}', function(Request $request, $code){
             // redirect with flash message
         }
     }
+    // TODO handle unhappy path
 });
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
 
 Route::get('/translationtest', function () {
     return view('page2');
