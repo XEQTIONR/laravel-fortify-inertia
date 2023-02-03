@@ -20,6 +20,9 @@ const StyledTreeItem = styled((props) => (
         marginLeft: 25,
         borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
     },
+    [`& .${treeItemClasses.disabled}`]: {
+        opacity: 1,
+    },
 
 }));
 
