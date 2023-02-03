@@ -21,6 +21,7 @@ class CategoryResource extends JsonResource
             'bangla_name' => $this->bangla_name,
             'children' => $this->children === null ? null : self::collection($this->children),
             'level' => $this->when(is_int($this->level), $this->level),
+            'parent_id' => $this->parent_id,
             'parent' => new self($this->whenLoaded('parent')),
             'image' => $this->image,
             'status' => $this->status,
