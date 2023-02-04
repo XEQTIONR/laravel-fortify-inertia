@@ -39,19 +39,19 @@ const theme = createTheme({
 
 export default function Nav({ children, navLinks, selectedCategory }) {
 
-    const [ show, setShow ] = useState(window.innerWidth <= 800
+    const [ show, setShow ] = useState(window.outerWidth <= 800
         ? false
         : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
     );
-    const [ mainWidth, setMainWidth ] = useState(window.innerWidth);
-    const [ menuType, setMenuType ] = useState((window.innerWidth > 800) ? 'persistent' : 'temporary');
+    const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
+    const [ menuType, setMenuType ] = useState((window.outerWidth > 800) ? 'persistent' : 'temporary');
     useEffect(() => {
         function handleResize() {
-            setMainWidth(window.innerWidth);
-            if (window.innerWidth <= 800 && menuType === 'persistent' ) {
+            setMainWidth(window.outerWidth);
+            if (window.outerWidth <= 800 && menuType === 'persistent' ) {
                 setShow(false)
                 setMenuType('temporary');
-            } else if (window.innerWidth > 800 && menuType === 'temporary' ) {
+            } else if (window.outerWidth > 800 && menuType === 'temporary' ) {
                 setShow(true)
                 setMenuType('persistent');
             }
@@ -104,6 +104,8 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                 </Box>
             </Drawer>
             <Box
+                sx={{ flexGrow: 1}}
+                className="flex justify-center px-0"
                 style={{
                     // may choose to remove this transition.
                     // transition: theme.transitions.create("all", {
@@ -114,8 +116,7 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                 component="main"
                 sx={{
                      //flexShrink: 0, if using transition
-                    height: '100vh',
-                    pt: 10,
+                    pt: 8,
                     px: 2,
                     pb: 2,
                 }}
