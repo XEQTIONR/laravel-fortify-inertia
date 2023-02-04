@@ -123,11 +123,11 @@ Route::post('/reset-password-new/{code}', function(Request $request, $code) {
 });
 
 
-Route::get('/', [HomeController::class, 'index'])->name('welcome');
+Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
 
 Route::get('/translationtest', function () {
     return view('page2');
-})->name('welcome');
+});
 
 Route::get('/home', function () {
     return \Inertia\Inertia::render('Home');

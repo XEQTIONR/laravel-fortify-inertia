@@ -46,30 +46,44 @@ const ancestorIds = function(cat, nodeList) {
     ];
 }
 
-export default function LinkTree({links}) {
+export default function LinkTree({links, selectedCategory}) {
 
     const [ flattenedCategories, setFlattenedCategories ] = useState( flatten(links) )
     const [ expanded, setExpanded ] = useState([]);
     const [ selected, setSelected ] = useState(null);
 
+    useEffect(() => {
+        if (selectedCategory !== null) {
+            const aIds = ancestorIds(selectedCategory, flattenedCategories);
+            if (selectedCategory.children !== null) {
+                setExpanded([...aIds.map(value => value.toString())])
+            } else {
+                setExpanded([selectedCategory.id.toString(), ...aIds.map(value => value.toString())])
+            }
+            setSelected(selectedCategory.id.toString());
+        }
+    },[selectedCategory]);
+
     const mapLinks = function(theLinks) { // theLinks is the hierarchical list
         return theLinks.map((link) => link.children === null
             ? <StyledTreeItem // leaf node
                 onClick={() => {
-                    setSelected(link.id.toString());
+                    Inertia.visit(route('welcome', { slug: link.slug }), {
+                        preserveState: true
+                    })
                 }}
-                disabled={true}
+                disabled
                 key={link.id}
                 label={link.english_name}
                 nodeId={link.id.toString()}
             />
             : <StyledTreeItem // non-leaf node
                 onClick={() => {
-                    setSelected(link.id.toString());
-                    setExpanded([link.id, ...ancestorIds(link, flattenedCategories)].map(item => item.toString()))
-
+                    Inertia.visit(route('welcome', { slug: link.slug }),{
+                        preserveState: true
+                    })
                 }}
-                disabled={true}
+                disabled
                 key={link.id}
                 label={link.english_name}
                 nodeId={link.id.toString()}
@@ -81,9 +95,7 @@ export default function LinkTree({links}) {
     return (
         <TreeView
             aria-label="customized"
-            defaultExpanded={[]}
             expanded={expanded}
-            // defaultSelected
             selected={selected}
             defaultCollapseIcon={<KeyboardArrowDown />}
             defaultExpandIcon={<KeyboardArrowRight />}

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('english_name');
             $table->string('bangla_name');
+            $table->string('slug')->unique();
             $table->string('image')->nullable();
             $table->foreignId('parent_id')->nullable();
             $table->string('status');

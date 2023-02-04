@@ -37,9 +37,8 @@ const theme = createTheme({
     },
 });
 
-export default function Nav({ children, navLinks }) {
-    const [ open, setOpen ] = useState( false);
-    const [ mOpen, setMOpen] = useState( Object.assign({},...navLinks.map(item => ({ [item.id] : false }))));
+export default function Nav({ children, navLinks, selectedCategory }) {
+
     const [ show, setShow ] = useState(window.innerWidth <= 800
         ? false
         : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
@@ -99,7 +98,7 @@ export default function Nav({ children, navLinks }) {
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
                     <List>
-                            <LinkTree links={navLinks} />
+                        <LinkTree links={navLinks} selectedCategory={selectedCategory ? selectedCategory.data : null} />
                     </List>
                     <Divider />
                 </Box>
