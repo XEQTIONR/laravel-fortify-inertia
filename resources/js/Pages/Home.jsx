@@ -1,54 +1,52 @@
 import React, {useState}  from 'react';
 import Nav from '@/Components/Nav';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import {Box, Button, Typography} from "@mui/material";
 
-export default function Home ({ categories, category }) {
+export default function Home ({ categories, category, products }) {
 
-    const [items, setItems] = useState([
-        '🦊','🦊','🦊','🦊','🦊','🦊',
-        '🦊','🦊','🦊','🦊','🦊','🦊','🦊','🦊',
-        '🦊','🦊','🦊','🦊','🦊','🦊','🦊','🦊',
-    ]);
+    const [items, setItems] = useState(products.data);
 
     return (
         <Nav navLinks={categories.data} selectedCategory={category}>
-            <Grid
-                className="bg-amber-500 flex-wrap content-start"
-                spacing={2}
-                container
+            <Box
+                className="flex flex-wrap justify-start"
             >
                 {
-                    items.map((thing) => (
-                        <Grid
-                            className="text-center"
-                            item
-                            xs={12} sm={6} md={4} lg={3}
+                    items.map(({id, current_selling_price, english_name, uom}) => (
+                        <Box
+                            key={id}
+                            className="p-2 flex flex-col"
+                            sx={{
+                                width: "200px",
+                            }}
                         >
-                            <div
-                                style={{
-                                    position: "relative",
-                                    paddingTop: '100%'
+                            <Box
+                                className="bg-red-300"
+
+                                sx={{
+                                    width: '100%',
+                                    paddingTop: '100%',
+                                    backgroundImage: `url(' https://via.placeholder.com/500x500.png/009911?text=Eggplant+totam')`,
+                                    backgroundSize: 'cover'
                                 }}
-                                className="bg-blue-500"
+                            />
+                            <Box className="w-full"
+                                sx={{ height: '50px', overflowY: 'hidden' }}
                             >
-                                <span
-                                    style={{
-                                        position: 'absolute',
-                                        top: 0,
-                                        left: 0,
-                                        bottom: 0,
-                                        right: 0,
-                                    }}
+                                <Typography
+                                    variant="body1"
+                                    align="center"
                                 >
-                                    {thing}
-                                </span>
-                            </div>
-                        </Grid>
+                                    {english_name}
+                                </Typography>
+                            </Box>
+                            <Typography className="my-2" variant="caption"  align="center">{uom}</Typography>
+                            <Typography className="font-bold" variant="body1"  align="center">৳ {current_selling_price}</Typography>
+                            <Button className="mt-2" variant="outlined">Add to cart</Button>
+                        </Box>
                     ))
                 }
-            </Grid>
+            </Box>
         </Nav>
     );
 }
