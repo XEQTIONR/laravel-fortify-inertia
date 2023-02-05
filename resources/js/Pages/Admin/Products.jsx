@@ -103,17 +103,6 @@ export default function Products({ products }) {
             const addButton = document.querySelector('#addButton');
             addButton.classList.remove('scale-0');
         }, 125);
-
-        if ( ! window.localStorage.getItem('api-token') ) {
-            axios.get(route('admin.token'), { headers: { Accept: 'application/json' } })
-                .then(({data}) => {
-                    data && window.localStorage.setItem('api-token', data);
-                })
-                .catch( (e) => {
-                    console.log('error');
-                    console.log(e);
-                });
-        }
     });
 
     return (

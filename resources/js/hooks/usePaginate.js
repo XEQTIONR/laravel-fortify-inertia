@@ -9,9 +9,6 @@ export default function usePaginate(route, setIsLoading, setRows, setMeta) {
             order
         }
         axios.get( route, {
-            headers: {
-                Authorization: 'Bearer ' + window.localStorage.getItem('api-token'),
-            },
             params
         })
             .then( ({data, status}) => {
