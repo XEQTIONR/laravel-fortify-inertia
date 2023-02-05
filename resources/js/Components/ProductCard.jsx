@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography } from "@mui/material";
+import ProductCardSkeleton from "./ProductCardSkeleton";
 
 
 export default function ProductCard ({product}) {
-    return (
+
+    const [imgUrl, setImgUrl] = useState('none');
+    useEffect(() => {
+        const img = new Image();
+        img.src = product.image;
+        img.onload = () => {
+            setImgUrl("url('" + img.src + "')")
+        }
+    }, []);
+
+    return  imgUrl === 'none'
+        ? <ProductCardSkeleton />
+        : (
         <Box
             key={product.id}
             className="p-3 mt-2 mb-6 flex flex-col hover:border   hover:shadow-xl "
@@ -13,7 +26,7 @@ export default function ProductCard ({product}) {
                 sx={{
                     width: '100%',
                     paddingTop: '100%',
-                    backgroundImage: `url(' https://via.placeholder.com/500x500.png/009911?text=Eggplant+totam')`,
+                    backgroundImage: imgUrl,
                     backgroundSize: 'cover'
                 }}
             />
@@ -37,5 +50,5 @@ export default function ProductCard ({product}) {
                     Add to cart
                 </Button>
         </Box>
-    )
+        )
 }
