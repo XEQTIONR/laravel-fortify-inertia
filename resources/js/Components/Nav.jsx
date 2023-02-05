@@ -107,6 +107,9 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                 sx={{ flexGrow: 1}}
                 className="flex justify-center px-0"
                 style={{
+                    pt: 8,
+                    px: 2,
+                    pb: 2,
                     // may choose to remove this transition.
                     // transition: theme.transitions.create("all", {
                     //     easing: theme.transitions.easing.sharp,
@@ -114,12 +117,6 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                     width: (show && menuType === 'persistent') ? mainWidth - drawerWidth : mainWidth,
                 }}
                 component="main"
-                sx={{
-                     //flexShrink: 0, if using transition
-                    pt: 8,
-                    px: 2,
-                    pb: 2,
-                }}
             >
                 { children }
             </Box>
