@@ -57,7 +57,7 @@ export default function Nav({ children, navLinks, selectedCategory }) {
             }
         }
         window.addEventListener('resize', handleResize)
-    });
+    }, [window.outerWidth]);
 
     useEffect( () => {
         window.localStorage.setItem('showSidebar', show);
@@ -98,7 +98,7 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
                     <List>
-                        <LinkTree links={navLinks} selectedCategory={selectedCategory ? selectedCategory.data : null} />
+                        <LinkTree links={navLinks} selectedCategory={selectedCategory} />
                     </List>
                     <Divider />
                 </Box>

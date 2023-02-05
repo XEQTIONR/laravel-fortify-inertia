@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\ProductResource;
-use App\Models\Category;
-use App\Models\Product;
+use App\Http\Controllers\Api\HomeController as Controller;
 use Illuminate\Http\Request;
 use App\Http\Traits\HierarchicalCategoriesTrait;
 use Inertia\Inertia;
@@ -14,14 +11,14 @@ class HomeController extends Controller
 {
     use HierarchicalCategoriesTrait;
 
-    public function index($slug = null) {
-        $category = Category::where('slug', $slug)->first();
-        $products = ProductResource::collection(Product::all());
+    public function index(Request $request, $slug = null) {
+
+        $data = parent::index($request, $slug);
 
         return Inertia::render( 'Home', [
             'categories' => $this->categoryTree(),
-            'category' => $category ? new CategoryResource($category) : null,
-            'products' => $products,
-        ] );
+            'category' => $data['category'],
+            'products' => $data['products'],
+        ]);
     }
 }
