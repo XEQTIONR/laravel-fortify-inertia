@@ -11,10 +11,10 @@ trait HierarchicalCategoriesTrait {
     /**
      * Arrange the categories in hierarchical order.
      *
+     * @param Collection $categories
      * @return AnonymousResourceCollection
      */
-    protected function categoryTree() {
-        $categories = Category::all();
+    protected function categoryTree(Collection $categories) {
         $grouped =  $categories->groupBy('parent_id');
         $roots = $grouped[''];
 
@@ -25,13 +25,14 @@ trait HierarchicalCategoriesTrait {
 
         return CategoryResource::collection($roots);
     }
+    
     /**
      * Helper for categoryTree().
      *
      * @param Collection $grouped
      * @param int $id
      * @param int $level
-     * @return AnonymousResourceCollection
+     * @return AnonymousResourceCollection|null
      */
     protected function getChildren(Collection $grouped, int $id, int $level = 0) {
         if (! isset($grouped[$id])) {

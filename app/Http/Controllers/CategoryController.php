@@ -31,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render( 'Admin/AddCategory', ['categories' => $this->categoryTree() ] );
+        return Inertia::render( 'Admin/AddCategory', ['categories' => $this->categoryTree(Category::all()) ] );
     }
 
     /**
@@ -61,7 +61,7 @@ class CategoryController extends Controller
         $resource = new CategoryResource( $category );
         return Inertia::render( 'Admin/EditCategory', [
             'category' => $resource,
-            'categories' => $this->categoryTree(),
+            'categories' => $this->categoryTree(Category::all()),
         ] );
     }
 

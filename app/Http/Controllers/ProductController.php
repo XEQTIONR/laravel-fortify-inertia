@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Http\Traits\HierarchicalCategoriesTrait;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\ProductController as Controller;
@@ -34,7 +35,7 @@ class ProductController extends Controller
     {
         return Inertia::render('Admin/AddProduct', [
             'uom' => Product::$unitsOfMeasurement,
-            'categories' => $this->categoryTree(),
+            'categories' => $this->categoryTree(Category::all()),
         ]);
     }
 
@@ -76,7 +77,7 @@ class ProductController extends Controller
         return Inertia::render( 'Admin/EditProduct', [
             'product' => new ProductResource($product->load('categories')),
             'uom' => Product::$unitsOfMeasurement,
-            'categories' => $this->categoryTree(),
+            'categories' => $this->categoryTree(Category::all()),
         ]);
     }
 
