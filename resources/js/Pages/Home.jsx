@@ -8,17 +8,18 @@ import usePaginate from '@/hooks/usePaginate';
 
 export default function Home ({ categories, products }) {
 
-    const [items, setItems] = useState(products.data);
+    const [items, setItems] = useState(products.data ?? []);
     const [meta, setMeta] = useState(products.meta);
     const [selectedCategory, setSelectedCategory] = useState(products.meta.category);
     const [isLoading, setIsLoading] = useState(false);
     const container = useRef(null);
 
-    const setR = (rows) => {
+    const setRows = (rows) => {
         setItems([...items, ...rows]);
     }
 
-    const paginate = usePaginate( route('api.home', { slug: selectedCategory.slug }), setIsLoading, setR, setMeta );
+    const paginate = usePaginate( route('api.home', { slug: selectedCategory ? selectedCategory.slug : null }),
+        setIsLoading, setRows, setMeta );
 
     const scrollPercentage = () => {
         const h = document.documentElement,
@@ -40,7 +41,7 @@ export default function Home ({ categories, products }) {
 
     window.addEventListener('scroll', function() {
 
-       if ( scrollPercentage() > 99 && isLoading === false ) {
+       if ( scrollPercentage() > 85 && isLoading === false ) {
            setIsLoading(true);
        }
     });

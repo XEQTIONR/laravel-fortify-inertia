@@ -19,7 +19,7 @@ class HomeController extends Controller
      */
     public function index(Request $request, $slug = null)
     {
-        $perPage = 10;
+        $perPage = 25;
         $category = null;
         $products = [];
 
@@ -44,6 +44,7 @@ class HomeController extends Controller
                     $query->whereIn('categories.id', $ids );
                 })->paginate($perPage);
             }
+
         }
 
 
@@ -52,10 +53,6 @@ class HomeController extends Controller
                 'category' => $category ? new CategoryResource($category) : null
             ]
         ]);
-//        return [
-//            'category' => $category ? new CategoryResource($category) : null,
-//            'products' => ProductResource::collection($products)
-//        ];
     }
 
     /**

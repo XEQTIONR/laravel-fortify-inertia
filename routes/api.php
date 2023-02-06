@@ -36,6 +36,6 @@ Route::name('api.')
             ->name('categories.index');
         });
       // Non auth routes
-      Route::get('/{slug}', [ HomeController::class, 'index' ])
+      Route::get('/{slug?}', [ HomeController::class, 'index' ])
         ->name('home');
 });
