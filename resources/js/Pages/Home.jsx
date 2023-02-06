@@ -16,6 +16,7 @@ export default function Home ({ categories, products }) {
     // to account for preserveState in LinkTree
     useEffect(() => {
         setItems(products.data);
+        setMeta(products.meta);
         setSelectedCategory(products.meta.category);
     }, [ products ]);
 
