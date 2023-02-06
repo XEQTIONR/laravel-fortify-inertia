@@ -44,7 +44,12 @@ export default function Home ({ categories, products }) {
 
     useEffect(() => {
         if (isLoading) {
-            paginate(meta.current_page + 1);
+            if (meta.current_page < meta.last_page) {
+                paginate(meta.current_page + 1);
+            } else {
+                setIsLoading(false);
+            }
+
         }
     }, [isLoading]);
 
