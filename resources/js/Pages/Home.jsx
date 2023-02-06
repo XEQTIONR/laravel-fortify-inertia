@@ -34,17 +34,20 @@ export default function Home ({ categories, products }) {
         const perRow = Math.floor(container.current.offsetWidth/250);
         const numItems = items.length;
         const mod = numItems % perRow;
-        const fill = perRow - mod;
 
-        return fill === 0 ? perRow : fill
+        return perRow - mod;
     }
 
-    window.addEventListener('scroll', function() {
+    const onScroll = () => {
+        if ( scrollPercentage() > 85 && isLoading === false ) {
+            setIsLoading(true);
+        }
+    }
+    useEffect(() => {
+        window.addEventListener('scroll', onScroll );
 
-       if ( scrollPercentage() > 85 && isLoading === false ) {
-           setIsLoading(true);
-       }
-    });
+        return () => { window.removeEventListener('scroll', onScroll ); }
+    }, [])
 
     // to account for preserveState in LinkTree
     useEffect(() => {
@@ -72,7 +75,7 @@ export default function Home ({ categories, products }) {
                     items.map((item) => <ProductCard key={item.id} product={item} />)
                 }
                 {
-                    isLoading
+                    (isLoading && (meta.current_page < meta.last_page))
                         ? ([...Array(displayNSkeletonsWhileLoading())].map((e, i) =>
                             <ProductCardSkeleton key={'skeleton' + i} />))
                         : null
