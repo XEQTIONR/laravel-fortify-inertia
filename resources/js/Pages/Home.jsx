@@ -14,12 +14,11 @@ export default function Home ({ categories, products }) {
     const [isLoading, setIsLoading] = useState(false);
     const container = useRef(null);
 
-    // to account for preserveState in LinkTree
-    useEffect(() => {
-        setItems(products.data);
-        setMeta(products.meta);
-        setSelectedCategory(products.meta.category);
-    }, [ products ]);
+    const setR = (rows) => {
+        setItems([...items, ...rows]);
+    }
+
+    const paginate = usePaginate( route('api.home', { slug: selectedCategory.slug }), setIsLoading, setR, setMeta );
 
     const scrollPercentage = () => {
         const h = document.documentElement,
@@ -39,10 +38,6 @@ export default function Home ({ categories, products }) {
         return fill === 0 ? perRow : fill
     }
 
-    const setR = (rows) => {
-            setItems([...items, ...rows]);
-    }
-
     window.addEventListener('scroll', function() {
 
        if ( scrollPercentage() > 99 && isLoading === false ) {
@@ -50,8 +45,12 @@ export default function Home ({ categories, products }) {
        }
     });
 
-
-    const paginate = usePaginate( route('api.home', { slug: selectedCategory.slug }), setIsLoading, setR, setMeta );
+    // to account for preserveState in LinkTree
+    useEffect(() => {
+        setItems(products.data);
+        setMeta(products.meta);
+        setSelectedCategory(products.meta.category);
+    }, [ products ]);
 
     useEffect(() => {
         if (isLoading) {
@@ -63,7 +62,7 @@ export default function Home ({ categories, products }) {
             }
 
         }
-    }, [isLoading]);
+    }, [ isLoading ]);
 
     return (
         <Nav navLinks={categories.data} selectedCategory={selectedCategory} loading>
