@@ -15,10 +15,11 @@ class HomeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return array
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
     public function index(Request $request, $slug = null)
     {
+        $perPage = 10;
         $category = null;
         $products = [];
 
@@ -41,15 +42,20 @@ class HomeController extends Controller
 
                 $products = Product::whereHas('categories', function(Builder $query) use ($ids) {
                     $query->whereIn('categories.id', $ids );
-                })->get();
+                })->paginate($perPage);
             }
         }
 
 
-        return [
-            'category' => $category ? new CategoryResource($category) : null,
-            'products' => ProductResource::collection($products)
-        ];
+        return ProductResource::collection($products)->additional([
+            'meta' => [
+                'category' => $category ? new CategoryResource($category) : null
+            ]
+        ]);
+//        return [
+//            'category' => $category ? new CategoryResource($category) : null,
+//            'products' => ProductResource::collection($products)
+//        ];
     }
 
     /**

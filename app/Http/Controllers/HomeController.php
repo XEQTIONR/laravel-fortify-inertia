@@ -13,12 +13,11 @@ class HomeController extends Controller
 
     public function index(Request $request, $slug = null) {
 
-        $data = parent::index($request, $slug);
+        //return parent::index($request, $slug);
 
         return Inertia::render( 'Home', [
             'categories' => $this->categoryTree(),
-            'category' => $data['category'],
-            'products' => $data['products'],
+            'products' => parent::index($request, $slug),
         ]);
     }
 }
