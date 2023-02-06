@@ -29,14 +29,11 @@ export default function Home ({ categories, products }) {
     }
 
     const setR = (rows) => {
-        // if ( category && selectedCategory.id === category.data.id ) {
-            // setItems([...items, ...rows]);
-            console.log('items', items)
-            console.log('rows', rows)
-        // }
+            setItems([...items, ...rows]);
     }
 
     window.addEventListener('scroll', function() {
+
        if ( scrollPercentage() > 99 && isLoading === false ) {
            setIsLoading(true);
        }
@@ -47,18 +44,9 @@ export default function Home ({ categories, products }) {
 
     useEffect(() => {
         if (isLoading) {
-            console.log('meta.current_page', meta.current_page);
             paginate(meta.current_page + 1);
         }
     }, [isLoading]);
-
-    // useEffect(() => {
-    //     if ( category && category.data.id !== selectedCategory?.id) {
-    //         setSelectedCategory(category.data);
-    //         setItems(products.data);
-    //         setMeta(products.meta);
-    //     }
-    // },[category]);
 
     return (
         <Nav navLinks={categories.data} selectedCategory={selectedCategory} loading>
