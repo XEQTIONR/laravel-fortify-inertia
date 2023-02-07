@@ -41,7 +41,7 @@ export default function ProductCard ({product}) {
                     {product.english_name}
                 </Typography>
             </Box>
-            <Typography className="my-2" variant="caption"  align="center">{product.uom}</Typography>
+            <Typography className="my-2" variant="caption"  align="center">{ product.amount } {product.uom}</Typography>
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
 
                 <Button

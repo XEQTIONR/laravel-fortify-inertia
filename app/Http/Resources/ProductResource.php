@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Product;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -19,7 +20,8 @@ class ProductResource extends JsonResource
             'english_name' => $this->english_name,
             'bangla_name' => $this->bangla_name,
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
-            'uom' => $this->uom,
+            'uom' => Product::$unitsOfMeasurement[$this->uom],
+            'amount' => $this->amount,
             'current_selling_price' => $this->current_selling_price,
             'in_stock' => $this->in_stock,
             'image' => $this->image,

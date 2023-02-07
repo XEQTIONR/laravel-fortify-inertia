@@ -16,6 +16,7 @@ class Product extends Model
         'english_name',
         'bangla_name',
         'uom',
+        'amount',
         'current_selling_price',
         'image',
         'status',
@@ -27,12 +28,12 @@ class Product extends Model
         'pk'     => 'packs',
         'box'    => 'boxes',
         'bottle' => 'bottles',
-        'mg'     => 'milligrams',
+        'mg'     => 'mg',
         'gm'     => 'grams',
         'oz'     => 'ounces',
-        'kg'     => 'kilograms',
+        'kg'     => 'kg',
         'ltr'    => 'litres',
-        'ml'     => 'millilitres',
+        'ml'     => 'ml',
     ];
 
     /**

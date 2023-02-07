@@ -52,6 +52,13 @@ export default function Products({ products }) {
             valueGetter: (params) => `৳ ${params.row.current_selling_price.toFixed(2)}`
         },
         {
+            field: 'amount',
+            type: 'number',
+            headerName: 'Amount',
+            width: 75,
+            editable: true,
+        },
+        {
             field: 'uom',
             headerName: 'Unit',
             width: 75,

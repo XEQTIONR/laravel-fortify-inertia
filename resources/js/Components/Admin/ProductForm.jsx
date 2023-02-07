@@ -20,11 +20,10 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { styled } from "@mui/material/styles";
 import { useForm } from "@inertiajs/inertia-react";
-
+import flatten from "@/functions/flatten";
 
 const FormWrapper = styled( Paper )(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
@@ -40,16 +39,6 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-const flatten = function(cats) {
-    if (cats.length === 0) {
-        return cats;
-    }
-    if (cats[0].children === null) {
-        return [cats[0], ...flatten(cats.slice(1))]
-    }
-    return [cats[0], ...flatten(cats[0].children), ...flatten(cats.slice(1))];
-}
-
 export default function ProductForm ({ action, existingCategories, productData, uom }) {
 
     const [ uploadedImageUrl, setUploadedImageUrl ] = useState( productData ? productData.image : null );
@@ -60,6 +49,7 @@ export default function ProductForm ({ action, existingCategories, productData, 
         'english_name' : productData ? productData.english_name : '',
         'bangla_name' : productData ? productData.bangla_name : '',
         'categories' : productData ? productData.categories.map(({id}) => id) : [],
+        'amount' : productData ? productData.amount : 0,
         'uom' : productData ? productData.uom : '',
         'current_selling_price' : productData ? productData.current_selling_price.toFixed(2) : '',
         'image' : null,
@@ -146,6 +136,18 @@ export default function ProductForm ({ action, existingCategories, productData, 
                         </FormControl>
                     <Box  className="flex justify-between h-1/4">
                         <Stack spacing={2} className="w-1/2 h-1/2">
+                            <TextField
+                                className="mr-1"
+                                type="number"
+                                value={data.amount}
+                                error={!!errors.amount}
+                                helperText={errors?.amount}
+                                onChange={({target}) => setData('amount', target.value)}
+                                required
+                                id="amount"
+                                label="Amount"
+                                variant="standard"
+                            />
                             <FormControl required variant="standard" className="mr-1">
                                 <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
                                 <Select
@@ -190,32 +192,8 @@ export default function ProductForm ({ action, existingCategories, productData, 
                                     label={ data.status.substring(0,1).toUpperCase() + data.status.substring(1) }
                                 />
                             </FormGroup>
-                            <Box className="w-full">
-                                {   uploadedImageUrl
-                                    ? (
-                                        <Button
-                                            variant="outlined"
-                                            onClick={() => {
-                                                setUploadedImageUrl(null);
-                                                setData('image', null);
-                                            }}
-                                        >
-                                            Remove Image
-                                        </Button>
-                                    )
-                                    : (
-                                        <Button variant="outlined" component="label">
-                                            Select Image
-                                            <input hidden accept="image/*" type="file" onChange={(e) => {
-                                                setData('image', e.target.files[0])
-                                                setUploadedImageUrl(URL.createObjectURL(e.target.files[0]))
-                                            }} />
-                                        </Button>
-                                    )
-                                }
-                            </Box>
                         </Stack>
-                        <Box className="w-1/2 self-end">
+                        <Stack className="w-1/2 self-end">
                             <Box
                                 className="bg-center bg-cover w-full h-0 relative"
                                 sx={{
@@ -242,7 +220,31 @@ export default function ProductForm ({ action, existingCategories, productData, 
                                     )
                                 }
                             </Box>
-                        </Box>
+                            <Box className="w-full mt-1">
+                                {   uploadedImageUrl
+                                    ? (
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => {
+                                                setUploadedImageUrl(null);
+                                                setData('image', null);
+                                            }}
+                                        >
+                                            Remove Image
+                                        </Button>
+                                    )
+                                    : (
+                                        <Button variant="outlined" component="label">
+                                            Select Image
+                                            <input hidden accept="image/*" type="file" onChange={(e) => {
+                                                setData('image', e.target.files[0])
+                                                setUploadedImageUrl(URL.createObjectURL(e.target.files[0]))
+                                            }} />
+                                        </Button>
+                                    )
+                                }
+                            </Box>
+                        </Stack>
                     </Box>
                     <Stack className="pt-4">
                         { progress ? ( <LinearProgress variant="determinate" value={progress.percentage} /> ) : null }

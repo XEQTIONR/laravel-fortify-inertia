@@ -17,11 +17,10 @@ import {
     TextField,
     Typography
 } from "@mui/material";
-
 import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 import { styled } from "@mui/material/styles";
 import { useForm } from "@inertiajs/inertia-react";
-
+import flatten from "@/functions/flatten";
 
 const FormWrapper = styled( Paper )(({ theme }) => ({
     [theme.breakpoints.down('sm')]: {
@@ -36,16 +35,6 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
         width: 450
     },
 }));
-
-const flatten = function(cats) {
-    if (cats.length === 0) {
-        return cats;
-    }
-    if (cats[0].children === null) {
-       return [cats[0], ...flatten(cats.slice(1))]
-    }
-    return [cats[0], ...flatten(cats[0].children), ...flatten(cats.slice(1))];
-}
 
 export default function CategoryForm ({ action, categoryData, existingCategories }) {
 
