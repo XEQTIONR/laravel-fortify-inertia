@@ -1,8 +1,10 @@
 import React, {useState, useEffect, useRef}  from 'react';
 import Nav from '@/Components/Nav';
+import CategoryCard from '@/Components/CategoryCard';
 import ProductCard from '@/Components/ProductCard';
 import ProductCardSkeleton from "../Components/ProductCardSkeleton";
 import { Box } from "@mui/material";
+import flatten from "@/functions/flatten";
 
 import usePaginate from '@/hooks/usePaginate';
 
@@ -71,6 +73,13 @@ export default function Home ({ categories, products }) {
     return (
         <Nav navLinks={categories.data} selectedCategory={selectedCategory} loading>
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
+                {
+                    selectedCategory
+                        ? flatten(categories.data)
+                            .filter((children) => children.parent_id === selectedCategory.id)
+                            .map(item => <CategoryCard category={item} />)
+                        : null
+                }
                 {
                     items.map((item) => <ProductCard key={item.id} product={item} />)
                 }
