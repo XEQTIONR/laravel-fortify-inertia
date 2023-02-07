@@ -5,6 +5,7 @@ import ProductCard from '@/Components/ProductCard';
 import ProductCardSkeleton from "../Components/ProductCardSkeleton";
 import { Box } from "@mui/material";
 import flatten from "@/functions/flatten";
+import { cardWidth } from "@/constants/card";
 
 import usePaginate from '@/hooks/usePaginate';
 
@@ -33,7 +34,7 @@ export default function Home ({ categories, products }) {
     }
 
     const displayNSkeletonsWhileLoading = () => {
-        const perRow = Math.floor(container.current.offsetWidth/250);
+        const perRow = Math.floor(container.current.offsetWidth/cardWidth);
         const numItems = items.length;
         const mod = numItems % perRow;
 

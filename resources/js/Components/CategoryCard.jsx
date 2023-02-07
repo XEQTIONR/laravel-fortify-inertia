@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
 import { Box, Typography } from "@mui/material";
-import ProductCardSkeleton from "./ProductCardSkeleton";
-
+import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
+import { cardWidth } from "@/constants/card";
 
 export default function CategoryCard ({category}) {
 
@@ -21,8 +21,8 @@ export default function CategoryCard ({category}) {
         <Box
             onClick={() => Inertia.visit(category.link, { preserveState: true })}
             key={'category' + category.id}
-            className="cursor-pointer p-3 mt-2 mb-6 flex flex-col hover:border hover:shadow-xl"
-            sx={{ width: "250px", alignSelf: "flex-start" }}
+            className="cursor-pointer p-3 mt-2 mx-1 mb-6 flex flex-col hover:border hover:shadow-xl"
+            sx={{ width: `${cardWidth}px`, alignSelf: "flex-start" }}
         >
             <Box
                 sx={{

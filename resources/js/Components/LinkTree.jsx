@@ -4,6 +4,7 @@ import {alpha, styled} from "@mui/material/styles";
 import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
 import { KeyboardArrowRight, KeyboardArrowDown } from '@mui/icons-material';
+import flatten from "@/functions/flatten";
 
 const StyledTreeItem = styled((props) => (
     <TreeItem {...props} />
@@ -25,16 +26,6 @@ const StyledTreeItem = styled((props) => (
     },
 
 }));
-
-const flatten = function(cats) {
-    if (cats.length === 0) {
-        return cats;
-    }
-    if (cats[0].children === null) {
-        return [cats[0], ...flatten(cats.slice(1))]
-    }
-    return [cats[0], ...flatten(cats[0].children), ...flatten(cats.slice(1))];
-}
 
 const ancestorIds = function(cat, nodeList) {
     if (cat.parent_id === null ) {
