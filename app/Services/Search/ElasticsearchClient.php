@@ -1,0 +1,80 @@
+<?php
+
+namespace App\Services\Search;
+
+use App\Contracts\SearchClient;
+use Elastic\Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\Client;
+
+class ElasticsearchClient implements SearchClient
+{
+    protected Client $client;
+    protected string $index;
+
+    /**
+     * @param string $index
+     * @param array $hosts
+     * @throws \Elastic\Elasticsearch\Exception\AuthenticationException
+     */
+    public function __construct(string $index, array $hosts = ['localhost:9200'])
+    {
+        $this->client = ClientBuilder::create()
+            ->setHosts($hosts)
+            ->build();
+        $this->index = $index;
+    }
+
+    public function search(string $query, array $fields, $numResults = 10)
+    {
+        $params = [
+            'index' => $this->index,
+            'size'   => $numResults,
+            'body' => [
+                'query' => [
+                    'multi_match' => [
+                        'query' => $query,
+                        'fields' => $fields
+                    ],
+
+                ]
+            ]
+        ];
+
+        return $this->client->search($params)->asArray();
+    }
+
+    /**
+     * @param string|int $id
+     * @param array $data
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function index($id, array $data) {
+        $params = [
+            'index' => $this->index,
+            'id' => $id,
+            'body' => $data
+        ];
+
+        $this->client->index($params);
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function createIndex($indexParam) {
+        $this->client->indices()->create(['index' => $indexParam ?? $this->index]);
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function deleteIndex($indexParam) {
+        $this->client->indices()->delete(['index' => $indexParam ?? $this->index]);
+    }
+}

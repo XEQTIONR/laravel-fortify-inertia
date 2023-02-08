@@ -197,6 +197,10 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * Application Specific Service Providers
+         */
+        App\Providers\SearchServiceProvider::class,
     ],
 
     /*
