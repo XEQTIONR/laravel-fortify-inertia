@@ -65,6 +65,41 @@ class ElasticsearchClient implements SearchClient
      * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
      * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
      */
+    public function update($id, array $data) {
+        if ( isset($data['status']) && $data['status'] === 'inactive' ) {
+            $this->delete($id);
+        } else {
+            $params = [
+                'index' => $this->index,
+                'id' => $id,
+                'body' => [
+                    'doc' => $data
+                ]
+            ];
+
+            $this->client->update($params);
+        }
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function delete($id) {
+        $params = [
+            'index' => $this->index,
+            'id'    => $id
+        ];
+
+        $this->client->delete($params);
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
     public function createIndex($indexParam) {
         $this->client->indices()->create(['index' => $indexParam ?? $this->index]);
     }
