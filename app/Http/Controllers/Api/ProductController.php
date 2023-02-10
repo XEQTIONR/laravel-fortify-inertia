@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Contracts\SearchClient;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
@@ -133,9 +134,12 @@ class ProductController extends Controller
      * @return array
      */
     public function toggleActivation( Request $request ) {
+
         $validated = $request->validate([
             'ids' => 'required|array|min:1',
         ]);
+
+        $searchClient = app(SearchClient::class);
 
         $active = Product::whereIn('id', $validated['ids'])
             ->where('status', 'active')->get();
@@ -145,9 +149,22 @@ class ProductController extends Controller
             ->where('status', 'inactive')->get();
         $inactiveKeys = $inactive->modelKeys();
 
+        $countInactive = 0;
+        if (count($activeKeys) > 0) {
+            $countInactive = Product::whereIn('id', $activeKeys)->update(['status' => 'inactive']);
+            // manually delete from search because model events are not fired.
+            $searchClient->deleteMany($activeKeys);
+        }
 
-        $countInactive = Product::whereIn('id', $activeKeys)->update(['status' => 'inactive']);
-        $countActive = Product::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
+        $countActive = 0;
+        if (count($inactiveKeys) > 0) {
+            $countActive = Product::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
+            // manually add items to search because model events are not fired.
+            $searchClient->indexMany($inactiveKeys, $inactive->map(fn($item) => [
+                'english_name' => $item->english_name,
+                'bangla_name' => $item->bangla_name,
+            ])->toArray());
+        }
 
         $message = "$countActive activated, $countInactive deactivated.";
 

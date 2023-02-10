@@ -61,6 +61,27 @@ class ElasticsearchClient implements SearchClient
     }
 
     /**
+     * @param array $ids
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     */
+    public function indexMany(array $ids, array $data){
+        $params = [ 'body' => [] ];
+
+        for ($i = 0; $i < count($ids); $i++) {
+            $params['body'][] = [
+                'index' => [
+                    '_index' => $this->index,
+                    '_id' => $ids[$i],
+                ]
+            ];
+            $params['body'][] = $data[$i];
+        }
+
+        $this->client->bulk($params);
+    }
+
+    /**
      * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
      * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
      * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
@@ -93,6 +114,26 @@ class ElasticsearchClient implements SearchClient
         ];
 
         $this->client->delete($params);
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function deleteMany(array $ids) {
+        $stringIDs = array_map(fn($id) => strval($id), $ids);
+        $params = [
+            'index' => $this->index,
+            'body' => [
+                'query' => [
+                    'ids' => [
+                        'values' => $stringIDs
+                    ]
+                ]
+            ]
+        ];
+        $this->client->deleteByQuery($params);
     }
 
     /**
