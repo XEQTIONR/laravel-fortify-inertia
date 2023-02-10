@@ -90,6 +90,7 @@ class ProductController extends Controller
             'english_name' => 'required|string|max:50',
             'bangla_name' => 'required|string|max:50',
             'categories' => 'required|array',
+            'amount' => 'required|numeric|min:1',
             'uom' => [
                 'required',
                 Rule::in( array_keys(Product::$unitsOfMeasurement))
