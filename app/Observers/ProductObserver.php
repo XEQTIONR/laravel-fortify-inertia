@@ -20,6 +20,12 @@ class ProductObserver
             $searchClient->index($product->id, [
                 'english_name' => $product->english_name,
                 'bangla_name' => $product->bangla_name,
+                'uom' => Product::$unitsOfMeasurement[$product->uom],
+                'amount' => $product->amount,
+                'current_selling_price' => $product->current_selling_price,
+                'image' => $product->image,
+                'status' => $product->status,
+
             ]);
         }
     }
@@ -40,6 +46,11 @@ class ProductObserver
             $searchClient->index($product->id, [
                 'english_name' => $product->english_name,
                 'bangla_name' => $product->bangla_name,
+                'uom' => Product::$unitsOfMeasurement[$product->uom],
+                'amount' => $product->amount,
+                'current_selling_price' => $product->current_selling_price,
+                'image' => $product->image,
+                'status' => $product->status,
             ]);
         }
     }

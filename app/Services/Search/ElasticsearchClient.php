@@ -24,6 +24,10 @@ class ElasticsearchClient implements SearchClient
         $this->index = $index;
     }
 
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     */
     public function search(string $query, array $fields, $numResults = 10)
     {
         $params = [
@@ -31,12 +35,24 @@ class ElasticsearchClient implements SearchClient
             'size'   => $numResults,
             'body' => [
                 'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => $fields
-                    ],
-
-                ]
+                    'bool' => [
+                        'must' => [
+                            [
+                                'multi_match' => [
+                                    'query' => $query,
+                                    'fields' => $fields
+                                ],
+                            ]
+                        ],
+                        'filter' => [
+                            [
+                                'term' => [
+                                    'status' => 'active'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
             ]
         ];
 
@@ -100,6 +116,32 @@ class ElasticsearchClient implements SearchClient
 
             $this->client->update($params);
         }
+    }
+
+    /**
+     * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
+     * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
+     * @throws \Elastic\Elasticsearch\Exception\MissingParameterException
+     */
+    public function updateMany($ids, $field, $value) {
+        $stringIDs = array_map(fn($id) => strval($id), $ids);
+        $params = [
+            'index' => $this->index,
+            'body' => [
+                'query' => [
+                    'ids' => [
+                        'values' => $stringIDs
+                    ]
+                ],
+                'script' => [
+                    'source' => "ctx._source.$field = params.value",
+                    'params' => [
+                        'value' => $value
+                    ]
+                ]
+            ]
+        ];
+        $this->client->updateByQuery($params);
     }
 
     /**
