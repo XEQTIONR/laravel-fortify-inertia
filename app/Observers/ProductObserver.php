@@ -39,20 +39,15 @@ class ProductObserver
     public function updated(Product $product)
     {
         $searchClient = app(SearchClient::class);
-        if ($product->status === 'inactive') {
-            $searchClient->delete($product->id);
-        } elseif ($product->status === 'active') {
-            $searchClient = app(SearchClient::class);
-            $searchClient->index($product->id, [
-                'english_name' => $product->english_name,
-                'bangla_name' => $product->bangla_name,
-                'uom' => Product::$unitsOfMeasurement[$product->uom],
-                'amount' => $product->amount,
-                'current_selling_price' => $product->current_selling_price,
-                'image' => $product->image,
-                'status' => $product->status,
-            ]);
-        }
+        $searchClient->index($product->id, [
+            'english_name' => $product->english_name,
+            'bangla_name' => $product->bangla_name,
+            'uom' => Product::$unitsOfMeasurement[$product->uom],
+            'amount' => $product->amount,
+            'current_selling_price' => $product->current_selling_price,
+            'image' => $product->image,
+            'status' => $product->status,
+        ]);
     }
 
     /**
