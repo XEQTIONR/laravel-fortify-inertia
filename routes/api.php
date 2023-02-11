@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SupplierController;
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,7 @@ Route::name('api.')
       // Non auth routes
       Route::get('/{slug?}', [ HomeController::class, 'index' ])
         ->name('home');
+
+      Route::get('/search/{query}', SearchController::class)
+        ->name('search');
 });

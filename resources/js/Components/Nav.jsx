@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
     AppBar,
     Box,
-    Collapse,
     createTheme,
     CssBaseline,
     Divider,
@@ -10,17 +9,15 @@ import {
     IconButton,
     List,
     Typography,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
     Toolbar
 } from '@mui/material';
 
-import  MenuIcon  from '@mui/icons-material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import LinkTree from '@/Components/LinkTree'
 import NavSearchBar from '@/Components/NavSearchBar'
+
+import useSearch from '@/hooks/useSearch';
 
 
 
@@ -39,6 +36,15 @@ const theme = createTheme({
     },
 });
 
+function debounce( fn, timeout = 1000) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { fn(...args); }, timeout);
+    };
+}
+
+
 export default function Nav({ children, navLinks, selectedCategory }) {
 
     const [ show, setShow ] = useState(window.outerWidth <= 767
@@ -47,6 +53,13 @@ export default function Nav({ children, navLinks, selectedCategory }) {
     );
     const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
     const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
+    const [ isSearching, setIsSearching ] = useState(false);
+
+    const searchFunc = useSearch();
+    const search = debounce((q) => {
+        searchFunc(q, setIsSearching)
+    })
+
     useEffect(() => {
         function handleResize() {
             setMainWidth(window.outerWidth);
@@ -92,7 +105,11 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                             Clipped drawer
                         </Typography>
                     </Box>
-                    <NavSearchBar onChange={({target}) => { console.log(target.value)}} />
+                    <NavSearchBar onChange={({target}) => {
+                        if (target.value.length > 0) {
+                            search(target.value)
+                        }
+                    }} />
 
                 </Toolbar>
             </AppBar>

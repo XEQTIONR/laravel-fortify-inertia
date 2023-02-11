@@ -28,7 +28,7 @@ class ElasticsearchClient implements SearchClient
      * @throws \Elastic\Elasticsearch\Exception\ServerResponseException
      * @throws \Elastic\Elasticsearch\Exception\ClientResponseException
      */
-    public function search(string $query, array $fields, $numResults = 10)
+    public function search(string $query, array $fields, $numResults = 50)
     {
         $params = [
             'index' => $this->index,
@@ -38,10 +38,16 @@ class ElasticsearchClient implements SearchClient
                     'bool' => [
                         'must' => [
                             [
-                                'multi_match' => [
-                                    'query' => $query,
-                                    'fields' => $fields
-                                ],
+                                'query_string' => [
+                                    'query' => "*$query*",
+                                    'fields' => $fields,
+                                ]
+                                // v 1.0 only matches prefixes.
+                                // 'multi_match' => [
+                                //     'query' => $query,
+                                //     'type' => 'phrase_prefix',
+                                //     'fields' => $fields
+                                // ],
                             ]
                         ],
                         'filter' => [
@@ -56,7 +62,16 @@ class ElasticsearchClient implements SearchClient
             ]
         ];
 
-        return $this->client->search($params)->asArray();
+        $metaData =  $this->client->search($params);
+        $hits = $metaData->hits->hits;
+
+        return array_map(function($item) {
+            $data = $item->_source;
+            $data->id = intval($item->_id);
+            return $data;
+        }, $hits);
+
+
     }
 
     /**
