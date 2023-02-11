@@ -1,6 +1,5 @@
 export default function useSearch() {
-    function search(query, setIsLoading) {
-        setIsLoading(true)
+    function search(query, setIsLoading, setItems) {
         const params = {
             //page,
             query
@@ -8,6 +7,7 @@ export default function useSearch() {
         axios.get( route('api.search', { query }))
             .then(({data}) => {
                 console.log(data);
+                setItems(data)
             })
             .catch ( e => {
                 console.log('search error', e)

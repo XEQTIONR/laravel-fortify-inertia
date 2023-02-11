@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     AppBar,
     Box,
@@ -45,7 +45,7 @@ function debounce( fn, timeout = 1000) {
 }
 
 
-export default function Nav({ children, navLinks, selectedCategory }) {
+export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems }) {
 
     const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
@@ -53,12 +53,12 @@ export default function Nav({ children, navLinks, selectedCategory }) {
     );
     const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
     const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
-    const [ isSearching, setIsSearching ] = useState(false);
+    //const [ isSearching, setIsSearching ] = useState(false);
 
     const searchFunc = useSearch();
-    const search = debounce((q) => {
-        searchFunc(q, setIsSearching)
-    })
+    const search = useCallback( debounce((q) => {
+        searchFunc(q, setIsSearching, setSearchItems)
+    }), [] );
 
     useEffect(() => {
         function handleResize() {
@@ -105,11 +105,17 @@ export default function Nav({ children, navLinks, selectedCategory }) {
                             Clipped drawer
                         </Typography>
                     </Box>
-                    <NavSearchBar onChange={({target}) => {
-                        if (target.value.length > 0) {
-                            search(target.value)
-                        }
-                    }} />
+                    <NavSearchBar
+                        onChange={({target}) => {
+                            setIsSearching(true);
+                            if (target.value.length > 0) {
+                                search(target.value);
+                            } else {
+                                setIsSearching(false);
+                                setSearchItems([]);
+                            }
+                        }}
+                    />
 
                 </Toolbar>
             </AppBar>

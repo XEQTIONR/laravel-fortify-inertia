@@ -15,6 +15,8 @@ export default function Home ({ categories, products }) {
     const [meta, setMeta] = useState(products.meta);
     const [selectedCategory, setSelectedCategory] = useState(products.meta.category);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSearching, setIsSearching] = useState(false);
+    const [searchItems, setSearchItems] = useState([]);
     const container = useRef(null);
 
     const setRows = (rows) => {
@@ -62,7 +64,6 @@ export default function Home ({ categories, products }) {
     useEffect(() => {
         if (isLoading) {
             if (meta.current_page < meta.last_page) {
-                displayNSkeletonsWhileLoading();
                 paginate(meta.current_page + 1);
             } else {
                 setIsLoading(false);
@@ -72,24 +73,36 @@ export default function Home ({ categories, products }) {
     }, [ isLoading ]);
 
     return (
-        <Nav navLinks={categories.data} selectedCategory={selectedCategory} loading>
+        <Nav navLinks={categories.data}
+             selectedCategory={selectedCategory}
+             setIsSearching={setIsSearching}
+             setSearchItems={setSearchItems}
+        >
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
+
                 {
-                    selectedCategory
+                    ( selectedCategory && searchItems.length === 0 && !isSearching )
                         ? flatten(categories.data)
                             .filter((children) => children.parent_id === selectedCategory.id)
                             .map(item => <CategoryCard category={item} />)
                         : null
                 }
                 {
-                    items.map((item) => <ProductCard key={item.id} product={item} />)
+                    isSearching ?
+                        'Searching'
+                        : ( searchItems.length > 0 )
+                            ? searchItems.map((item) => <ProductCard key={item.id} product={item} />)
+                            : items.map((item) => <ProductCard key={item.id} product={item} />)
                 }
                 {
-                    (isLoading && (meta.current_page < meta.last_page))
-                        ? ([...Array(displayNSkeletonsWhileLoading())].map((e, i) =>
-                            <ProductCardSkeleton key={'skeleton' + i} />))
-                        : null
+
                 }
+                {/*{*/}
+                {/*    (isLoading && (meta.current_page < meta.last_page))*/}
+                {/*        ? ([...Array(displayNSkeletonsWhileLoading())].map((e, i) =>*/}
+                {/*            <ProductCardSkeleton key={'skeleton' + i} />))*/}
+                {/*        : null*/}
+                {/*}*/}
             </Box>
         </Nav>
     );
