@@ -31,7 +31,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         width: '100%',
     },
 }));
-export default function NavSearchBar ({onChange}) {
+export default function NavSearchBar ({onChange, value}) {
 
     return (
         <SearchInput>
@@ -41,6 +41,7 @@ export default function NavSearchBar ({onChange}) {
                 <SearchIcon />
             </Box>
             <StyledInputBase
+                value={value}
                 onChange={onChange}
                 className="w-full"
                 placeholder="Search…"

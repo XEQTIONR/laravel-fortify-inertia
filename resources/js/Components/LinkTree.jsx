@@ -37,7 +37,7 @@ const ancestorIds = function(cat, nodeList) {
     ];
 }
 
-export default function LinkTree({links, selectedCategory}) {
+export default function LinkTree({links, selectedCategory, onSelect}) {
 
     const [ flattenedCategories, setFlattenedCategories ] = useState( flatten(links) )
     const [ expanded, setExpanded ] = useState([]);
@@ -59,6 +59,7 @@ export default function LinkTree({links, selectedCategory}) {
         return theLinks.map((link) => link.children === null
             ? <StyledTreeItem // leaf node
                 onClick={() => {
+                    onSelect()
                     Inertia.visit(route('welcome', { slug: link.slug }), {
                         preserveState: true
                     })
@@ -70,6 +71,7 @@ export default function LinkTree({links, selectedCategory}) {
             />
             : <StyledTreeItem // non-leaf node
                 onClick={() => {
+                    onSelect()
                     Inertia.visit(route('welcome', { slug: link.slug }),{
                         preserveState: true
                     })

@@ -53,7 +53,7 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
     );
     const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
     const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
-    //const [ isSearching, setIsSearching ] = useState(false);
+    const [ searchQuery, setSearchQuery ] = useState('');
 
     const searchFunc = useSearch();
     const search = useCallback( debounce((q) => {
@@ -106,7 +106,9 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                         </Typography>
                     </Box>
                     <NavSearchBar
+                        value={searchQuery}
                         onChange={({target}) => {
+                            setSearchQuery(target.value);
                             setIsSearching(true);
                             if (target.value.length > 0) {
                                 search(target.value);
@@ -133,7 +135,14 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
                     <List>
-                        <LinkTree links={navLinks} selectedCategory={selectedCategory} />
+                        <LinkTree
+                            links={navLinks}
+                            selectedCategory={selectedCategory}
+                            onSelect={() => {
+                                setSearchQuery('')
+                                setSearchItems([])
+                            }}
+                        />
                     </List>
                     <Divider />
                 </Box>
