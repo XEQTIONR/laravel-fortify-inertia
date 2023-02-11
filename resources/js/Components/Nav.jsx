@@ -16,11 +16,13 @@ import {
     ListItemText,
     Toolbar
 } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import MenuIcon from '@mui/icons-material/Menu';
+
+import  MenuIcon  from '@mui/icons-material/Menu';
 
 import LinkTree from '@/Components/LinkTree'
+import NavSearchBar from '@/Components/NavSearchBar'
+
+
 
 const drawerWidth = 240;
 
@@ -39,19 +41,19 @@ const theme = createTheme({
 
 export default function Nav({ children, navLinks, selectedCategory }) {
 
-    const [ show, setShow ] = useState(window.outerWidth <= 800
+    const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
         : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
     );
     const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
-    const [ menuType, setMenuType ] = useState((window.outerWidth > 800) ? 'persistent' : 'temporary');
+    const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
     useEffect(() => {
         function handleResize() {
             setMainWidth(window.outerWidth);
-            if (window.outerWidth <= 800 && menuType === 'persistent' ) {
+            if (window.outerWidth <= 767 && menuType === 'persistent' ) {
                 setShow(false)
                 setMenuType('temporary');
-            } else if (window.outerWidth > 800 && menuType === 'temporary' ) {
+            } else if (window.outerWidth > 767 && menuType === 'temporary' ) {
                 setShow(true)
                 setMenuType('persistent');
             }
@@ -69,26 +71,36 @@ export default function Nav({ children, navLinks, selectedCategory }) {
         <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="px-1">
-                    <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        color="inherit"
-                        onClick={() => { setShow( !show )}}
+                    <Box className="flex items-center flex-shrink-0"
+                        sx={{ width: show ? drawerWidth : '50px' }}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Clipped drawer
-                    </Typography>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                            onClick={() => { setShow( !show )}}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography
+                            className={'flex-shrink-0 ' + (show ? '' : 'hidden') }
+                            variant="h6"
+                            noWrap component="div"
+                        >
+                            Clipped drawer
+                        </Typography>
+                    </Box>
+                    <NavSearchBar onChange={({target}) => { console.log(target.value)}} />
+
                 </Toolbar>
             </AppBar>
 
             <Drawer
                 open={show}
                 variant={menuType}
-                onClose={() => (mainWidth < 800) && setShow(false)}
+                onClose={() => (mainWidth < 767) && setShow(false)}
                 sx={{
                     width: show ? drawerWidth : 0,
                     flexShrink: 0,
