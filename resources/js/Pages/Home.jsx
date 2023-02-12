@@ -3,7 +3,7 @@ import Nav from '@/Components/Nav';
 import CategoryCard from '@/Components/CategoryCard';
 import ProductCard from '@/Components/ProductCard';
 import ProductCardSkeleton from "../Components/ProductCardSkeleton";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import flatten from "@/functions/flatten";
 import { cardWidth } from "@/constants/card";
 
@@ -89,7 +89,7 @@ export default function Home ({ categories, products }) {
                 }
                 {
                     isSearching ?
-                        'Searching'
+                        <CircularProgress sx={{ mt: '33vh' }} />
                         : ( searchItems.length > 0 )
                             ? searchItems.map((item) => <ProductCard key={item.id} product={item} />)
                             : items.map((item) => <ProductCard key={item.id} product={item} />)
