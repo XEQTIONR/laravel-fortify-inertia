@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef}  from 'react';
+import {Inertia} from '@inertiajs/inertia'
 import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
 import CategoryCard from '@/Components/CategoryCard';
@@ -10,7 +11,7 @@ import { cardWidth } from "@/constants/card";
 
 import usePaginate from '@/hooks/usePaginate';
 
-export default function Home ({ categories, products }) {
+export default function Home ({ categories, products, user }) {
 
     const [items, setItems] = useState(products.data ?? []);
     const [meta, setMeta] = useState(products.meta);
@@ -26,6 +27,18 @@ export default function Home ({ categories, products }) {
 
     const paginate = usePaginate( route('api.home', { slug: selectedCategory ? selectedCategory.slug : null }),
         setIsLoading, setRows, setMeta );
+
+    const addToCart = ( product_id, user_id ) => {
+        axios.post( route('api.carts.store'), {
+            'product_id': product_id,
+            'user_id': user_id,
+        }).then((res) => {
+           console.log('add to cart response', res);
+        }).catch(err => {
+            console.log('ERROR:', err);
+        });
+
+    }
 
     const scrollPercentage = () => {
         const h = document.documentElement,
@@ -87,20 +100,36 @@ export default function Home ({ categories, products }) {
              setSearchItems={setSearchItems}
         >
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
-
+                <button onClick={()=> {
+                    Inertia.post(route('logout'));
+                }} >Button</button>
                 {
                     ( selectedCategory && searchItems.length === 0 && !isSearching )
                         ? flatten(categories.data)
                             .filter((children) => children.parent_id === selectedCategory.id)
-                            .map(item => <CategoryCard category={item} />)
+                            .map(item => <CategoryCard key={item.id} category={item} />)
                         : null
                 }
                 {
                     isSearching ?
                         <CircularProgress sx={{ mt: '33vh' }} />
                         : ( searchItems.length > 0 )
-                            ? searchItems.map((item) => <ProductCard key={item.id} product={item} />)
-                            : items.map((item) => <ProductCard key={item.id} product={item} />)
+                            ? searchItems.map((item) =>
+                                <ProductCard
+                                    key={item.id}
+                                    product={item}
+                                    cbAdd={() => {
+                                        addToCart(item.id, user?.id)
+                                    }}
+                                />)
+                            : items.map((item) =>
+                                <ProductCard
+                                    key={item.id}
+                                    product={item}
+                                    cbAdd={() => {
+                                        addToCart(item.id, user ? user.id : null)
+                                    }}
+                                />)
                 }
                 {
 

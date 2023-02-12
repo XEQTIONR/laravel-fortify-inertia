@@ -3,7 +3,7 @@ import { Box, Button, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 
-export default function ProductCard ({product}) {
+export default function ProductCard ({product, cbAdd }) {
 
     const [imgUrl, setImgUrl] = useState('none');
     useEffect(() => {
@@ -45,7 +45,10 @@ export default function ProductCard ({product}) {
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
 
                 <Button
-                    onClick={ (e) => e.stopPropagation() }
+                    onClick={ (e) => {
+                        e.stopPropagation()
+                        cbAdd();
+                    }}
                     className="mt-2 border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
                     variant="outlined"
                 >

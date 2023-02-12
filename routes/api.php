@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\ShoppingCartController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,6 +22,8 @@ use App\Http\Controllers\Api\SupplierController;
 
 Route::name('api.')
     ->group(function() {
+
+      Route::post('/cart', [ShoppingCartController::class, 'store'])->name('carts.store');
       Route::middleware('auth:sanctum')
         ->group(function() {
           Route::get('/user', function (Request $request) {
