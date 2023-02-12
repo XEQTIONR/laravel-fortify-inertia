@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
@@ -12,8 +13,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Rules\Password;
-
-use App\Models\Category;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -122,6 +121,7 @@ Route::post('/reset-password-new/{code}', function(Request $request, $code) {
     // TODO handle unhappy path
 });
 
+Route::get('/cookie', CartCookieController::class)->name('cookie');
 
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
 
@@ -133,9 +133,7 @@ Route::get('/home', function () {
     return \Inertia\Inertia::render('Home');
 })->middleware(['auth', 'verified.phone'])->name('home');
 
-Route::get('/test', function () {
-    echo lang_path('en/auth.php');
-});
+
 
 Route::get('/forget', function() {
    \Illuminate\Support\Facades\Cache::forget('lang_'.config('app.locale').'.js');

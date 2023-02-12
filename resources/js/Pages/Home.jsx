@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef}  from 'react';
+import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
 import CategoryCard from '@/Components/CategoryCard';
 import ProductCard from '@/Components/ProductCard';
@@ -52,6 +53,13 @@ export default function Home ({ categories, products }) {
         window.addEventListener('scroll', onScroll );
 
         return () => { window.removeEventListener('scroll', onScroll ); }
+    }, [])
+
+    useEffect(() => {
+        const cookie = Cookies.get('shopping-cart')
+        if ( ! cookie ) {
+            axios.get(route('cookie'));
+        }
     }, [])
 
     // to account for preserveState in LinkTree
