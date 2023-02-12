@@ -9,6 +9,7 @@ import {
     FormControl,
     FormControlLabel,
     FormGroup,
+    FormHelperText,
     InputLabel,
     LinearProgress,
     ListItemText,
@@ -50,7 +51,7 @@ export default function ProductForm ({ action, existingCategories, productData, 
         'bangla_name' : productData ? productData.bangla_name : '',
         'categories' : productData ? productData.categories.map(({id}) => id) : [],
         'amount' : productData ? productData.amount : 0,
-        'uom' : productData ? productData.uom : '',
+        'uom' : productData ? Object.keys(uom).find((key) => uom[key] === productData.uom) : '',
         'current_selling_price' : productData ? productData.current_selling_price.toFixed(2) : '',
         'image' : null,
         'status' : productData ? productData.status : 'inactive',
@@ -151,20 +152,25 @@ export default function ProductForm ({ action, existingCategories, productData, 
                             <FormControl required variant="standard" className="mr-1">
                                 <InputLabel id="demo-simple-select-standard-label">Unit Of Measure</InputLabel>
                                 <Select
+                                    error={ !! errors.uom }
                                     onChange={ ({target}) => setData('uom', target.value) }
                                     id="uom"
                                     value={data.uom}
                                     label="Unit of Measure"
                                 >
-                                    <MenuItem value="" key={'None'}>
+                                    <MenuItem value='' key={'None'}>
                                         <em>None</em>
                                     </MenuItem>
-                                    { Object.keys(uom).map( (key) =>
-                                        <MenuItem value={key} key={key}>
-                                            {uom[key]}
-                                        </MenuItem>
-                                    )}
+                                    {
+                                        Object.entries(uom).map(( [key, value] ) => (
+                                            <MenuItem value={key} key={key}>
+                                                {value}
+                                            </MenuItem>
+                                            )
+                                        )
+                                    }
                                 </Select>
+                                <FormHelperText>{errors.uom}</FormHelperText>
                             </FormControl>
                             <Box sx={{ display: 'flex', alignItems: errors.current_selling_price ? 'center' : 'flex-end' }}>
                                 <Typography className="mr-1">৳</Typography>
