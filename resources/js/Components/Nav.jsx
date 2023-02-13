@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Inertia } from '@inertiajs/inertia'
 import {
     AppBar,
     Box,
@@ -8,10 +9,18 @@ import {
     Drawer,
     IconButton,
     List,
+    Menu,
+    MenuItem,
+    Stack,
     Typography,
     Toolbar
 } from '@mui/material';
 
+import {
+    AccountBox,
+    ShoppingCart,
+    Login,
+} from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import LinkTree from '@/Components/LinkTree'
@@ -45,7 +54,7 @@ function debounce( fn, timeout = 1000) {
 }
 
 
-export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems }) {
+export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems, user }) {
 
     const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
@@ -54,6 +63,8 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
     const [ mainWidth, setMainWidth ] = useState(window.outerWidth);
     const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
     const [ searchQuery, setSearchQuery ] = useState('');
+    const [ userMenuOpen, setUserMenuOpen ] = useState(false);
+    const [ menuAnchor, setMenuAnchor ] = useState(null);
 
     const searchFunc = useSearch();
     const search = useCallback( debounce((q) => {
@@ -83,9 +94,10 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
         <CssBaseline />
         <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                <Toolbar className="px-1">
-                    <Box className="flex items-center flex-shrink-0"
-                        sx={{ width: show ? drawerWidth : '50px' }}
+                <Stack spacing={1} direction="row" justifyContent="flex-start">
+                <Toolbar className="pl-1 pr-0">
+                    <Box className="flex items-center"
+                         sx={{ width: show ? drawerWidth : '50px' }}
                     >
                         <IconButton
                             size="large"
@@ -105,6 +117,8 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                             Clipped drawer
                         </Typography>
                     </Box>
+                </Toolbar>
+                <Toolbar className="w-full px-0">
                     <NavSearchBar
                         value={searchQuery}
                         onChange={({target}) => {
@@ -120,6 +134,55 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                     />
 
                 </Toolbar>
+                <Toolbar className="pl-0 pr-4">
+
+                    <IconButton
+                        className="mr-2"
+                        color="inherit"
+                                onMouseEnter={(e) => {
+                                    setMenuAnchor(e.currentTarget);
+                                }}
+                                onClick={(e) => {
+                        if ( !user ) {
+                            Inertia.visit( route('login') );
+                        } else {
+                            // setMenuAnchor(e.currentTarget);
+                            setUserMenuOpen( ! userMenuOpen );
+                        }
+                    }}>
+                        { user ? <AccountBox /> : <Login /> }
+                    </IconButton>
+                    <Menu
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        className="mr-2"
+                        id="user-menu"
+                        anchorEl={menuAnchor}
+                        open={userMenuOpen}
+                        onClose={() => setUserMenuOpen(false)}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                        }}
+                    >
+                        <MenuItem onClick={() => setUserMenuOpen(false)} >Profile</MenuItem>
+                        <MenuItem onClick={() => setUserMenuOpen(false)} >My account</MenuItem>
+                        <MenuItem onClick={() => {
+                            setUserMenuOpen(false)
+                            Inertia.post(route('logout') )
+
+                        }} >Logout</MenuItem>
+                    </Menu>
+                    <IconButton color="inherit">
+                        <ShoppingCart />
+                    </IconButton>
+                </Toolbar>
+                </Stack>
             </AppBar>
 
             <Drawer
@@ -148,9 +211,9 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                 </Box>
             </Drawer>
             <Box
-                sx={{ flexGrow: 1}}
                 className="flex justify-center px-0"
-                style={{
+                sx={{
+                    flewGrow: 1,
                     pt: 8,
                     px: 2,
                     pb: 2,

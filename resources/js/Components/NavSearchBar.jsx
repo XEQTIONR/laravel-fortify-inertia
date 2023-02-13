@@ -12,7 +12,7 @@ const SearchInput = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginRight: theme.spacing(2),
+    marginRight: 0,
     marginLeft: 0,
     width: '100%',
     // [theme.breakpoints.up('sm')]: {
@@ -35,6 +35,7 @@ export default function NavSearchBar ({onChange, value}) {
 
     return (
         <SearchInput>
+
             <Box
                 className="h-full absolute pointer-events-none flex justify-center items-center px-4 py-0"
             >

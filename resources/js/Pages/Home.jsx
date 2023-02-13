@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useRef}  from 'react';
-import {Inertia} from '@inertiajs/inertia'
 import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
 import CategoryCard from '@/Components/CategoryCard';
@@ -8,6 +7,7 @@ import ProductCardSkeleton from "../Components/ProductCardSkeleton";
 import { Box, CircularProgress } from "@mui/material";
 import flatten from "@/functions/flatten";
 import { cardWidth } from "@/constants/card";
+
 
 import usePaginate from '@/hooks/usePaginate';
 
@@ -95,14 +95,12 @@ export default function Home ({ categories, products, user }) {
 
     return (
         <Nav navLinks={categories.data}
+             user={user}
              selectedCategory={selectedCategory}
              setIsSearching={setIsSearching}
              setSearchItems={setSearchItems}
         >
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
-                <button onClick={()=> {
-                    Inertia.post(route('logout'));
-                }} >Button</button>
                 {
                     ( selectedCategory && searchItems.length === 0 && !isSearching )
                         ? flatten(categories.data)
