@@ -23,26 +23,28 @@ use App\Http\Controllers\Api\ShoppingCartController;
 Route::name('api.')
     ->group(function() {
 
-      Route::post('/cart', [ShoppingCartController::class, 'store'])->name('carts.store');
-      Route::middleware('auth:sanctum')
-        ->group(function() {
-          Route::get('/user', function (Request $request) {
-            return $request->user();
-          })->name('user');
+        Route::apiResource('carts', ShoppingCartController::class);
 
-          Route::get('/products', [ ProductController::class, 'index' ])
-            ->name('products.index');
+        Route::middleware('auth:sanctum')
+            ->group(function() {
+                Route::get('/user', function (Request $request) {
+                    return $request->user();
+                })->name('user');
 
-          Route::get('/suppliers', [ SupplierController::class, 'index' ])
-            ->name('suppliers.index');
+                Route::get('/products', [ ProductController::class, 'index' ])
+                    ->name('products.index');
 
-          Route::get('/categories', [ CategoryController::class, 'index' ])
-            ->name('categories.index');
+                Route::get('/suppliers', [ SupplierController::class, 'index' ])
+                    ->name('suppliers.index');
+
+                Route::get('/categories', [ CategoryController::class, 'index' ])
+                    ->name('categories.index');
         });
-      // Non auth routes
-      Route::get('/{slug?}', [ HomeController::class, 'index' ])
-        ->name('home');
 
-      Route::get('/search/{query}', SearchController::class)
-        ->name('search');
+        // Non auth routes
+        Route::get('/{slug?}', [ HomeController::class, 'index' ])
+            ->name('home');
+
+        Route::get('/search/{query}', SearchController::class)
+            ->name('search');
 });

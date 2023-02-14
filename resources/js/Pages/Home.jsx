@@ -19,6 +19,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [searchItems, setSearchItems] = useState([]);
+    const [cart, setCart] = useState(shopping_cart);
     const container = useRef(null);
 
     const setRows = (rows) => {
@@ -33,6 +34,15 @@ export default function Home ({ categories, products, shopping_cart, user }) {
             'product_id': product_id,
             'user_id': user_id,
         }).then((res) => {
+            console.log('api.carts.store', res)
+            const found = cart.find(({ id }) => id === res.data.id);
+
+            if ( found ) {
+                setCart(cart.map((item) => (item.id === found.id) ? res.data : item ));
+            } else {
+                setCart([...cart, res.data]);
+            }
+
            console.log('add to cart response', res);
         }).catch(err => {
             console.log('ERROR:', err);
@@ -99,7 +109,8 @@ export default function Home ({ categories, products, shopping_cart, user }) {
              selectedCategory={selectedCategory}
              setIsSearching={setIsSearching}
              setSearchItems={setSearchItems}
-             shoppingCart={shopping_cart}
+             shoppingCart={cart}
+             setShoppingCart={setCart}
         >
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
                 {

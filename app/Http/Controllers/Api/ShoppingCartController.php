@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class ShoppingCartController extends Controller
@@ -24,7 +25,7 @@ class ShoppingCartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return ShoppingCart
      */
     public function store(Request $request)
@@ -41,12 +42,10 @@ class ShoppingCartController extends Controller
             $items = $cartItems->where('product_id', $validated['product_id']);
             if ( $items->count() === 1 ) {
                 $item = $items->first();
-                Log::info('$items->first()');
-                Log::info($item ?? 'is-null');
                 $item->qty++;
                 $item->status = 'new';
                 $item->save();
-
+                $item->load('product');
                 return $item;
             }
         }
@@ -57,6 +56,7 @@ class ShoppingCartController extends Controller
             $item->qty = 1;
             $item->status = 'new';
             $item->save();
+            $item->load('product');
 
             return $item;
     }
@@ -76,23 +76,47 @@ class ShoppingCartController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param  ShoppingCart  $shoppingCart
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ShoppingCart $cart)
     {
-        //
+        $validated = $request->validate([
+            'qty' => 'numeric|min:0',
+        ]);
+        $cookie = $request->cookie($this->cookieName);
+        $id = $cart->id;
+        $action = 'none';
+
+        if ( $cart->session_cookie === $cookie ) {
+            if ( $validated['qty'] === 0 ) {
+                $this->destroy($request, $cart);
+                $action = 'delete';
+                $cart = 'null';
+            } else {
+                $cart->qty = $validated['qty'];
+                $cart->save();
+                $action = 'update';
+            }
+        }
+
+        return response()->json(compact('id', 'action', 'cart'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param ShoppingCart $cart
+     * @return int
      */
-    public function destroy($id)
+    public function destroy(Request $request, ShoppingCart $cart)
     {
-        //
+        $id = $cart->id;
+
+        $cart->delete();
+
+        return $id;
     }
 }
