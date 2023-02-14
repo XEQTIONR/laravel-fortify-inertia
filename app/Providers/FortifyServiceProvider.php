@@ -8,12 +8,17 @@ use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Http\Responses\LogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -24,7 +29,20 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->instance(LogoutResponse::class, new class implements LogoutResponseContract {
+            public function toResponse($request)
+            {
+                return $request->wantsJson()
+                    ? new JsonResponse('', 204)
+                    : redirect()->route(Fortify::redirects('logout', 'welcome'))
+                        ->withCookie(Cookie::make(
+                            name: 'shopping-cart',
+                            value: Str::random(),
+                            minutes: 100000,
+                            httpOnly: false,
+                        ));
+            }
+        });
     }
 
     /**

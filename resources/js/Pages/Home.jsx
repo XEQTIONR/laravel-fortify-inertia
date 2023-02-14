@@ -72,6 +72,9 @@ export default function Home ({ categories, products, shopping_cart, user }) {
             setIsLoading(true);
         }
     }
+
+    useEffect( () => setCart(shopping_cart), [shopping_cart]);
+
     useEffect(() => {
         window.addEventListener('scroll', onScroll );
 

@@ -53,7 +53,7 @@ class HandleInertiaRequests extends Middleware
 
             if ($cookies_only->count() > 0) {
                 ShoppingCart::whereIn('id', $cookies_only->map(fn($item, $key) => $item->id ))
-                    ->update(['user_id', $user->id]);
+                    ->update(['user_id' => $user->id]);
             }
         }
 
