@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Inertia } from '@inertiajs/inertia'
 import {
     AppBar,
+    Badge,
     Box,
     createTheme,
     CssBaseline,
@@ -9,17 +10,23 @@ import {
     Drawer,
     IconButton,
     List,
+    ListItem,
     Menu,
     MenuItem,
+    Paper,
     Stack,
     Typography,
-    Toolbar
+    Toolbar, MenuList, ListItemText, Popover
 } from '@mui/material';
 
 import {
     AccountBox,
-    ShoppingCart,
+    Close,
+    DeleteForever,
+    KeyboardArrowDown,
+    KeyboardArrowUp,
     Login,
+    ShoppingCart,
 } from '@mui/icons-material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -54,7 +61,7 @@ function debounce( fn, timeout = 1000) {
 }
 
 
-export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems, user }) {
+export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems, user, shoppingCart }) {
 
     const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
@@ -64,7 +71,9 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
     const [ menuType, setMenuType ] = useState((window.outerWidth > 767) ? 'persistent' : 'temporary');
     const [ searchQuery, setSearchQuery ] = useState('');
     const [ userMenuOpen, setUserMenuOpen ] = useState(false);
+    const [ cartMenuOpen, setCartMenuOpen ] = useState(false);
     const [ menuAnchor, setMenuAnchor ] = useState(null);
+    const [ cartAnchor, setCartAnchor ] = useState(null);
 
     const searchFunc = useSearch();
     const search = useCallback( debounce((q) => {
@@ -178,9 +187,108 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
 
                         }} >Logout</MenuItem>
                     </Menu>
-                    <IconButton color="inherit">
-                        <ShoppingCart />
+                    <IconButton color="inherit"
+                        onMouseEnter={(e) => {
+                            setCartAnchor(e.currentTarget);
+                        }}
+                        onClick={() => setCartMenuOpen(!cartMenuOpen)}
+                    >
+                        <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
+                               color="error"
+                        >
+                            <ShoppingCart />
+                        </Badge>
                     </IconButton>
+                    {/*<Paper sx={{ width: 320, maxWidth: '100%' }}>*/}
+                    <Popover
+                        open={cartMenuOpen}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'right',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        anchorEl={cartAnchor}
+                    >
+                        <Typography variant="subtitlle1"
+                            sx={{
+                                display: 'block',
+                                fontWeight: 'bold',
+                                mt: 2,
+                                mb: 1,
+                                textAlign: 'center',
+                            }}
+                        >Shopping Cart (5 Items) </Typography>
+
+                        <List sx={{ minWidth: 375, padding: 1 }}>
+                            { shoppingCart.map(item =>
+                                <>
+                                <Divider variant="middle" />
+                                <ListItem
+                                    sx={{ my: 1 }}
+                                    secondaryAction={
+
+                                        <Box alignItems="center"
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center'
+                                            }}
+                                        >
+                                            <Stack sx={{ mr: 1 }} spacing={0} alignItems="center">
+
+                                                <IconButton size="small">
+                                                    <KeyboardArrowUp fontSize="inherit" />
+                                                </IconButton>
+                                                <Typography variant="caption">{item.qty}</Typography>
+                                                <IconButton size="small">
+                                                    <KeyboardArrowDown fontSize="inherit" />
+                                                </IconButton>
+
+                                            </Stack>
+                                            <Typography
+                                                variant="caption"
+                                                sx={{ ml: 2 }}
+                                            >
+                                                ৳ 240
+                                            </Typography>
+                                            <IconButton size="large" variant="outlined" color="error" sx={{ marginLeft: 1 }}>
+                                                <DeleteForever fontSize="inherit" />
+                                            </IconButton>
+
+                                        </Box>
+                                    }
+                                >
+                                    <Box width={50} height={50}
+                                        sx={{
+                                            backgroundImage: "url('" + item.product.image + "')",
+                                            backgroundSize: 'cover'
+                                        }}
+                                    >
+
+                                    </Box>
+                                    <Stack
+                                        sx={{
+                                            marginLeft: 2,
+                                            marginY: 0,
+                                            width: '33%'
+                                        }}
+                                    >
+                                        <Typography variant="body2">{item.product.english_name}</Typography>
+                                        <Typography variant="subtitle2">{item.product.amount} {item.product.uom}</Typography>
+                                    </Stack>
+                                </ListItem>
+                                </>
+                            )}
+                            <Divider variant="middle" />
+                            <ListItem>
+                                <ListItemText sx={{ width: '60%', ml: 2}}>Subtotal</ListItemText>
+                                <ListItemText sx={{ width: '40%', mr: 4, textAlign: 'right' }}>৳ 1000 /-</ListItemText>
+                            </ListItem>
+                        </List>
+                    </Popover>
+                    {/*</Paper>*/}
                 </Toolbar>
                 </Stack>
             </AppBar>

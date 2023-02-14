@@ -11,7 +11,7 @@ import { cardWidth } from "@/constants/card";
 
 import usePaginate from '@/hooks/usePaginate';
 
-export default function Home ({ categories, products, user }) {
+export default function Home ({ categories, products, shopping_cart, user }) {
 
     const [items, setItems] = useState(products.data ?? []);
     const [meta, setMeta] = useState(products.meta);
@@ -99,6 +99,7 @@ export default function Home ({ categories, products, user }) {
              selectedCategory={selectedCategory}
              setIsSearching={setIsSearching}
              setSearchItems={setSearchItems}
+             shoppingCart={shopping_cart}
         >
             <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
                 {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -36,13 +37,26 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = auth()->user();
+        $cookie = $request->cookie('shopping-cart', false);
+        if ( ! $user ) {
+           $items =  ShoppingCart::with('product')
+                        ->where('session_cookie', $cookie)
+                        ->get();
+        } else {
+            $items = ShoppingCart::with('product')
+                        ->where('session_cookie', $cookie)
+                        ->orWhere('user_id', $user->id)->get();
+        }
+
         return array_merge(parent::share($request), [
             'flash' => [
                 'title'   => fn () => $request->session()->get('title'),
                 'message' => fn () => $request->session()->get('message'),
                 'status'  => fn () => $request->session()->get('status'),
             ],
-            'user' => auth()->user(),
+            'user' => $user,
+            'shopping_cart' => $items
         ]);
     }
 }
