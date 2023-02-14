@@ -129,7 +129,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
                                     key={item.id}
                                     product={item}
                                     cbAdd={() => {
-                                        addToCart(item.id, user?.id)
+                                        addToCart(item.id, user ? user.id : null)
                                     }}
                                 />)
                             : items.map((item) =>

@@ -46,7 +46,15 @@ class HandleInertiaRequests extends Middleware
         } else {
             $items = ShoppingCart::with('product')
                         ->where('session_cookie', $cookie)
-                        ->orWhere('user_id', $user->id)->get();
+                        ->orWhere('user_id', $user->id)
+                        ->get();
+
+            $cookies_only = $items->filter(fn($item) => $item->user_id === null );
+
+            if ($cookies_only->count() > 0) {
+                ShoppingCart::whereIn('id', $cookies_only->map(fn($item, $key) => $item->id ))
+                    ->update(['user_id', $user->id]);
+            }
         }
 
         return array_merge(parent::share($request), [
