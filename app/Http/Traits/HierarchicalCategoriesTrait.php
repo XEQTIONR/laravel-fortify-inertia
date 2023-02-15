@@ -3,7 +3,6 @@
 namespace App\Http\Traits;
 
 use App\Http\Resources\CategoryResource;
-use App\Models\Category;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 

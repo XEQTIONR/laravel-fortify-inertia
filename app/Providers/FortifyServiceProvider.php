@@ -6,8 +6,7 @@ use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
-use App\Http\Traits\HierarchicalCategoriesTrait;
-use App\Models\Category;
+use App\Contracts\HierarchicalCategories;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +23,6 @@ use Laravel\Fortify\Http\Responses\LogoutResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    use HierarchicalCategoriesTrait;
     /**
      * Register any application services.
      *
@@ -62,7 +60,7 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::loginView( function() {
             return Inertia::render('Login', [
-                'categories' => $this->categoryTree(Category::all())
+                'categories' => app(HierarchicalCategories::class)
             ]);
         });
         Fortify::registerView( function(Request $request) {
@@ -72,7 +70,7 @@ class FortifyServiceProvider extends ServiceProvider
 
             return Inertia::render('Register', [
                 'primary_contact_number' => $validated['primary_contact_number'],
-                'categories' => $this->categoryTree(Category::all())
+                'categories' => app(HierarchicalCategories::class)
             ]);
         });
 

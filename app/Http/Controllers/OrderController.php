@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\HierarchicalCategories;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\OrderController as Controller;
 use Illuminate\Support\Facades\Cookie;
@@ -11,7 +12,7 @@ use Inertia\Inertia;
 class OrderController extends Controller
 {
     public function create() {
-        return Inertia::render('CreateOrder');
+        return Inertia::render('CreateOrder', ['categories' => app(HierarchicalCategories::class)]);
     }
     /**
      * Store a newly created resource in storage.

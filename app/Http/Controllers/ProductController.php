@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\HierarchicalCategories;
 use App\Http\Resources\ProductResource;
-use App\Http\Traits\HierarchicalCategoriesTrait;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -13,7 +13,6 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
-    use HierarchicalCategoriesTrait;
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +34,7 @@ class ProductController extends Controller
     {
         return Inertia::render('Admin/AddProduct', [
             'uom' => Product::$unitsOfMeasurement,
-            'categories' => $this->categoryTree(Category::all()),
+            'categories' => app(HierarchicalCategories::class),
         ]);
     }
 
@@ -77,7 +76,7 @@ class ProductController extends Controller
         return Inertia::render( 'Admin/EditProduct', [
             'product' => new ProductResource($product->load('categories')),
             'uom' => Product::$unitsOfMeasurement,
-            'categories' => $this->categoryTree(Category::all()),
+            'categories' => app(HierarchicalCategories::class),
         ]);
     }
 

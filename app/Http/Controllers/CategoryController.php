@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\HierarchicalCategories;
 use App\Http\Controllers\Api\CategoryController as Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Traits\HierarchicalCategoriesTrait;
@@ -31,7 +32,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render( 'Admin/AddCategory', ['categories' => $this->categoryTree(Category::all()) ] );
+        return Inertia::render( 'Admin/AddCategory', ['categories' => app(HierarchicalCategories::class) ] );
     }
 
     /**
@@ -61,7 +62,7 @@ class CategoryController extends Controller
         $resource = new CategoryResource( $category );
         return Inertia::render( 'Admin/EditCategory', [
             'category' => $resource,
-            'categories' => $this->categoryTree(Category::all()),
+            'categories' => app(HierarchicalCategories::class),
         ] );
     }
 

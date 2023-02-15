@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\HierarchicalCategories;
+use App\Models\Category;
+use App\Services\HierarchicalCategoriesService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        app()->singleton(HierarchicalCategories::class, function() {
+            $service = new HierarchicalCategoriesService();
+
+            return $service->categoryTree(Category::all());
+        });
     }
 
     /**
