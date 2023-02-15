@@ -1,7 +1,9 @@
-import { useForm, Link } from '@inertiajs/inertia-react'
+import React, {useState, useEffect, useRef}  from 'react';
+import { useForm, Link } from '@inertiajs/inertia-react';
+import Nav from '@/Components/Nav';
+import { Button, Box, Checkbox, FormGroup, FormControlLabel, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material';
 
-
-export default function Login ({ loginRoute }) {
+export default function Login ({ loginRoute, shopping_cart, categories }) {
 
     const { data, setData, post, processing, errors } = useForm({
         email: '',
@@ -9,62 +11,108 @@ export default function Login ({ loginRoute }) {
         remember: false,
     })
 
-    function handleSubmit(e) {
+    function handleLogin(e) {
         e.preventDefault();
         post( loginRoute ?? route('login'),{
             onError: () => setData('password', '')
         });
     }
+
+    function handleRegister(e) {
+
+    }
     return (
-        <>
-            { errors.email && <div>{ errors.email }</div> }
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="email">{ trans('labels.Email or phone number') }</label>
-                    <input
-                        type="text"
-                        required
-                        autoFocus
-                        value={data.email}
-                        onChange={e => setData('email', e.target.value)}
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <label htmlFor="password">{ trans('labels.Password') }</label>
-                    <input
-                        type="password"
-                        required
-                        value={data.password}
-                        onChange={e => setData('password', e.target.value)}
-                    />
-                </div>
-
-                <div className="block mt-4">
-                    <label htmlFor="remember">
-                    <input
-                        type="checkbox"
-                        checked={data.remember}
-                        onChange={e => setData('remember', e.target.value)}
-                    />
-                        { trans('labels.Remember me')}
-                    </label>
-                </div>
+        <Nav
+            navLinks={categories.data}
+            shoppingCart={shopping_cart}
+            selectedCategory={null}
+            showUserMenu={false}
+        >
+            <Box className="w-full h-full flex flex-col items-center">
+            <Paper className="p-5 mt-5" elevation={5}>
+            <form onSubmit={handleLogin}>
+                <Stack
+                    sx={{ minWidth: "300px"}}
+                    spacing={2}>
+                        <Typography  align="center">Log In</Typography>
 
 
+                        { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
 
-                <div>
-                    <button
-                        type="submit"
-                        disabled={processing}
-                    >
-                        { trans('labels.Log in') }
-                    </button>
+                        <TextField
+                            size="small"
+                            required
+                            autoFocus
+                            label={trans('labels.Email or phone number')}
+                            defaultValue={data.email}
+                            onChange={e => setData('email', e.target.value)}
+                        />
+                        <TextField
+                            size="small"
+                            required
+                            autoFocus
+                            label={trans('labels.Password')}
+                            type="password"
+                            defaultValue={data.password}
+                            onChange={e => setData('password', e.target.value)}
+                        />
 
-                    <Link href={route('password.request')}>Forgot my password</Link>
+                        <FormGroup>
+                            <FormControlLabel control={
+                                <Checkbox
+                                    defaultChecked={data.remember}
+                                    onChange={e => setData('remember', e.target.value)}
+                                />
+                            } label={ trans('labels.Remember me')} />
+                        </FormGroup>
 
-                </div>
+
+
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            disabled={processing}
+                        >
+                            { trans('labels.Log in') }
+                        </Button>
+
+                        <Link className="underline" href={route('password.request')}>Forgot my password</Link>
+                </Stack>
             </form>
-        </>
+            </Paper>
+            <Typography className="mt-4" align="center">or</Typography>
+            <Paper className="p-5 mt-5" elevation={5}>
+                <form onSubmit={(e) => {
+                    e.preventDefault()
+                    handleRegister(e);
+                }}>
+                    <Stack
+                        sx={{ maxWidth: "300px"}}
+                        spacing={2}>
+                        <Typography  align="center">Register with your mobile number</Typography>
+
+
+                        { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
+
+                        <Stack spacing={1} direction="row">
+                        <TextField
+                            size="small"
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">+88</InputAdornment>
+                            }}
+                            required
+                            autoFocus
+                            label={trans('labels.Mobile number')}
+                            defaultValue={data.email}
+                            onChange={e => setData('email', e.target.value)}
+                        />
+                            <Button variant="contained">Submit</Button>
+                        </Stack>
+
+                    </Stack>
+                </form>
+            </Paper>
+            </Box>
+        </Nav>
     );
 }

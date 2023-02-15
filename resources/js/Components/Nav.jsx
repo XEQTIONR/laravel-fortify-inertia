@@ -60,8 +60,19 @@ function debounce( fn, timeout = 1000) {
 }
 
 
-export default function Nav({ children, navLinks, selectedCategory, setIsSearching, setSearchItems, user, shoppingCart, setShoppingCart }) {
+export default function Nav({
+    children,
+    navLinks,
+    selectedCategory,
+    setIsSearching,
+    setSearchItems,
+    user,
+    shoppingCart,
+    setShoppingCart,
+    showUserMenu = true,
+}) {
 
+    console.log('navLinks', navLinks);
     const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
         : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
@@ -126,89 +137,99 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                         </Typography>
                     </Box>
                 </Toolbar>
-                <Toolbar className="w-full px-0">
-                    <NavSearchBar
-                        value={searchQuery}
-                        onChange={({target}) => {
-                            setSearchQuery(target.value);
-                            setIsSearching(true);
-                            if (target.value.length > 0) {
-                                search(target.value);
-                            } else {
-                                setIsSearching(false);
-                                setSearchItems([]);
+                        <Toolbar className="w-full px-0">
+                            {   setSearchItems
+                                ? <NavSearchBar
+                                    value={searchQuery}
+                                    onChange={({target}) => {
+                                        setSearchQuery(target.value);
+                                        setIsSearching(true);
+                                        if (target.value.length > 0) {
+                                            search(target.value);
+                                        } else {
+                                            setIsSearching(false);
+                                            setSearchItems([]);
+                                        }
+                                    }}
+                                />
+                                : null
                             }
-                        }}
-                    />
 
-                </Toolbar>
-                <Toolbar className="pl-0 pr-4">
+                        </Toolbar>
 
-                    <IconButton
-                        className="mr-2"
-                        color="inherit"
-                                onMouseEnter={(e) => {
-                                    setMenuAnchor(e.currentTarget);
-                                }}
-                                onClick={(e) => {
-                        if ( !user ) {
-                            Inertia.visit( route('login') );
-                        } else {
-                            // setMenuAnchor(e.currentTarget);
-                            setUserMenuOpen( ! userMenuOpen );
+                    <Toolbar className="pl-0 pr-4">
+                        {
+                            showUserMenu ?
+                                (<>
+                                <IconButton
+                                    className="mr-2"
+                                    color="inherit"
+                                    onMouseEnter={(e) => {
+                                        setMenuAnchor(e.currentTarget);
+                                    }}
+                                    onClick={(e) => {
+                                        if (!user) {
+                                            Inertia.visit(route('login'));
+                                        } else {
+                                            // setMenuAnchor(e.currentTarget);
+                                            setUserMenuOpen(!userMenuOpen);
+                                        }
+                                    }}>
+                                    {user ? <AccountBox/> : <Login/>}
+                                </IconButton>
+
+                                <Menu
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    className="mr-2"
+                                    id="user-menu"
+                                    anchorEl={menuAnchor}
+                                    open={userMenuOpen}
+                                    onClose={() => setUserMenuOpen(false)}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    <MenuItem onClick={() => setUserMenuOpen(false)} >Profile</MenuItem>
+                                    <MenuItem onClick={() => setUserMenuOpen(false)} >My account</MenuItem>
+                                    <MenuItem onClick={() => {
+                                        setUserMenuOpen(false)
+                                        Inertia.post(route('logout') )
+
+                                    }} >Logout</MenuItem>
+                                </Menu>
+                                </>) : null
                         }
-                    }}>
-                        { user ? <AccountBox /> : <Login /> }
-                    </IconButton>
-                    <Menu
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'right',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                        }}
-                        className="mr-2"
-                        id="user-menu"
-                        anchorEl={menuAnchor}
-                        open={userMenuOpen}
-                        onClose={() => setUserMenuOpen(false)}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button',
-                        }}
-                    >
-                        <MenuItem onClick={() => setUserMenuOpen(false)} >Profile</MenuItem>
-                        <MenuItem onClick={() => setUserMenuOpen(false)} >My account</MenuItem>
-                        <MenuItem onClick={() => {
-                            setUserMenuOpen(false)
-                            Inertia.post(route('logout') )
-
-                        }} >Logout</MenuItem>
-                    </Menu>
-                    <IconButton color="inherit"
-                        onMouseEnter={(e) => {
-                            setCartAnchor(e.currentTarget);
-                        }}
-                        onClick={() => setCartMenuOpen(!cartMenuOpen)}
-                    >
-                        <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
-                               color="error"
+                        <IconButton color="inherit"
+                                    onMouseEnter={(e) => {
+                                        setCartAnchor(e.currentTarget);
+                                    }}
+                                    onClick={() => setCartMenuOpen(!cartMenuOpen)}
                         >
-                            <ShoppingCart />
-                        </Badge>
-                    </IconButton>
-                    {/*<Paper sx={{ width: 320, maxWidth: '100%' }}>*/}
-                    <CartCard
-                        user={user}
-                        open={cartMenuOpen}
-                        setOpen={setCartMenuOpen}
-                        anchor={cartAnchor}
-                        items={shoppingCart}
-                        setItems={setShoppingCart}
-                    />
-                    {/*</Paper>*/}
-                </Toolbar>
+                            <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
+                                   color="error"
+                            >
+                                <ShoppingCart />
+                            </Badge>
+                        </IconButton>
+                        {/*<Paper sx={{ width: 320, maxWidth: '100%' }}>*/}
+                        <CartCard
+                            user={user}
+                            open={cartMenuOpen}
+                            setOpen={setCartMenuOpen}
+                            anchor={cartAnchor}
+                            items={shoppingCart}
+                            setItems={setShoppingCart}
+                        />
+                        {/*</Paper>*/}
+                    </Toolbar>
+
                 </Stack>
             </AppBar>
 
@@ -229,8 +250,10 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                             links={navLinks}
                             selectedCategory={selectedCategory}
                             onSelect={() => {
-                                setSearchQuery('')
-                                setSearchItems([])
+                                if(setSearchItems) {
+                                    setSearchQuery('')
+                                    setSearchItems([])
+                                }
                             }}
                         />
                     </List>

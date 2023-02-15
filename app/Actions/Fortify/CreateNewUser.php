@@ -42,13 +42,17 @@ class CreateNewUser implements CreatesNewUsers
             'primary_contact_number' => 'This mobile number is already registered.'
         ])->validate();
 
-        return User::create([
+        $code = strval( random_int(100000, 999999) );
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'primary_contact_number' => $input['primary_contact_number'],
             'secondary_contact_number' => $input['secondary_contact_number'],
             'password' => Hash::make( $input['password'] ),
-            'sms_verification_code' => strval( random_int(100000, 999999) ),
+            'sms_verification_code' => $code,
         ]);
+        //TODO: text the code to the users primary_contact_number;
+
+        return $user;
     }
 }

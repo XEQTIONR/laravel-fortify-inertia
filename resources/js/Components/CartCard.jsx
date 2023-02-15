@@ -1,3 +1,4 @@
+import { Inertia } from '@inertiajs/inertia';
 import React, { useState, Fragment } from 'react';
 import { useForm, usePage } from '@inertiajs/inertia-react'
 import {Box, Button, Divider, IconButton, List, ListItem, Popover, Stack, Typography} from "@mui/material";
@@ -17,7 +18,8 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
     function submit(e) {
         e.preventDefault();
 
-        post( route('orders.create') )
+        Inertia.visit(route('orders.create'));
+        //get( route('orders.create') )
     }
     return (
         <Popover

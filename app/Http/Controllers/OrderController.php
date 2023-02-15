@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\OrderController as Controller;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Str;
+use Inertia\Inertia;
 
 class OrderController extends Controller
 {
+    public function create() {
+        return Inertia::render('CreateOrder');
+    }
     /**
      * Store a newly created resource in storage.
      *
