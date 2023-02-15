@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -123,17 +124,18 @@ Route::post('/reset-password-new/{code}', function(Request $request, $code) {
 
 Route::get('/cookie', CartCookieController::class)->name('cookie');
 
+Route::get('/get-cookie', function() {
+    return request()->cookie('shopping-cart');
+});
+
+Route::post('/orders', [OrderController::class, 'store'])
+    ->name('orders.create');
+
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
 
 Route::get('/translationtest', function () {
     return view('page2');
 });
-
-Route::get('/home', function () {
-    return \Inertia\Inertia::render('Home');
-})->middleware(['auth', 'verified.phone'])->name('home');
-
-
 
 Route::get('/forget', function() {
    \Illuminate\Support\Facades\Cache::forget('lang_'.config('app.locale').'.js');

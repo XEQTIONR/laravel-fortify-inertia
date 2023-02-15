@@ -200,6 +200,7 @@ export default function Nav({ children, navLinks, selectedCategory, setIsSearchi
                     </IconButton>
                     {/*<Paper sx={{ width: 320, maxWidth: '100%' }}>*/}
                     <CartCard
+                        user={user}
                         open={cartMenuOpen}
                         setOpen={setCartMenuOpen}
                         anchor={cartAnchor}

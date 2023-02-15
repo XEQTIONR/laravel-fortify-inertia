@@ -36,14 +36,17 @@ class ShoppingCartController extends Controller
         ]);
         $cookie = $request->cookie($this->cookieName);
 
-
-        $cartItems = ShoppingCart::where('session_cookie', $cookie)->get();
+        $query = ShoppingCart::where('session_cookie', $cookie);
+        if ( $validated['user_id'] > 0 ) {
+            $query = $query->orWhere('user_id', $validated['user_id']);
+        }
+        $cartItems = $query->get();
         if ($cartItems->count() > 0) {
             $items = $cartItems->where('product_id', $validated['product_id']);
             if ( $items->count() === 1 ) {
                 $item = $items->first();
                 $item->qty++;
-                $item->status = 'new';
+                $item->status = 'updated';
                 $item->save();
                 $item->load('product');
                 return $item;
@@ -88,14 +91,16 @@ class ShoppingCartController extends Controller
         $cookie = $request->cookie($this->cookieName);
         $id = $cart->id;
         $action = 'none';
+        $user = auth()->user();
 
-        if ( $cart->session_cookie === $cookie ) {
+        if ( $cart->session_cookie === $cookie || $user && $user->id === $cart->user_id ) {
             if ( $validated['qty'] === 0 ) {
                 $this->destroy($request, $cart);
                 $action = 'delete';
                 $cart = 'null';
             } else {
                 $cart->qty = $validated['qty'];
+                $cart->status = 'updated';
                 $cart->save();
                 $action = 'update';
             }

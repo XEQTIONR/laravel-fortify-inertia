@@ -115,7 +115,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
              shoppingCart={cart}
              setShoppingCart={setCart}
         >
-            <Box ref={container} className="flex flex-wrap justify-start mt-16 pl-4">
+            <Box ref={container} className="flex flex-wrap justify-start mt-3 pl-4">
                 {
                     ( selectedCategory && searchItems.length === 0 && !isSearching )
                         ? flatten(categories.data)

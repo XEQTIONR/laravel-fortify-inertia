@@ -41,7 +41,10 @@ class HandleInertiaRequests extends Middleware
         $cookie = $request->cookie('shopping-cart', false);
         if ( ! $user ) {
            $items =  ShoppingCart::with('product')
-                        ->where('session_cookie', $cookie)
+                        ->where([
+                            ['session_cookie', '=', $cookie],
+                            ['user_id', '=', null]
+                        ])
                         ->get();
         } else {
             $items = ShoppingCart::with('product')

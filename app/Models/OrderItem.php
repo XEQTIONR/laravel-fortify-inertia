@@ -5,25 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ShoppingCart extends Model
+class OrderItem extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
     protected $fillable = [
-        'session_cookie',
-
-        'user_id',
+        'order_id',
         'product_id',
         'status',
-        'qty',
+        'selling_price'
     ];
 
-    public function users(): BelongsTo
+    public function order():BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Order::class);
     }
 
     public function product(): BelongsTo
