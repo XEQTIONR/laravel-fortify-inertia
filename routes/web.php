@@ -129,6 +129,10 @@ Route::get('/get-cookie', function() {
 });
 
 Route::post('/orders', [OrderController::class, 'store'])
+    ->name('orders.store');
+
+Route::get('/orders/create', [OrderController::class, 'create'])
+    ->middleware(['auth', 'verified.phone'])
     ->name('orders.create');
 
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
@@ -166,7 +170,7 @@ Route::get('js/translations.js', function () {
 
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/login', function() {
-       return \Inertia\Inertia::render('Login', [ 'loginRoute' => route('admin.login') ]);
+       return \Inertia\Inertia::render('Admin/Login', [ 'loginRoute' => route('admin.login') ]);
     })->name('login');
 
     Route::post('/login', [AuthController::class, 'authenticate']);
