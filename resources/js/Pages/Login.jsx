@@ -11,6 +11,10 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
         remember: false,
     })
 
+    const RegisterForm = useForm({
+        primary_contact_number: '',
+    })
+
     function handleLogin(e) {
         e.preventDefault();
         post( loginRoute ?? route('login'),{
@@ -19,8 +23,10 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
     }
 
     function handleRegister(e) {
-
+        e.preventDefault();
+        RegisterForm.get(route('register'));
     }
+
     return (
         <Nav
             navLinks={categories.data}
@@ -34,7 +40,7 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
                 <Stack
                     sx={{ minWidth: "300px"}}
                     spacing={2}>
-                        <Typography  align="center">Log In</Typography>
+                        <Typography  align="center">Log in to continue</Typography>
 
 
                         { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
@@ -82,10 +88,7 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
             </Paper>
             <Typography className="mt-4" align="center">or</Typography>
             <Paper className="p-5 mt-5" elevation={5}>
-                <form onSubmit={(e) => {
-                    e.preventDefault()
-                    handleRegister(e);
-                }}>
+                <form onSubmit={handleRegister}>
                     <Stack
                         sx={{ maxWidth: "300px"}}
                         spacing={2}>
@@ -103,10 +106,10 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
                             required
                             autoFocus
                             label={trans('labels.Mobile number')}
-                            defaultValue={data.email}
-                            onChange={e => setData('email', e.target.value)}
+                            defaultValue={RegisterForm.data.primary_contact_number}
+                            onChange={e => RegisterForm.setData('primary_contact_number', e.target.value)}
                         />
-                            <Button variant="contained">Submit</Button>
+                            <Button type="submit" variant="contained">Submit</Button>
                         </Stack>
 
                     </Stack>

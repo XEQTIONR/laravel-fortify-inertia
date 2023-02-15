@@ -1,10 +1,10 @@
 import { useForm } from '@inertiajs/inertia-react'
 
-export default function Register() {
+export default function Register({primary_contact_number}) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
-        primary_contact_number: '',
+        primary_contact_number: primary_contact_number ?? '',
         secondary_contact_number: '',
         password: '',
         password_confirmation: '',

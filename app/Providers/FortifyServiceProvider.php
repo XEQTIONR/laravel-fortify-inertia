@@ -65,8 +65,9 @@ class FortifyServiceProvider extends ServiceProvider
                 'categories' => $this->categoryTree(Category::all())
             ]);
         });
-        Fortify::registerView( function() {
-            return Inertia::render('Register');
+        Fortify::registerView( function(Request $request) {
+            $primary_contact_number = $request->input('primary_contact_number');
+            return Inertia::render('Register', compact('primary_contact_number'));
         });
 
         Fortify::requestPasswordResetLinkView( function () {
