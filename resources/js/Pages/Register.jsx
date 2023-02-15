@@ -1,6 +1,10 @@
+import React, { useState, useEffect } from "react";
 import { useForm } from '@inertiajs/inertia-react'
+import Nav from '@/Components/Nav';
+import { Button, Box, Checkbox, FormGroup, FormControlLabel, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material';
 
-export default function Register({primary_contact_number}) {
+
+export default function Register({shopping_cart, categories, primary_contact_number}) {
     const { data, setData, post, processing, errors } = useForm({
         name: '',
         email: '',
@@ -10,86 +14,91 @@ export default function Register({primary_contact_number}) {
         password_confirmation: '',
     });
 
+    const [cart, setCart] = useState(shopping_cart);
+
+
     function handleSubmit(e) {
         e.preventDefault();
         post(route('register'));
     }
     return (
+        <Nav
+            navLinks={categories.data}
+            shoppingCart={cart}
+            setShoppingCart={setCart}
+            selectedCategory={null}
+            showUserMenu={false}
+        >
+            <Paper className="p-5 mt-5" elevation={5}>
         <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="name">{trans('labels.Name')}</label>
-                <input
-                    id="name"
-                    type="text"
+            <Stack
+                sx={{ minWidth: "300px"}}
+                spacing={2}
+            >
+                <Typography align="center">Register</Typography>
+                <TextField
                     required
-                    value={data.name}
+                    size="small"
+                    label={trans('labels.Name')}
+                    defaultValue={data.name}
                     onChange={e => setData('name', e.target.value)}
-                    autoFocus
                 />
                 { errors.name && <div>{ errors.name }</div> }
-            </div>
 
-            <div>
-                <label htmlFor="email">{trans('labels.Email')}</label>
-                <input
-                    id="email"
-                    type="email"
-                    value={data.email}
+                <TextField
+                    size="small"
+                    label={trans('labels.Email')}
+                    defaultValue={data.email}
                     onChange={e => setData('email', e.target.value)}
                 />
                 { errors.email && <div>{ errors.email }</div> }
-            </div>
 
-            <div className="mt-4">
-                <label htmlFor="primary_contact_number">{trans('labels.Mobile number')}</label>
-                <input
-                    id="primary_contact_number"
-                    type="tel"
-                    value={data.primary_contact_number}
-                    onChange={e => setData('primary_contact_number', e.target.value)}
+                <TextField
                     required
+                    size="small"
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">+88</InputAdornment>
+                    }}
+                    label={trans('labels.Mobile number')}
+                    defaultValue={data.primary_contact_number}
+                    onChange={e => setData('primary_contact_number', e.target.value)}
                 />
                 { errors.primary_contact_number && <div>{ errors.primary_contact_number }</div> }
-            </div>
 
-            <div className="mt-4">
-                <label htmlFor="secondary_contact_number">{trans('labels.Other contact number')}</label>
-                <input
-                    type="tel"
-                    value={data.secondary_contact_number}
+                <TextField
+                    size="small"
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">+88</InputAdornment>
+                    }}
+                    label={trans('labels.Other contact number')}
+                    defaultValue={data.secondary_contact_number}
                     onChange={e => setData('secondary_contact_number', e.target.value)}
                 />
                 { errors.secondary_contact_number && <div>{ errors.secondary_contact_number }</div> }
-            </div>
 
-            <div className="mt-4">
-                <label htmlFor="password">{trans('labels.Password')}</label>
-                <input
-                    type="password"
-                    value={data.password}
-                    onChange={e => setData('password', e.target.value)}
+                <TextField
                     required
+                    size="small"
+                    label={trans('labels.Password')}
+                    defaultValue={data.password}
+                    onChange={e => setData('password', e.target.value)}
                 />
                 { errors.password && <div>{ errors.password }</div> }
-            </div>
-            <div className="mt-4">
-                <label htmlFor="password">{trans('labels.Confirm password')}</label>
-                <input
-                    type="password"
-                    value={data.password_confirmation}
-                    onChange={e => setData('password_confirmation', e.target.value)}
-                    required
-                />
-            </div>
 
-            <div>
-                <button
-                    type="submit"
-                    disabled={processing}
-                >
+                <TextField
+                    required
+                    size="small"
+                    label={trans('labels.Confirm password')}
+                    defaultValue={data.password_confirmation}
+                    onChange={e => setData('password_confirmation', e.target.value)}
+                />
+
+                <Button type="submit" disabled={processing} variant="contained">
                     { trans('labels.Register') }
-                </button>
-            </div>
+                </Button>
+            </Stack>
         </form>
+            </Paper>
+        </Nav>
     )
 }

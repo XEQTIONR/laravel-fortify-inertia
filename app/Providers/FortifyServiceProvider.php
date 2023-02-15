@@ -66,8 +66,14 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
         });
         Fortify::registerView( function(Request $request) {
-            $primary_contact_number = $request->input('primary_contact_number');
-            return Inertia::render('Register', compact('primary_contact_number'));
+            $validated = $request->validate([
+                'primary_contact_number' => 'nullable|numeric'
+            ]);
+
+            return Inertia::render('Register', [
+                'primary_contact_number' => $validated['primary_contact_number'],
+                'categories' => $this->categoryTree(Category::all())
+            ]);
         });
 
         Fortify::requestPasswordResetLinkView( function () {

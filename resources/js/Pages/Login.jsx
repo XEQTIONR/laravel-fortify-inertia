@@ -3,9 +3,9 @@ import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
 import { Button, Box, Checkbox, FormGroup, FormControlLabel, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material';
 
-export default function Login ({ loginRoute, shopping_cart, categories }) {
+export default function Login ({ loginRoute, shopping_cart, categories, errors }) {
 
-    const { data, setData, post, processing, errors } = useForm({
+    const { data, setData, post, processing } = useForm({
         email: '',
         password: '',
         remember: false,
@@ -95,9 +95,9 @@ export default function Login ({ loginRoute, shopping_cart, categories }) {
                         <Typography  align="center">Register with your mobile number</Typography>
 
 
-                        { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
-
+                        { errors.primary_contact_number &&  <Typography variant="caption" className="text-red-400">{ errors.primary_contact_number }</Typography> }
                         <Stack spacing={1} direction="row">
+
                         <TextField
                             size="small"
                             InputProps={{

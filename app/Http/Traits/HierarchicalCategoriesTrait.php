@@ -14,7 +14,7 @@ trait HierarchicalCategoriesTrait {
      * @param Collection $categories
      * @return AnonymousResourceCollection
      */
-    protected function categoryTree(Collection $categories) {
+    public function categoryTree(Collection $categories) {
         $grouped =  $categories->groupBy('parent_id');
         $roots = $grouped[''];
 
@@ -25,7 +25,7 @@ trait HierarchicalCategoriesTrait {
 
         return CategoryResource::collection($roots);
     }
-    
+
     /**
      * Helper for categoryTree().
      *
