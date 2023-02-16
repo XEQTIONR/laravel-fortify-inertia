@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Address' => 'Street address',
+    'Business name' => 'Business name',
     'Confirm password' => 'Confirm password',
     'Confirm new password' => 'Confirm new password',
     'Email' => 'Email',

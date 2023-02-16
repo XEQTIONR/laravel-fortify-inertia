@@ -187,7 +187,7 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
 
                     }}
                 >
-                    Place Order
+                    Checkout
                 </Button>
             </ListItem>
 

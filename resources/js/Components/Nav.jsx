@@ -67,12 +67,10 @@ export default function Nav({
     setIsSearching,
     setSearchItems,
     user,
-    shoppingCart,
+    shoppingCart = null,
     setShoppingCart,
     showUserMenu = true,
 }) {
-
-    console.log('navLinks', navLinks);
     const [ show, setShow ] = useState(window.outerWidth <= 767
         ? false
         : (JSON.parse(window.localStorage.getItem('showSidebar')) ?? false)
@@ -206,28 +204,32 @@ export default function Nav({
                                 </Menu>
                                 </>) : null
                         }
-                        <IconButton color="inherit"
-                                    onMouseEnter={(e) => {
-                                        setCartAnchor(e.currentTarget);
-                                    }}
-                                    onClick={() => setCartMenuOpen(!cartMenuOpen)}
-                        >
-                            <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
-                                   color="error"
-                            >
-                                <ShoppingCart />
-                            </Badge>
-                        </IconButton>
-                        {/*<Paper sx={{ width: 320, maxWidth: '100%' }}>*/}
-                        <CartCard
-                            user={user}
-                            open={cartMenuOpen}
-                            setOpen={setCartMenuOpen}
-                            anchor={cartAnchor}
-                            items={shoppingCart}
-                            setItems={setShoppingCart}
-                        />
-                        {/*</Paper>*/}
+                        {
+
+                            shoppingCart
+                                ? <>
+                                    <IconButton color="inherit"
+                                                onMouseEnter={(e) => {
+                                                    setCartAnchor(e.currentTarget);
+                                                }}
+                                                onClick={() => setCartMenuOpen(!cartMenuOpen)}
+                                    >
+                                        <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
+                                               color="error"
+                                        >
+                                            <ShoppingCart />
+                                        </Badge>
+                                    </IconButton>
+                                    <CartCard
+                                        user={user}
+                                        open={cartMenuOpen}
+                                        setOpen={setCartMenuOpen}
+                                        anchor={cartAnchor}
+                                        items={shoppingCart}
+                                        setItems={setShoppingCart}
+                                    />
+                                </> : null
+                        }
                     </Toolbar>
 
                 </Stack>
