@@ -18,6 +18,7 @@ return [
     'Register' => 'Register',
     'Remember me' => 'Remember me',
     'Resend verification code' => 'Resend verification code',
+    'Save new address' => 'Save new address',
     'Submit' => 'Submit',
     'Verification code' => 'Verification code',
     'Verify' => 'Verify',

@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef}  from 'react';
 import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
+import useInput from '@/hooks/useInput';
+
 import {
     Button,
     Box,
@@ -32,23 +34,19 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import {KeyboardArrowUp, KeyboardArrowDown} from "@mui/icons-material";
 
-function createData(name, calories, fat, carbs) {
-    return { name, calories, fat, carbs };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24),
-    createData('Ice cream sandwich', 237, 9.0, 37),
-    createData('Eclair', 262, 16.0, 24),
-    createData('Cupcake', 305, 3.7, 67),
-    createData('Gingerbread', 356, 16.0, 49),
-];
-
 export default function CreateOrder({categories, shopping_cart, user}) {
 
     const currentMoment = moment()
     const [date, setDate] = useState(currentMoment);
     const [cart, setCart] = useState(shopping_cart);
+    const [newAddress, setNewAddress] = useInput({
+        'full_name': '',
+        'business_name': '',
+        'address': '',
+        'phone_number': user.primary_contact_number,
+    });
+    const [newAddressErrors, setNewAddressErrors] = useState({});
+
     const refValidDate = useRef(true);
     const { data, setData, post, processing } = useForm({
         items: cart,
@@ -65,6 +63,12 @@ export default function CreateOrder({categories, shopping_cart, user}) {
     ];
 
     const [activeStep, setActiveStep] = useState(0);
+
+    const removeError = function(key) {
+        const localAddressErrors = newAddressErrors;
+        delete localAddressErrors[key];
+        setNewAddressErrors(localAddressErrors);
+    }
 
     const subTotal = function() {
          return cart.reduce((total, {qty, product}) => total + qty * product.current_selling_price, 0)
@@ -228,85 +232,119 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                     <TextField
                                         required
                                         size="small"
-                                        value={data.full_name}
-                                        onChange={e => setData('full_name', e.target.value)}
+                                        name="full_name"
+                                        value={newAddress.full_name}
+                                        onChange={(e) => {
+                                            removeError('full_name');
+                                            setNewAddress(e);
+                                        }}
+                                        error={newAddressErrors.hasOwnProperty('full_name')}
                                         label={trans('labels.Full name')}
+                                        helperText={newAddressErrors.hasOwnProperty('full_name') && newAddressErrors['full_name'][0]}
                                     />
                                     <TextField
                                         size="small"
-                                        value={data.business_name}
-                                        onChange={e => setData('business_name', e.target.value)}
+                                        name="business_name"
+                                        value={newAddress.business_name}
+                                        onChange={(e) => {
+                                            removeError('business_name');
+                                            setNewAddress(e)
+                                        }}
+                                        error={newAddressErrors.hasOwnProperty('business_name')}
                                         label={trans('labels.Business name')}
+                                        helperText={newAddressErrors.hasOwnProperty('business_name') && newAddressErrors['business_name'][0]}
                                     />
                                     <TextField
                                         multiline
                                         rows={4}
                                         size="small"
                                         required
+                                        name="address"
                                         label={trans('labels.Address')}
-                                        value={data.address}
-                                        onChange={e => setData('address', e.target.value)}
+                                        value={newAddress.address}
+                                        error={newAddressErrors.hasOwnProperty('address')}
+                                        onChange={(e) => {
+                                            removeError('address');
+                                            setNewAddress(e)
+                                        }}
+                                        helperText={newAddressErrors.hasOwnProperty('address') && newAddressErrors['address'][0]}
                                     />
                                     <TextField
                                         size="small"
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">+88</InputAdornment>
                                         }}
+                                        name="phone_number"
                                         label={trans('labels.Phone number')}
-                                        defaultValue={data.secondary_contact_number}
-                                        onChange={e => setData('secondary_contact_number', e.target.value)}
+                                        value={newAddress.phone_number}
+                                        error={newAddressErrors.hasOwnProperty('phone_number')}
+                                        onChange={(e) => {
+                                            removeError('phone_number');
+                                            setNewAddress(e)
+                                        }}
+                                        helperText={newAddressErrors.hasOwnProperty('phone_number') && newAddressErrors['phone_number'][0]}
                                     />
-                                    <Stack spacing={2} alignItems="flex-start" direction="row">
-                                        <LocalizationProvider
-                                            className="flex-grow"
-                                            dateAdapter={AdapterMoment}
-                                        >
-                                            <DesktopDatePicker
-                                                className="w-1/2"
-                                                label="Delivery Date"
-                                                inputFormat="DD/MM/YYYY"
-                                                value={date}
-                                                onError={() => {
-                                                    console.log('error');
-                                                }}
-                                                onChange={e => {
-                                                    if (e && e._isValid) {
-                                                        setDate(e)
-                                                        setData('delivery_date', e.format('YYYY-MM-DD'));
-                                                        refValidDate.current = true;
+                                    {/*<Stack spacing={2} alignItems="flex-start" direction="row">*/}
+                                    {/*    <LocalizationProvider*/}
+                                    {/*        className="flex-grow"*/}
+                                    {/*        dateAdapter={AdapterMoment}*/}
+                                    {/*    >*/}
+                                    {/*        <DesktopDatePicker*/}
+                                    {/*            className="w-1/2"*/}
+                                    {/*            label="Delivery Date"*/}
+                                    {/*            inputFormat="DD/MM/YYYY"*/}
+                                    {/*            value={date}*/}
+                                    {/*            onError={() => {*/}
+                                    {/*                console.log('error');*/}
+                                    {/*            }}*/}
+                                    {/*            onChange={e => {*/}
+                                    {/*                if (e && e._isValid) {*/}
+                                    {/*                    setDate(e)*/}
+                                    {/*                    setData('delivery_date', e.format('YYYY-MM-DD'));*/}
+                                    {/*                    refValidDate.current = true;*/}
 
-                                                    } else {
-                                                        refValidDate.current = false;
-                                                    }
+                                    {/*                } else {*/}
+                                    {/*                    refValidDate.current = false;*/}
+                                    {/*                }*/}
 
-                                                }}
-                                                renderInput={(params) =>
-                                                    <TextField {...params}
-                                                               required={true}
-                                                               error={!refValidDate.current}
-                                                               helperText={!refValidDate.current && 'Invalid date'}
-                                                    />}
-                                            />
-                                        </LocalizationProvider>
-                                        <FormControl  required={true} className="flex-grow">
-                                            <InputLabel id="demo-simple-select-helper-label">Time slot</InputLabel>
+                                    {/*            }}*/}
+                                    {/*            renderInput={(params) =>*/}
+                                    {/*                <TextField {...params}*/}
+                                    {/*                           required={true}*/}
+                                    {/*                           error={!refValidDate.current}*/}
+                                    {/*                           helperText={!refValidDate.current && 'Invalid date'}*/}
+                                    {/*                />}*/}
+                                    {/*        />*/}
+                                    {/*    </LocalizationProvider>*/}
+                                    {/*    <FormControl  required={true} className="flex-grow">*/}
+                                    {/*        <InputLabel id="demo-simple-select-helper-label">Time slot</InputLabel>*/}
 
-                                            <Select label="Time slot"
-                                                    value={data.time_slot}
-                                                    onChange={(e) => setData('time_slot', e.target.value)}
-                                            >
-                                                <MenuItem value=""> Not Selected </MenuItem>
-                                                <MenuItem value={1}>11AM - 1PM</MenuItem>
-                                                <MenuItem value={2}>1PM - 4PM</MenuItem>
-                                                <MenuItem value={3}>4PM - 7PM</MenuItem>
-                                                <MenuItem value={3}>7PM - 10PM</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                    </Stack>
+                                    {/*        <Select label="Time slot"*/}
+                                    {/*                value={data.time_slot}*/}
+                                    {/*                onChange={(e) => setData('time_slot', e.target.value)}*/}
+                                    {/*        >*/}
+                                    {/*            <MenuItem value=""> Not Selected </MenuItem>*/}
+                                    {/*            <MenuItem value={1}>11AM - 1PM</MenuItem>*/}
+                                    {/*            <MenuItem value={2}>1PM - 4PM</MenuItem>*/}
+                                    {/*            <MenuItem value={3}>4PM - 7PM</MenuItem>*/}
+                                    {/*            <MenuItem value={3}>7PM - 10PM</MenuItem>*/}
+                                    {/*        </Select>*/}
+                                    {/*    </FormControl>*/}
+                                    {/*</Stack>*/}
                                     <Button
-                                        onClick={() => setActiveStep(2) }
+                                        onClick={() => {
+                                            axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
+                                                .then((res) => {
+                                                    console.log('save address response', res);
+                                                })
+                                                .catch(({ response }) => {
+                                                    console.log('response.data', response.data);
+                                                    setNewAddressErrors(response.data.errors);
+                                                })
+                                            // setActiveStep(2)
+                                        }}
                                         variant="contained"
-                                    >Confirm Address</Button>
+                                    >{trans('labels.Save new address')}</Button>
                                 </Stack>
                             </Card>
                             <Card className="w-full  lg:w-2/5" variant="outlined">

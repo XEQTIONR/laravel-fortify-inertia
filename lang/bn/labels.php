@@ -18,6 +18,7 @@ return [
     'Register' => 'নিবন্ধন করুন',
     'Remember me' => 'আমাকে মনে রাখো',
     'Resend verification code' => 'যাচাইকরণ কোড আবার পাঠান',
+    'Save new address' => 'নতুন ঠিকানা সংরক্ষণ করুন',
     'Submit' => 'জমা দিন',
     'Verification code' => 'যাচাইকরণ কোড',
     'Verify' => 'যাচাই করুন'
