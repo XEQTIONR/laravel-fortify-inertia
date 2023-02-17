@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
+use App\Models\Address;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AddressController extends Controller
@@ -10,22 +13,31 @@ class AddressController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(User $user)
     {
-        //
+        return AddressResource::collection($user->addresses()->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return false|\Illuminate\Database\Eloquent\Model
      */
-    public function store(Request $request)
+    public function store(Request $request, User $user)
     {
-        //
+        $validated = $request->validate([
+            'full_name' => 'required|string',
+            'business_name' => 'nullable|string',
+            'address' => 'required|string',
+            'phone_number' => 'required|numeric',
+        ]);
+
+        $address = new Address($validated);
+
+        return $user->addresses()->save($address);
     }
 
     /**

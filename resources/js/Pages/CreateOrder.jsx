@@ -7,13 +7,14 @@ import {
     Card,
     FormControl,
     IconButton,
+    InputAdornment,
     InputLabel,
+    MenuItem,
     Stack,
     TextField,
     Typography,
     TableFooter,
     Select,
-    MenuItem,
 } from '@mui/material';
 import * as moment from 'moment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -95,8 +96,8 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                 {
                     activeStep === 0 &&
                     (
-                        <Stack alignItems="flex-start" direction="row" spacing={1} className="w-full flex-wrap lg:flex-nowrap" >
-                            <Card className="w-full  lg:w-3/5" variant="outlined">
+                        <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
+                            <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
                                 <Typography className="font-bold text-lg mx-4 mt-3">1. Confirm your items.</Typography>
                                 <TableContainer>
                                     <Table>
@@ -202,7 +203,7 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                     </Table>
                                 </TableContainer>
                             </Card>
-                            <Card className="w-full  lg:w-2/5" variant="outlined">
+                            <Card className="w-full lg:w-2/5" variant="outlined">
                                 <Stack spacing={2} className="p-3">
                                     <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
                                     </Typography>
@@ -213,17 +214,30 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                     <Button onClick={() => setActiveStep(1)} variant="contained">Confirm Items</Button>
                                 </Stack>
                             </Card>
-                        </Stack>
+                        </Box>
                     )
 
                 }
                 {
                     activeStep === 1 &&
                     (
-                        <Stack alignItems="flex-start" direction="row" spacing={1} className="w-full flex-wrap lg:flex-nowrap">
-                            <Card className="w-full  lg:w-3/5" variant="outlined">
+                        <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
+                            <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
                                 <Stack className="px-4 py-3" spacing={2} component="form">
                                     <Typography className="font-bold text-lg">2. Select delivery address and time.</Typography>
+                                    <TextField
+                                        required
+                                        size="small"
+                                        value={data.full_name}
+                                        onChange={e => setData('full_name', e.target.value)}
+                                        label={trans('labels.Full name')}
+                                    />
+                                    <TextField
+                                        size="small"
+                                        value={data.business_name}
+                                        onChange={e => setData('business_name', e.target.value)}
+                                        label={trans('labels.Business name')}
+                                    />
                                     <TextField
                                         multiline
                                         rows={4}
@@ -235,9 +249,12 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                     />
                                     <TextField
                                         size="small"
-                                        value={data.business_name}
-                                        onChange={e => setData('business_name', e.target.value)}
-                                        label={trans('labels.Business name')}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">+88</InputAdornment>
+                                        }}
+                                        label={trans('labels.Phone number')}
+                                        defaultValue={data.secondary_contact_number}
+                                        onChange={e => setData('secondary_contact_number', e.target.value)}
                                     />
                                     <Stack spacing={2} alignItems="flex-start" direction="row">
                                         <LocalizationProvider
@@ -300,10 +317,10 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                         ৳ {subTotal()}
                                     </Typography>
 
-                                    <Button variant="outlined" onClick={() => setActiveStep(1)}>Back to cart</Button>
+                                    <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
                                 </Stack>
                             </Card>
-                        </Stack>
+                        </Box>
                     )
                 }
                 {

@@ -17,6 +17,13 @@ class Order extends Model
         'status',
     ];
 
+    public static array $timeSlots = [
+        '11AM - 1PM',
+        '1PM - 4PM',
+        '4PM - 7PM',
+        '7PM - 10PM',
+    ];
+
     public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany( OrderItem::class );

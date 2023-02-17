@@ -39,7 +39,7 @@ export default function Register({shopping_cart, categories, primary_contact_num
                 <TextField
                     required
                     size="small"
-                    label={trans('labels.Name')}
+                    label={trans('labels.Full name')}
                     defaultValue={data.name}
                     onChange={e => setData('name', e.target.value)}
                 />

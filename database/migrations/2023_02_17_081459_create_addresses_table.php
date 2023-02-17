@@ -20,8 +20,6 @@ return new class extends Migration
             $table->string('business_name')->nullable();
             $table->text('address');
             $table->string('phone_number');
-            $table->date('delivery_date');
-            $table->smallInteger('time_slot');
             $table->timestamps();
             $table->softDeletes();
         });

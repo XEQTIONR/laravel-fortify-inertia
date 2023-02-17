@@ -2,12 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\ShoppingCartController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,6 +41,9 @@ Route::name('api.')
 
                 Route::get('/categories', [ CategoryController::class, 'index' ])
                     ->name('categories.index');
+
+                Route::apiResource('users.addresses', AddressController::class)
+                    ->shallow();
         });
 
         // Non auth routes
