@@ -53,7 +53,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
     const refValidDate = useRef(true);
     const { data, setData, post, processing } = useForm({
         items: cart,
-        address: null,
+        address: '',
         delivery_date: currentMoment.format('YYYY-MM-DD'),
         time_slot: '',
     })
@@ -78,6 +78,37 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
 
     const qtyTotal = function() {
         return cart.reduce((total, {qty}) => total + qty, 0)
+    }
+
+    const SelectedAddress = function() {
+        return (
+            <Card variant="outlined">
+                <Stack spacing={0} className="p-3">
+                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>Deliver To:</Typography>
+                    <Typography variant="body1" gutterBottom={true}>{selectedAddress.full_name}</Typography>
+                    {
+                        selectedAddress.business_name && selectedAddress.business_name.length
+                        && <Typography key="business-name" variant="body1" gutterBottom={true}>
+                            {selectedAddress.business_name}
+                        </Typography>
+                    }
+                    {
+                        selectedAddress.address.split('\n')
+                            .filter((element, index, array) => index !== array.length - 1)
+                            .map((line, index) => <Typography key={'address-line-' + index} variant="body1">{line}</Typography>)
+                    }
+                    {
+                        selectedAddress.address.split('\n')
+                            .filter((element, index, array) => index === array.length - 1)
+                            .map((line) => <Typography key={'address-last-line'} variant="body1" gutterBottom={true}>{line}</Typography>)
+                    }
+                    <Typography key="phone-number" variant="body1">
+                        <LocalPhone className="mr-2" fontSize="small" />
+                        {selectedAddress.phone_number}
+                    </Typography>
+                </Stack>
+            </Card>
+        )
     }
 
     return (
@@ -237,14 +268,22 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                 <InputLabel id="demo-simple-select-helper-label">Select Existing Address</InputLabel>
                                                 <Select
                                                     label="Select Existing Address"
-                                                    // value={data.time_slot}
+                                                    value={data.address}
                                                     onChange={(e) => {
-                                                        console.log('select address', e.target.value)
+                                                        setData('address', e.target.value);
+                                                        if (e.target.value === "") {
+                                                            setSelectedAddress(null);
+                                                        } else {
+                                                            setSelectedAddress(existingAddresses.find(({id}) => id === e.target.value))
+                                                        }
                                                     }}
                                                 >
-                                                    <MenuItem value=""> <em>None</em> </MenuItem>
+                                                    <MenuItem key="none" value=""> <em>None</em> </MenuItem>
                                                     {
-                                                        existingAddresses.map(({id, full_name, business_name, address}) => <MenuItem value={id}>
+                                                        existingAddresses.map(({id, full_name, business_name, address}) => <MenuItem
+                                                            value={id}
+                                                            key={id}
+                                                        >
                                                             {full_name} {business_name} - {address}
                                                         </MenuItem>)
                                                     }
@@ -254,7 +293,10 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     }
                                     <Box>
                                         <Button
-                                            onClick={() => setUseNewAddress(!useNewAddress)}
+                                            onClick={() => {
+                                                setSelectedAddress(null);
+                                                setUseNewAddress(!useNewAddress);
+                                            }}
                                             startIcon={useNewAddress ? <Remove /> : <Add />}
                                         >
                                             { useNewAddress ? 'Use an existing address' : 'Add a new address' }
@@ -322,6 +364,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                     axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
                                                         .then(({data}) => {
                                                         setData('address', data.id );
+                                                        setExistingAddresses([...existingAddresses, data]);
                                                         setSelectedAddress(data);
                                                         setActiveStep(2)
                                                     }).catch(({ response }) => {
@@ -336,7 +379,8 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     )}
                                 </Stack>
                             </Card>
-                            <Card className="w-full  lg:w-2/5" variant="outlined">
+                            <Stack spacing={2} className="w-full  lg:w-2/5">
+                            <Card className="" variant="outlined">
                                 <Stack spacing={2} className="p-3">
                                     <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
                                     </Typography>
@@ -347,6 +391,12 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
                                 </Stack>
                             </Card>
+                                {
+                                    selectedAddress && (
+                                        <SelectedAddress />
+                                    )
+                                }
+                            </Stack>
                         </Box>
                     )
                 }
@@ -413,32 +463,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
                                 </Stack>
                             </Card>
-                            <Card variant="outlined">
-                                <Stack spacing={0} className="p-3">
-                                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>Deliver To:</Typography>
-                                    <Typography variant="body1" gutterBottom={true}>{selectedAddress.full_name}</Typography>
-                                    {
-                                        selectedAddress.business_name.length
-                                        && <Typography key="business-name" variant="body1" gutterBottom={true}>
-                                            {selectedAddress.business_name}
-                                        </Typography>
-                                    }
-                                    {
-                                        selectedAddress.address.split('\n')
-                                            .filter((element, index, array) => index !== array.length - 1)
-                                            .map((line, index) => <Typography key={'address-line-' + index} variant="body1">{line}</Typography>)
-                                    }
-                                    {
-                                        selectedAddress.address.split('\n')
-                                            .filter((element, index, array) => index === array.length - 1)
-                                            .map((line) => <Typography key={'address-last-line'} variant="body1" gutterBottom={true}>{line}</Typography>)
-                                    }
-                                    <Typography key="phone-number" variant="body1">
-                                        <LocalPhone className="mr-2" fontSize="small" />
-                                        {selectedAddress.phone_number}
-                                    </Typography>
-                                </Stack>
-                            </Card>
+                            <SelectedAddress />
                             </Stack>
                         </Box>
                     )
