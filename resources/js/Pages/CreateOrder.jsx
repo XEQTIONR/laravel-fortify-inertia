@@ -32,13 +32,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {KeyboardArrowUp, KeyboardArrowDown, LocalPhone} from "@mui/icons-material";
+import {KeyboardArrowUp, KeyboardArrowDown, LocalPhone, Add, Remove} from "@mui/icons-material";
 
-export default function CreateOrder({categories, shopping_cart, user}) {
+export default function CreateOrder({addresses, categories, shopping_cart, user}) {
 
     const currentMoment = moment()
     const [date, setDate] = useState(currentMoment);
     const [cart, setCart] = useState(shopping_cart);
+    const [existingAddresses, setExistingAddresses] = useState(addresses.data);
+    const [useNewAddress, setUseNewAddress] = useState(false);
     const [newAddress, setNewAddress] = useInput({
         'full_name': '',
         'business_name': '',
@@ -229,77 +231,109 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                             <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
                                 <Stack className="px-4 py-3" spacing={2} component="form">
                                     <Typography className="font-bold text-lg">2. Select delivery address.</Typography>
-                                    <TextField
-                                        required
-                                        size="small"
-                                        name="full_name"
-                                        value={newAddress.full_name}
-                                        onChange={(e) => {
-                                            removeError('full_name');
-                                            setNewAddress(e);
-                                        }}
-                                        error={newAddressErrors.hasOwnProperty('full_name')}
-                                        label={trans('labels.Full name')}
-                                        helperText={newAddressErrors.hasOwnProperty('full_name') && newAddressErrors['full_name'][0]}
-                                    />
-                                    <TextField
-                                        size="small"
-                                        name="business_name"
-                                        value={newAddress.business_name}
-                                        onChange={(e) => {
-                                            removeError('business_name');
-                                            setNewAddress(e)
-                                        }}
-                                        error={newAddressErrors.hasOwnProperty('business_name')}
-                                        label={trans('labels.Business name')}
-                                        helperText={newAddressErrors.hasOwnProperty('business_name') && newAddressErrors['business_name'][0]}
-                                    />
-                                    <TextField
-                                        multiline
-                                        rows={4}
-                                        size="small"
-                                        required
-                                        name="address"
-                                        label={trans('labels.Address')}
-                                        value={newAddress.address}
-                                        error={newAddressErrors.hasOwnProperty('address')}
-                                        onChange={(e) => {
-                                            removeError('address');
-                                            setNewAddress(e)
-                                        }}
-                                        helperText={newAddressErrors.hasOwnProperty('address') && newAddressErrors['address'][0]}
-                                    />
-                                    <TextField
-                                        size="small"
-                                        InputProps={{
-                                            startAdornment: <InputAdornment position="start">+88</InputAdornment>
-                                        }}
-                                        name="phone_number"
-                                        label={trans('labels.Phone number')}
-                                        value={newAddress.phone_number}
-                                        error={newAddressErrors.hasOwnProperty('phone_number')}
-                                        onChange={(e) => {
-                                            removeError('phone_number');
-                                            setNewAddress(e)
-                                        }}
-                                        helperText={newAddressErrors.hasOwnProperty('phone_number') && newAddressErrors['phone_number'][0]}
-                                    />
-                                    <Button
-                                        onClick={() => {
-                                            axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
-                                                .then(({data}) => {
-                                                    console.log('save address response', data);
-                                                    setData('address', data.id );
-                                                    setSelectedAddress(data);
-                                                    setActiveStep(2)
-                                                })
-                                                .catch(({ response }) => {
-                                                    console.log('response.data', response.data);
-                                                    setNewAddressErrors(response.data.errors);
-                                                })
-                                        }}
-                                        variant="contained"
-                                    >{trans('labels.Save new address')}</Button>
+                                    {
+                                        ! useNewAddress && (
+                                            <FormControl size="small"  required={true}>
+                                                <InputLabel id="demo-simple-select-helper-label">Select Existing Address</InputLabel>
+                                                <Select
+                                                    label="Select Existing Address"
+                                                    // value={data.time_slot}
+                                                    onChange={(e) => {
+                                                        console.log('select address', e.target.value)
+                                                    }}
+                                                >
+                                                    <MenuItem value=""> <em>None</em> </MenuItem>
+                                                    {
+                                                        existingAddresses.map(({id, full_name, business_name, address}) => <MenuItem value={id}>
+                                                            {full_name} {business_name} - {address}
+                                                        </MenuItem>)
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                        )
+                                    }
+                                    <Box>
+                                        <Button
+                                            onClick={() => setUseNewAddress(!useNewAddress)}
+                                            startIcon={useNewAddress ? <Remove /> : <Add />}
+                                        >
+                                            { useNewAddress ? 'Use an existing address' : 'Add a new address' }
+                                        </Button>
+                                    </Box>
+                                    { useNewAddress && (
+                                        <>
+                                            <TextField
+                                                required
+                                                size="small"
+                                                name="full_name"
+                                                value={newAddress.full_name}
+                                                onChange={(e) => {
+                                                    removeError('full_name');
+                                                    setNewAddress(e);
+                                                }}
+                                                error={newAddressErrors.hasOwnProperty('full_name')}
+                                                label={trans('labels.Full name')}
+                                                helperText={newAddressErrors.hasOwnProperty('full_name') && newAddressErrors['full_name'][0]}
+                                            />
+                                            <TextField
+                                                size="small"
+                                                name="business_name"
+                                                value={newAddress.business_name}
+                                                onChange={(e) => {
+                                                removeError('business_name');
+                                                    setNewAddress(e)
+                                                }}
+                                                error={newAddressErrors.hasOwnProperty('business_name')}
+                                                label={trans('labels.Business name')}
+                                                helperText={newAddressErrors.hasOwnProperty('business_name') && newAddressErrors['business_name'][0]}
+                                            />
+                                            <TextField
+                                                multiline
+                                                rows={4}
+                                                size="small"
+                                                required
+                                                name="address"
+                                                label={trans('labels.Address')}
+                                                value={newAddress.address}
+                                                error={newAddressErrors.hasOwnProperty('address')}
+                                                onChange={(e) => {
+                                                    removeError('address');
+                                                    setNewAddress(e)
+                                                }}
+                                                helperText={newAddressErrors.hasOwnProperty('address') && newAddressErrors['address'][0]}
+                                            />
+                                            <TextField
+                                                size="small"
+                                                InputProps={{
+                                                    startAdornment: <InputAdornment position="start">+88</InputAdornment>
+                                                }}
+                                                name="phone_number"
+                                                label={trans('labels.Phone number')}
+                                                value={newAddress.phone_number}
+                                                error={newAddressErrors.hasOwnProperty('phone_number')}
+                                                onChange={(e) => {
+                                                    removeError('phone_number');
+                                                    setNewAddress(e)
+                                                }}
+                                                helperText={newAddressErrors.hasOwnProperty('phone_number') && newAddressErrors['phone_number'][0]}
+                                            />
+                                            <Button
+                                                onClick={() => {
+                                                    axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
+                                                        .then(({data}) => {
+                                                        setData('address', data.id );
+                                                        setSelectedAddress(data);
+                                                        setActiveStep(2)
+                                                    }).catch(({ response }) => {
+                                                        setNewAddressErrors(response.data.errors);
+                                                    })
+                                                }}
+                                                variant="contained"
+                                            >
+                                                {trans('labels.Save new address')}
+                                            </Button>
+                                        </>
+                                    )}
                                 </Stack>
                             </Card>
                             <Card className="w-full  lg:w-2/5" variant="outlined">
