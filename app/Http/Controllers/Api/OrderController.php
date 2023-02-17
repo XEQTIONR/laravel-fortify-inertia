@@ -30,32 +30,39 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'nullable|exists:users,id|integer',
-            'payment_type' => 'nullable|string',
             'address_id' => 'nullable|integer',
-            'status' => 'required|string',
+            'delivery_date' => 'required|date',
+            'time_slot' => 'required|integer|min:0',
             'items' => 'required|array',
         ]);
-        //Log::info($validated['items']);
-        $ids = array_map(fn($item) => $item['id'], $validated['items']);
-        $cartItems = ShoppingCart::whereIn('id', $ids)
-                        ->with('product')
-                        ->get();
 
-        $orderItems = $cartItems->map(function($item) {
+        Log::info($validated);
+        $items = collect($validated['items']);
+
+        $shoppingCartIds = $items->map(function($item) {
+            return $item['id'];
+        });
+        Log::info($shoppingCartIds->all());
+
+        ShoppingCart::whereIn('id', $shoppingCartIds)
+                        ->update(['status' => 'ordered']);
+
+        $orderItems = $items->map(function($item) {
             $orderItem = new OrderItem();
             $orderItem->product_id = $item['product_id'];
-            $orderItem->selling_price = $item['product']['current_selling_price'] * 100;
+            $orderItem->qty = $item['qty'];
+            $orderItem->price = $item['product']['current_selling_price'];
 
             return $orderItem;
         });
         Log::info($orderItems);
 
         $order = new Order();
-        $order->user_id = $validated['user_id'];
-        $order->payment_type = $validated['payment_type'];
+        $order->user_id = auth()->user()->id;
         $order->address_id = $validated['address_id'];
-        $order->status = $validated['status'];
+        $order->delivery_date = $validated['delivery_date'];
+        $order->time_slot = $validated['time_slot'];
+        $order->status = 'created';
         $order->save();
 
         $order->items()->saveMany($orderItems);

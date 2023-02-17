@@ -12,9 +12,10 @@ class Order extends Model
     protected $fillable = [
         'user_id',
         'payment_type',
-        'order_at',
         'address_id',
         'status',
+        'delivery_date',
+        'time_slot'
     ];
 
     public static array $timeSlots = [

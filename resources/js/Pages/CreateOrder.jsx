@@ -59,7 +59,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
     const refValidDate = useRef(true);
     const { data, setData, post, processing } = useForm({
         items: cart,
-        address: '',
+        address_id: '',
         delivery_date: currentMoment.format('YYYY-MM-DD'),
         time_slot: '',
     })
@@ -77,6 +77,16 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
         delete localAddressErrors[key];
         setNewAddressErrors(localAddressErrors);
     }
+
+    const validate = (
+        Array.isArray(data.items)
+        && data.items.length > 0
+        && typeof data.address_id === 'number'
+        && data.address_id > 0
+        && typeof data.delivery_date === 'string'
+        && data.delivery_date.length === 10
+        && typeof data.time_slot === 'number'
+    );
 
     const subTotal = function() {
          return cart.reduce((total, {qty, product}) => total + qty * product.current_selling_price, 0)
@@ -291,9 +301,9 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                 <InputLabel id="demo-simple-select-helper-label">Select Existing Address</InputLabel>
                                                 <Select
                                                     label="Select Existing Address"
-                                                    value={data.address}
+                                                    value={data.address_id}
                                                     onChange={(e) => {
-                                                        setData('address', e.target.value);
+                                                        setData('address_id', e.target.value);
                                                         if (e.target.value === "") {
                                                             setSelectedAddress(null);
                                                         } else {
@@ -318,7 +328,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                         <Button
                                             onClick={() => {
                                                 setSelectedAddress(null);
-                                                setData('address', '');
+                                                setData('address_id', '');
                                                 setUseNewAddress(!useNewAddress);
                                             }}
                                             startIcon={useNewAddress ? <Remove /> : <Add />}
@@ -397,7 +407,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                 onClick={() => {
                                                     axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
                                                         .then(({data}) => {
-                                                            setData('address', data.id );
+                                                            setData('address_id', data.id );
                                                             setExistingAddresses([...existingAddresses, data]);
                                                             setSelectedAddress(data);
                                                             setActiveStep(2);
@@ -438,6 +448,10 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                             label="Delivery Date"
                                             inputFormat="DD/MM/YYYY"
                                             value={date}
+                                            disablePast={true}
+                                            shouldDisableDate={(date) => {
+                                                return false;
+                                            }}
                                             onError={() => {
                                                 console.log('error');
                                             }}
@@ -468,13 +482,25 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                 onChange={(e) => setData('time_slot', e.target.value)}
                                         >
                                             <MenuItem value=""> Not Selected </MenuItem>
-                                            <MenuItem value={1}>11AM - 1PM</MenuItem>
-                                            <MenuItem value={2}>1PM - 4PM</MenuItem>
-                                            <MenuItem value={3}>4PM - 7PM</MenuItem>
+                                            <MenuItem value={0}>11AM - 1PM</MenuItem>
+                                            <MenuItem value={1}>1PM - 4PM</MenuItem>
+                                            <MenuItem value={2}>4PM - 7PM</MenuItem>
                                             <MenuItem value={3}>7PM - 10PM</MenuItem>
                                         </Select>
                                     </FormControl>
-                                    <Button variant="contained">Place order</Button>
+                                    <Button
+                                        disabled={!validate}
+                                        variant={validate ? 'contained' : 'outlined'}
+                                        onClick={() => {
+                                            post( route('orders.store'), {
+                                                onError: (err) => {
+                                                    console.log(err);
+                                                }
+                                            });
+                                        }}
+                                    >
+                                        Place order
+                                    </Button>
                                 </Stack>
                             </Card>
                             <Stack spacing={1} className="w-full  lg:w-2/5">

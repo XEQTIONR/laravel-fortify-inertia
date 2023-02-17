@@ -19,6 +19,7 @@ class OrderController extends Controller
             'addresses' => AddressResource::collection(auth()->user()->addresses),
         ]);
     }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -30,8 +31,8 @@ class OrderController extends Controller
 
         return redirect( route('welcome') )
                 ->with([
-                    'title' => "Order $order->id created.",
-                    'message' => "Order was created",
+                    'title' => "Order created.",
+                    'message' => "Order $order->id was created",
                     'status' => \Illuminate\Http\Response::HTTP_CREATED,
                 ])
                 ->withCookie(Cookie::make(
