@@ -2,7 +2,10 @@ import React, {useState, useEffect, useRef}  from 'react';
 import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
 import useInput from '@/hooks/useInput';
-
+import * as moment from 'moment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
     Button,
     Box,
@@ -13,32 +16,27 @@ import {
     InputLabel,
     MenuItem,
     Stack,
+    Select,
+    Step,
+    StepLabel,
+    Stepper,
+    Table,
+    TableBody,
+    TableContainer,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableRow,
     TextField,
     Typography,
-    TableFooter,
-    Select,
 } from '@mui/material';
-import * as moment from 'moment';
-import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import {
     Add,
     ChevronLeft,
     ChevronRight,
-    KeyboardArrowUp,
-    KeyboardArrowDown,
     LocalPhone,
+    KeyboardArrowDown,
+    KeyboardArrowUp,
     Remove,
 } from "@mui/icons-material";
 
@@ -143,7 +141,15 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label, index) => (
                         <Step
-                            onClick={()=> setActiveStep(index)}
+                            onClick={() => {
+                                if ( (activeStep === 0 || activeStep === 1) && index === 2) {
+                                    if (selectedAddress === null) {
+                                        return
+                                    }
+                                }
+
+                                setActiveStep(index)
+                            }}
                             key={label}>
                             <StepLabel className="hover:cursor-pointer">{label}</StepLabel>
                         </Step>
@@ -225,7 +231,6 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                                                 }
                                                                                 return anItem
                                                                             }));
-                                                                            //console.log(update);
                                                                         } else if ( data.action === 'delete') {
                                                                             setCart(cart.filter( (anItem) => anItem.id !== data.id ))
                                                                         }
@@ -267,13 +272,11 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     <Typography align="center" className="font-bold text-2xl">
                                         ৳ {subTotal()}
                                     </Typography>
-
                                     <Button onClick={() => setActiveStep(1)} variant="contained">Confirm Items</Button>
                                 </Stack>
                             </Card>
                         </Box>
                     )
-
                 }
                 {
                     activeStep === 1 &&
