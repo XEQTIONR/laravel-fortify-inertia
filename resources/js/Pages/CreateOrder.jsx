@@ -32,7 +32,15 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {KeyboardArrowUp, KeyboardArrowDown, LocalPhone, Add, Remove} from "@mui/icons-material";
+import {
+    Add,
+    ChevronLeft,
+    ChevronRight,
+    KeyboardArrowUp,
+    KeyboardArrowDown,
+    LocalPhone,
+    Remove,
+} from "@mui/icons-material";
 
 export default function CreateOrder({addresses, categories, shopping_cart, user}) {
 
@@ -41,7 +49,7 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
     const [cart, setCart] = useState(shopping_cart);
     const [existingAddresses, setExistingAddresses] = useState(addresses.data);
     const [useNewAddress, setUseNewAddress] = useState(false);
-    const [newAddress, setNewAddress] = useInput({
+    const [newAddress, setNewAddress, resetNewAddress] = useInput({
         'full_name': '',
         'business_name': '',
         'address': '',
@@ -110,7 +118,19 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
             </Card>
         )
     }
+    const SubtotalCard = function() {
+        return (<Card className="" variant="outlined">
+            <Stack spacing={2} className="p-3">
+                <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
+                </Typography>
+                <Typography align="center" className="font-bold text-2xl">
+                    ৳ {subTotal()}
+                </Typography>
 
+                <Button startIcon={<ChevronLeft />} variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
+            </Stack>
+        </Card>);
+    }
     return (
         <Nav
             navLinks={categories.data}
@@ -291,16 +311,27 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                             </FormControl>
                                         )
                                     }
-                                    <Box>
+                                    <Box className="flex justify-between">
                                         <Button
                                             onClick={() => {
                                                 setSelectedAddress(null);
+                                                setData('address', '');
                                                 setUseNewAddress(!useNewAddress);
                                             }}
                                             startIcon={useNewAddress ? <Remove /> : <Add />}
                                         >
                                             { useNewAddress ? 'Use an existing address' : 'Add a new address' }
                                         </Button>
+                                        {
+                                            selectedAddress &&
+                                            <Button
+                                                onClick={() => setActiveStep(2)}
+                                                endIcon={<ChevronRight/>}
+                                                variant="contained"
+                                            >
+                                                Select delivery time
+                                            </Button>
+                                        }
                                     </Box>
                                     { useNewAddress && (
                                         <>
@@ -363,13 +394,15 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                 onClick={() => {
                                                     axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
                                                         .then(({data}) => {
-                                                        setData('address', data.id );
-                                                        setExistingAddresses([...existingAddresses, data]);
-                                                        setSelectedAddress(data);
-                                                        setActiveStep(2)
-                                                    }).catch(({ response }) => {
-                                                        setNewAddressErrors(response.data.errors);
-                                                    })
+                                                            setData('address', data.id );
+                                                            setExistingAddresses([...existingAddresses, data]);
+                                                            setSelectedAddress(data);
+                                                            setActiveStep(2);
+                                                            resetNewAddress()
+                                                            setUseNewAddress(false);
+                                                        }).catch(({ response }) => {
+                                                            setNewAddressErrors(response.data.errors);
+                                                        })
                                                 }}
                                                 variant="contained"
                                             >
@@ -379,18 +412,8 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     )}
                                 </Stack>
                             </Card>
-                            <Stack spacing={2} className="w-full  lg:w-2/5">
-                            <Card className="" variant="outlined">
-                                <Stack spacing={2} className="p-3">
-                                    <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
-                                    </Typography>
-                                    <Typography align="center" className="font-bold text-2xl">
-                                        ৳ {subTotal()}
-                                    </Typography>
-
-                                    <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
-                                </Stack>
-                            </Card>
+                            <Stack spacing={1} className="w-full  lg:w-2/5">
+                                <SubtotalCard />
                                 {
                                     selectedAddress && (
                                         <SelectedAddress />
@@ -451,19 +474,9 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                     <Button variant="contained">Place order</Button>
                                 </Stack>
                             </Card>
-                            <Stack spacing={2} className="w-full  lg:w-2/5">
-                            <Card variant="outlined">
-                                <Stack spacing={2} className="p-3">
-                                    <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
-                                    </Typography>
-                                    <Typography align="center" className="font-bold text-2xl">
-                                        ৳ {subTotal()}
-                                    </Typography>
-
-                                    <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
-                                </Stack>
-                            </Card>
-                            <SelectedAddress />
+                            <Stack spacing={1} className="w-full  lg:w-2/5">
+                                <SubtotalCard />
+                                <SelectedAddress />
                             </Stack>
                         </Box>
                     )
