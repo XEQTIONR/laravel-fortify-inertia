@@ -32,7 +32,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import {KeyboardArrowUp, KeyboardArrowDown} from "@mui/icons-material";
+import {KeyboardArrowUp, KeyboardArrowDown, LocalPhone} from "@mui/icons-material";
 
 export default function CreateOrder({categories, shopping_cart, user}) {
 
@@ -46,20 +46,20 @@ export default function CreateOrder({categories, shopping_cart, user}) {
         'phone_number': user.primary_contact_number,
     });
     const [newAddressErrors, setNewAddressErrors] = useState({});
+    const [selectedAddress, setSelectedAddress] = useState(null);
 
     const refValidDate = useRef(true);
     const { data, setData, post, processing } = useForm({
         items: cart,
-        address: '',
-        business_name: '',
+        address: null,
         delivery_date: currentMoment.format('YYYY-MM-DD'),
         time_slot: '',
     })
 
     const steps = [
         'Confirm items',
-        'Select delivery options',
-        'Place order',
+        'Choose Address',
+        'Select delivery time',
     ];
 
     const [activeStep, setActiveStep] = useState(0);
@@ -228,7 +228,7 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                         <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
                             <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
                                 <Stack className="px-4 py-3" spacing={2} component="form">
-                                    <Typography className="font-bold text-lg">2. Select delivery address and time.</Typography>
+                                    <Typography className="font-bold text-lg">2. Select delivery address.</Typography>
                                     <TextField
                                         required
                                         size="small"
@@ -284,64 +284,19 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                                         }}
                                         helperText={newAddressErrors.hasOwnProperty('phone_number') && newAddressErrors['phone_number'][0]}
                                     />
-                                    {/*<Stack spacing={2} alignItems="flex-start" direction="row">*/}
-                                    {/*    <LocalizationProvider*/}
-                                    {/*        className="flex-grow"*/}
-                                    {/*        dateAdapter={AdapterMoment}*/}
-                                    {/*    >*/}
-                                    {/*        <DesktopDatePicker*/}
-                                    {/*            className="w-1/2"*/}
-                                    {/*            label="Delivery Date"*/}
-                                    {/*            inputFormat="DD/MM/YYYY"*/}
-                                    {/*            value={date}*/}
-                                    {/*            onError={() => {*/}
-                                    {/*                console.log('error');*/}
-                                    {/*            }}*/}
-                                    {/*            onChange={e => {*/}
-                                    {/*                if (e && e._isValid) {*/}
-                                    {/*                    setDate(e)*/}
-                                    {/*                    setData('delivery_date', e.format('YYYY-MM-DD'));*/}
-                                    {/*                    refValidDate.current = true;*/}
-
-                                    {/*                } else {*/}
-                                    {/*                    refValidDate.current = false;*/}
-                                    {/*                }*/}
-
-                                    {/*            }}*/}
-                                    {/*            renderInput={(params) =>*/}
-                                    {/*                <TextField {...params}*/}
-                                    {/*                           required={true}*/}
-                                    {/*                           error={!refValidDate.current}*/}
-                                    {/*                           helperText={!refValidDate.current && 'Invalid date'}*/}
-                                    {/*                />}*/}
-                                    {/*        />*/}
-                                    {/*    </LocalizationProvider>*/}
-                                    {/*    <FormControl  required={true} className="flex-grow">*/}
-                                    {/*        <InputLabel id="demo-simple-select-helper-label">Time slot</InputLabel>*/}
-
-                                    {/*        <Select label="Time slot"*/}
-                                    {/*                value={data.time_slot}*/}
-                                    {/*                onChange={(e) => setData('time_slot', e.target.value)}*/}
-                                    {/*        >*/}
-                                    {/*            <MenuItem value=""> Not Selected </MenuItem>*/}
-                                    {/*            <MenuItem value={1}>11AM - 1PM</MenuItem>*/}
-                                    {/*            <MenuItem value={2}>1PM - 4PM</MenuItem>*/}
-                                    {/*            <MenuItem value={3}>4PM - 7PM</MenuItem>*/}
-                                    {/*            <MenuItem value={3}>7PM - 10PM</MenuItem>*/}
-                                    {/*        </Select>*/}
-                                    {/*    </FormControl>*/}
-                                    {/*</Stack>*/}
                                     <Button
                                         onClick={() => {
                                             axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
-                                                .then((res) => {
-                                                    console.log('save address response', res);
+                                                .then(({data}) => {
+                                                    console.log('save address response', data);
+                                                    setData('address', data.id );
+                                                    setSelectedAddress(data);
+                                                    setActiveStep(2)
                                                 })
                                                 .catch(({ response }) => {
                                                     console.log('response.data', response.data);
                                                     setNewAddressErrors(response.data.errors);
                                                 })
-                                            // setActiveStep(2)
                                         }}
                                         variant="contained"
                                     >{trans('labels.Save new address')}</Button>
@@ -362,7 +317,97 @@ export default function CreateOrder({categories, shopping_cart, user}) {
                     )
                 }
                 {
-                    activeStep === 2 && (<h1>SOmething</h1>)
+                    activeStep === 2 && (
+                        <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
+                            <Card className="w-full lg:w-3/5 mb-2 lg:mr-2 " variant="outlined">
+                                <Stack className="px-4 py-3" spacing={2} component="form">
+                                    <Typography className="font-bold text-lg">3. Select delivery window.</Typography>
+                                    <LocalizationProvider className="flex-grow" dateAdapter={AdapterMoment}>
+                                        <DesktopDatePicker
+                                            className="w-1/2"
+                                            label="Delivery Date"
+                                            inputFormat="DD/MM/YYYY"
+                                            value={date}
+                                            onError={() => {
+                                                console.log('error');
+                                            }}
+                                            onChange={e => {
+                                                if (e && e._isValid) {
+                                                    setDate(e)
+                                                    setData('delivery_date', e.format('YYYY-MM-DD'));
+                                                    refValidDate.current = true;
+
+                                                } else {
+                                                    refValidDate.current = false;
+                                                }
+
+                                            }}
+                                            renderInput={(params) =>
+                                                <TextField {...params}
+                                                           required={true}
+                                                           error={!refValidDate.current}
+                                                           helperText={!refValidDate.current && 'Invalid date'}
+                                                />}
+                                        />
+                                    </LocalizationProvider>
+                                    <FormControl  required={true}>
+                                        <InputLabel id="demo-simple-select-helper-label">Time slot</InputLabel>
+
+                                        <Select label="Time slot"
+                                                value={data.time_slot}
+                                                onChange={(e) => setData('time_slot', e.target.value)}
+                                        >
+                                            <MenuItem value=""> Not Selected </MenuItem>
+                                            <MenuItem value={1}>11AM - 1PM</MenuItem>
+                                            <MenuItem value={2}>1PM - 4PM</MenuItem>
+                                            <MenuItem value={3}>4PM - 7PM</MenuItem>
+                                            <MenuItem value={3}>7PM - 10PM</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <Button variant="contained">Place order</Button>
+                                </Stack>
+                            </Card>
+                            <Stack spacing={2} className="w-full  lg:w-2/5">
+                            <Card variant="outlined">
+                                <Stack spacing={2} className="p-3">
+                                    <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
+                                    </Typography>
+                                    <Typography align="center" className="font-bold text-2xl">
+                                        ৳ {subTotal()}
+                                    </Typography>
+
+                                    <Button variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
+                                </Stack>
+                            </Card>
+                            <Card variant="outlined">
+                                <Stack spacing={0} className="p-3">
+                                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>Deliver To:</Typography>
+                                    <Typography variant="body1" gutterBottom={true}>{selectedAddress.full_name}</Typography>
+                                    {
+                                        selectedAddress.business_name.length
+                                        && <Typography key="business-name" variant="body1" gutterBottom={true}>
+                                            {selectedAddress.business_name}
+                                        </Typography>
+                                    }
+                                    {
+                                        selectedAddress.address.split('\n')
+                                            .filter((element, index, array) => index !== array.length - 1)
+                                            .map((line, index) => <Typography key={'address-line-' + index} variant="body1">{line}</Typography>)
+                                    }
+                                    {
+                                        selectedAddress.address.split('\n')
+                                            .filter((element, index, array) => index === array.length - 1)
+                                            .map((line) => <Typography key={'address-last-line'} variant="body1" gutterBottom={true}>{line}</Typography>)
+                                    }
+                                    <Typography key="phone-number" variant="body1">
+                                        <LocalPhone className="mr-2" fontSize="small" />
+                                        {selectedAddress.phone_number}
+                                    </Typography>
+                                </Stack>
+                            </Card>
+                            </Stack>
+                        </Box>
+                    )
                 }
             </Stack>
         </Nav>
