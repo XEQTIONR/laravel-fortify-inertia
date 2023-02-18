@@ -36,13 +36,11 @@ class OrderController extends Controller
             'items' => 'required|array',
         ]);
 
-        Log::info($validated);
         $items = collect($validated['items']);
 
         $shoppingCartIds = $items->map(function($item) {
             return $item['id'];
         });
-        Log::info($shoppingCartIds->all());
 
         ShoppingCart::whereIn('id', $shoppingCartIds)
                         ->update(['status' => 'ordered']);
@@ -55,7 +53,6 @@ class OrderController extends Controller
 
             return $orderItem;
         });
-        Log::info($orderItems);
 
         $order = new Order();
         $order->user_id = auth()->user()->id;

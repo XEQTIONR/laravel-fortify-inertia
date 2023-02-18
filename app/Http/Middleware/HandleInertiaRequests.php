@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ShoppingCart;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -48,11 +49,15 @@ class HandleInertiaRequests extends Middleware
                         ->get();
         } else {
             $items = ShoppingCart::with('product')
-                        ->where('session_cookie', $cookie)
-                        ->orWhere('user_id', $user->id)
-                        ->get();
+                    ->whereIn('status', ['new', 'updated'])
+                    ->where('session_cookie', $cookie)
+                    ->orWhere(function(Builder $query) use ($user) {
+                        $query->whereIn('status', ['new', 'updated'])
+                            ->where('user_id', $user->id);
+                    })
+                    ->get();
 
-            $cookies_only = $items->filter(fn($item) => $item->user_id === null );
+            $cookies_only = $items->filter(fn($item) => $item->user_id === null);
 
             if ($cookies_only->count() > 0) {
                 ShoppingCart::whereIn('id', $cookies_only->map(fn($item, $key) => $item->id ))
