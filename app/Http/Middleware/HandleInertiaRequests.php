@@ -48,8 +48,7 @@ class HandleInertiaRequests extends Middleware
                         ])
                         ->get();
         } else {
-            $items = ShoppingCart::with('product')
-                        ->whereIn('status', ['new', 'updated'])
+            $items = ShoppingCart::whereIn('status', ['new', 'updated'])
                         ->where('session_cookie', $cookie)
                         ->orWhere(function(Builder $query) use ($user) {
                             $query->whereIn('status', ['new', 'updated'])
@@ -63,6 +62,31 @@ class HandleInertiaRequests extends Middleware
                 ShoppingCart::whereIn('id', $cookies_only->map(fn($item, $key) => $item->id ))
                     ->update(['user_id' => $user->id]);
             }
+
+            $collection = ShoppingCart::where('user_id', $user->id)->get();
+
+            $groups =  $collection->groupBy('product_id');
+            $deleteIds = collect();
+            $groups->each(function($group) use (&$deleteIds) {
+                if ($group->count() > 1) {
+                    $first = $group->first();
+                    $rest = $group->skip(1);
+                    $sum = $group->reduce(fn($carry, $item) => $carry + $item->qty, 0);
+                    $ids = $rest->map(fn($item) => $item->id);
+
+                    $deleteIds = $deleteIds->merge($ids);
+
+                    $first->qty = $sum;
+                    $first->save();
+                }
+            });
+            if ($deleteIds->count() > 0) {
+                ShoppingCart::whereIn('id', $deleteIds)->delete();
+            }
+            $items = ShoppingCart::with('product')
+                        ->where('user_id', $user->id)
+                        ->whereIn('status', ['new', 'updated'])
+                        ->get();
         }
 
         return array_merge(parent::share($request), [

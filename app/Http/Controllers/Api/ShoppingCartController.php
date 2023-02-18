@@ -43,7 +43,7 @@ class ShoppingCartController extends Controller
         $cartItems = $query->get();
         if ($cartItems->count() > 0) {
             $items = $cartItems->where('product_id', $validated['product_id']);
-            if ( $items->count() === 1 ) {
+            if ( $items->count() > 0 ) {
                 $item = $items->first();
                 $item->qty++;
                 $item->status = 'updated';
