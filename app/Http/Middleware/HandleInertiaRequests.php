@@ -49,13 +49,13 @@ class HandleInertiaRequests extends Middleware
                         ->get();
         } else {
             $items = ShoppingCart::with('product')
-                    ->whereIn('status', ['new', 'updated'])
-                    ->where('session_cookie', $cookie)
-                    ->orWhere(function(Builder $query) use ($user) {
-                        $query->whereIn('status', ['new', 'updated'])
-                            ->where('user_id', $user->id);
-                    })
-                    ->get();
+                        ->whereIn('status', ['new', 'updated'])
+                        ->where('session_cookie', $cookie)
+                        ->orWhere(function(Builder $query) use ($user) {
+                            $query->whereIn('status', ['new', 'updated'])
+                                ->where('user_id', $user->id);
+                        })
+                        ->get();
 
             $cookies_only = $items->filter(fn($item) => $item->user_id === null);
 

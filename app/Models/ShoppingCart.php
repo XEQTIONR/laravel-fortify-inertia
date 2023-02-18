@@ -14,14 +14,14 @@ class ShoppingCart extends Model
 
     protected $fillable = [
         'session_cookie',
-
+        'order_id',
         'user_id',
         'product_id',
         'status',
         'qty',
     ];
 
-    public function users(): BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -29,5 +29,9 @@ class ShoppingCart extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function order(): BelongsTo {
+        return $this->belongsTo(Order::class);
     }
 }

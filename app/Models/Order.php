@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
@@ -25,12 +27,17 @@ class Order extends Model
         '7PM - 10PM',
     ];
 
-    public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function items(): HasMany
     {
         return $this->hasMany( OrderItem::class );
     }
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function shoppingCarts(): HasMany
+    {
+        return $this->hasMany(ShoppingCart::class);
+    }
+
+    public function user(): BelongsTo
     {
         return $this->belongsTo( User::class );
     }

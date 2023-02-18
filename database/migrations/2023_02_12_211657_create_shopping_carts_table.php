@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('session_cookie');
             $table->foreignId('user_id')->nullable();
+            $table->foreignId('order_id')->nullable();
             $table->foreignId('product_id');
             $table->string('status');
             $table->integer('qty');

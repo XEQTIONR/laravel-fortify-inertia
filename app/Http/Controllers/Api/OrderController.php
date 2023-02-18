@@ -36,6 +36,14 @@ class OrderController extends Controller
             'items' => 'required|array',
         ]);
 
+        $order = new Order();
+        $order->user_id = auth()->user()->id;
+        $order->address_id = $validated['address_id'];
+        $order->delivery_date = $validated['delivery_date'];
+        $order->time_slot = $validated['time_slot'];
+        $order->status = 'created';
+        $order->save();
+
         $items = collect($validated['items']);
 
         $shoppingCartIds = $items->map(function($item) {
@@ -43,7 +51,10 @@ class OrderController extends Controller
         });
 
         ShoppingCart::whereIn('id', $shoppingCartIds)
-                        ->update(['status' => 'ordered']);
+            ->update([
+                'status' => 'ordered',
+                'order_id' => $order->id,
+        ]);
 
         $orderItems = $items->map(function($item) {
             $orderItem = new OrderItem();
@@ -53,14 +64,6 @@ class OrderController extends Controller
 
             return $orderItem;
         });
-
-        $order = new Order();
-        $order->user_id = auth()->user()->id;
-        $order->address_id = $validated['address_id'];
-        $order->delivery_date = $validated['delivery_date'];
-        $order->time_slot = $validated['time_slot'];
-        $order->status = 'created';
-        $order->save();
 
         $order->items()->saveMany($orderItems);
 
