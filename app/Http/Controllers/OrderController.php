@@ -17,6 +17,7 @@ class OrderController extends Controller
         return Inertia::render('CreateOrder', [
             'categories' => app(HierarchicalCategories::class),
             'addresses' => AddressResource::collection(auth()->user()->addresses),
+            'paymentConfig' => config('payment'),
         ]);
     }
 

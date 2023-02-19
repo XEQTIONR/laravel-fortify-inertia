@@ -40,7 +40,7 @@ import {
     Remove,
 } from "@mui/icons-material";
 
-export default function CreateOrder({addresses, categories, shopping_cart, user}) {
+export default function CreateOrder({addresses, categories, paymentConfig, shopping_cart, user}) {
 
     const currentMoment = moment()
     const [date, setDate] = useState(currentMoment);
@@ -92,6 +92,15 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
          return cart.reduce((total, {qty, product}) => total + qty * product.current_selling_price, 0)
     }
 
+    const serviceCharge = function() {
+        switch (paymentConfig.service_charge_type) {
+            case 'percentage':
+                return ((subTotal() * paymentConfig.service_charge_amount)/100.0)
+            case 'amount':
+                return paymentConfig.service_charge_amount;
+        }
+    }
+
     const qtyTotal = function() {
         return cart.reduce((total, {qty}) => total + qty, 0)
     }
@@ -126,18 +135,53 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
             </Card>
         )
     }
-    const SubtotalCard = function() {
-        return (<Card className="" variant="outlined">
-            <Stack spacing={2} className="p-3">
-                <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
-                </Typography>
-                <Typography align="center" className="font-bold text-2xl">
-                    ৳ {subTotal()}
-                </Typography>
+    const NextStep = function ({step}) {
 
-                <Button startIcon={<ChevronLeft />} variant="outlined" onClick={() => setActiveStep(0)}>Back to cart</Button>
-            </Stack>
-        </Card>);
+        switch (step) {
+            case 0:
+                return <Button onClick={() => setActiveStep(1)} variant="contained">Confirm Items</Button>
+            case 1:
+                return <Button onClick={() => setActiveStep(0)} startIcon={<ChevronLeft />} variant="outlined" >
+                    Back to cart
+                </Button>
+            case 2:
+                return <Button onClick={() => setActiveStep(1)} startIcon={<ChevronLeft />} variant="outlined" >
+                    Back to address
+                </Button>
+        }
+    }
+
+    const SubtotalCard = function() {
+        return (
+            <Card className="w-full" variant="outlined">
+                <Stack spacing={2} className="py-3 px-5">
+                    <Stack justifyContent="space-between" direction="row">
+                        <Typography align="center">Subtotal ({qtyTotal()} items)
+                        </Typography>
+                        <Typography align="center" className="font-bold">
+                            ৳ {subTotal()}
+                        </Typography>
+                    </Stack>
+                    <Stack justifyContent="space-between" direction="row">
+                        <Typography align="center">
+                            Service Charge
+                        </Typography>
+                        <Typography align="center" className="font-bold">
+                            ৳ {serviceCharge()}
+                        </Typography>
+                    </Stack>
+                    <Stack className="border-t-2" justifyContent="space-between" direction="row">
+                        <Typography align="center" className="font-bold mt-3 mb-2">
+                            Total
+                        </Typography>
+                        <Typography align="center" className="font-bold text-2xl mt-3 mb-2">
+                            ৳ {subTotal() + serviceCharge()}
+                        </Typography>
+                    </Stack>
+                    <NextStep step={activeStep} />
+                </Stack>
+            </Card>
+        );
     }
     return (
         <Nav
@@ -271,20 +315,40 @@ export default function CreateOrder({addresses, categories, shopping_cart, user}
                                                     <Typography className="font-bold" variant="subtitle2">৳ {subTotal()}</Typography>
                                                 </TableCell>
                                             </TableRow>
+                                            <TableRow>
+                                                <TableCell sx={{ width: '50%'}}>
+                                                    <Typography className="font-bold" variant="subtitle2">Service Charge</Typography>
+                                                </TableCell>
+                                                <TableCell sx={{ width: '10%'}} align="center">
+                                                    <Typography className="font-bold" variant="subtitle2">{
+                                                        paymentConfig.service_charge_type === 'percentage'
+                                                            ? (paymentConfig.service_charge_amount + ' %')
+                                                            : ('৳ ' + paymentConfig.service_charge_amount)
+                                                    }</Typography>
+                                                </TableCell>
+                                                <TableCell sx={{ width: '20%'}} align="right"/>
+                                                <TableCell sx={{ width: '20%'}} align="right">
+                                                    <Typography className="font-bold" variant="subtitle2">৳ {serviceCharge()}</Typography>
+                                                </TableCell>
+                                            </TableRow>
+                                            <TableRow>
+                                                <TableCell sx={{ width: '50%'}}>
+                                                    <Typography className="font-bold" variant="subtitle2">Total</Typography>
+                                                </TableCell>
+                                                <TableCell sx={{ width: '10%'}} align="center">
+                                                </TableCell>
+                                                <TableCell sx={{ width: '20%'}} align="right"/>
+                                                <TableCell sx={{ width: '20%'}} align="right">
+                                                    <Typography className="font-bold" variant="subtitle2">৳ {subTotal() + serviceCharge()}</Typography>
+                                                </TableCell>
+                                            </TableRow>
                                         </TableFooter>
                                     </Table>
                                 </TableContainer>
                             </Card>
-                            <Card className="w-full lg:w-2/5" variant="outlined">
-                                <Stack spacing={2} className="p-3">
-                                    <Typography align="center" className="text-lg">Subtotal ({qtyTotal()} items)
-                                    </Typography>
-                                    <Typography align="center" className="font-bold text-2xl">
-                                        ৳ {subTotal()}
-                                    </Typography>
-                                    <Button onClick={() => setActiveStep(1)} variant="contained">Confirm Items</Button>
-                                </Stack>
-                            </Card>
+                            <Stack spacing={1} className="w-full  lg:w-2/5">
+                                <SubtotalCard />
+                            </Stack>
                         </Box>
                     )
                 }
