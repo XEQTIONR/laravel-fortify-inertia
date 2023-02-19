@@ -36,25 +36,31 @@ class OrderController extends Controller
             'items' => 'required|array',
         ]);
 
+        $items = collect($validated['items']);
+
+        $subTotal = $items->reduce( fn($carry, $item) => $carry + ($item['qty'] * $item['product']['current_selling_price']));
+        $serviceChargeType = config('payment.service_charge_type');
+        $serviceChargeAmount = config('payment.service_charge_amount');
+
+        switch ($serviceChargeType) {
+            case 'percentage':
+                $total = $subTotal + (($subTotal * $serviceChargeAmount)/100.0);
+                break;
+
+            case 'amount':
+                $total = $subTotal + $serviceChargeAmount;
+                break;
+        }
+
         $order = new Order();
         $order->user_id = auth()->user()->id;
         $order->address_id = $validated['address_id'];
         $order->delivery_date = $validated['delivery_date'];
         $order->time_slot = $validated['time_slot'];
         $order->status = 'created';
+        $order->subtotal = $subTotal;
+        $order->total = $total;
         $order->save();
-
-        $items = collect($validated['items']);
-
-        $shoppingCartIds = $items->map(function($item) {
-            return $item['id'];
-        });
-
-        ShoppingCart::whereIn('id', $shoppingCartIds)
-            ->update([
-                'status' => 'ordered',
-                'order_id' => $order->id,
-        ]);
 
         $orderItems = $items->map(function($item) {
             $orderItem = new OrderItem();
@@ -66,6 +72,15 @@ class OrderController extends Controller
         });
 
         $order->items()->saveMany($orderItems);
+
+        $shoppingCartIds = $items->map(function($item) {
+            return $item['id'];
+        });
+
+        ShoppingCart::whereIn('id', $shoppingCartIds)->update([
+            'status' => 'ordered',
+            'order_id' => $order->id,
+        ]);
 
         return $order;
     }

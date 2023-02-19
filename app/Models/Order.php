@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,12 +13,14 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'payment_type',
         'address_id',
-        'status',
         'delivery_date',
-        'time_slot'
+        'payment_type',
+        'status',
+        'subtotal',
+        'time_slot',
+        'total',
+        'user_id',
     ];
 
     public static array $timeSlots = [
@@ -40,5 +43,21 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo( User::class );
+    }
+
+    public function subtotal(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100.0,
+            set: fn($value) => (int) ($value * 100)
+        );
+    }
+
+    public function total(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100.0,
+            set: fn($value) => (int) ($value * 100)
+        );
     }
 }
