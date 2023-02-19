@@ -28,13 +28,8 @@ use Laravel\Fortify\Rules\Password;
 Route::get('/phone-verification', function(Request $request) {
     $request->session()->reflash();
 
-    class Temp {
-        use \App\Http\Traits\HierarchicalCategoriesTrait;
-    }
-    $temp = new Temp();
-
     return \Inertia\Inertia::render('PhoneVerification', [
-        'categories' => $temp->categoryTree(\App\Models\Category::all())
+        'categories' => app(\App\Contracts\HierarchicalCategories::class)
     ]);
 })->name('verify-phone');
 
