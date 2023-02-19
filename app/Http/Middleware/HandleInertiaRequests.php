@@ -63,7 +63,9 @@ class HandleInertiaRequests extends Middleware
                     ->update(['user_id' => $user->id]);
             }
 
-            $collection = ShoppingCart::where('user_id', $user->id)->get();
+            $collection = ShoppingCart::where('user_id', $user->id)
+                ->whereIn('status', ['new', 'updated'])
+                ->get();
 
             $groups =  $collection->groupBy('product_id');
             $deleteIds = collect();

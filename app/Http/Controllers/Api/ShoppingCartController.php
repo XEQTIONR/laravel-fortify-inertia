@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShoppingCart;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -36,9 +37,14 @@ class ShoppingCartController extends Controller
         ]);
         $cookie = $request->cookie($this->cookieName);
 
-        $query = ShoppingCart::where('session_cookie', $cookie);
+        $query = ShoppingCart::whereIn('status', ['new', 'updated'])
+                    ->where('session_cookie', $cookie);
         if ( $validated['user_id'] > 0 ) {
-            $query = $query->orWhere('user_id', $validated['user_id']);
+            $user_id = $validated['user_id'];
+            $query = $query->orWhere(function(Builder $query) use ($user_id) {
+                $query->whereIn('status', ['new', 'updated'])
+                    ->where('user_id', $user_id);
+            });
         }
         $cartItems = $query->get();
         if ($cartItems->count() > 0) {

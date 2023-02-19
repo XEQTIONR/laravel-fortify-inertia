@@ -259,7 +259,6 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                                                 return anItem
                                                                             })
                                                                             setCart(updated);
-                                                                            //console.log(update);
                                                                         }
                                                                     })
                                                                     .catch((e) => {
