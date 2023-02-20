@@ -41,6 +41,11 @@ class Order extends Model
         return $this->hasMany( OrderItem::class );
     }
 
+    public function receipts(): HasMany
+    {
+        return $this->hasMany( OrderReceipt::class );
+    }
+
     public function shoppingCarts(): HasMany
     {
         return $this->hasMany(ShoppingCart::class);

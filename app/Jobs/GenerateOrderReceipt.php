@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Order;
+use App\Models\OrderReceipt;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,7 +40,7 @@ class GenerateOrderReceipt implements ShouldQueue
         $pdf = app(\App\Services\PDF::class);
 
         $pdf->AddPage();
-        $pdf->SetFont('Arial','B',12);
+        $pdf->SetFont('Arial', 'B', 12);
 
         $pdf->Cell(200, 10, "Order Receipt", '', 1, 'C');
 
@@ -63,13 +64,21 @@ class GenerateOrderReceipt implements ShouldQueue
 
         $dateObj = new \Carbon\Carbon($this->order->delivery_date);
         $dateStr = $dateObj->format('jS F Y');
+
         $pdf->SetFont('Arial','',12);
         $pdf->Cell(40, 6, $dateStr. '  ' . \App\Models\Order::$timeSlots[$this->order->time_slot], '', 1);
 
         $pdf->Ln(10);
 
         $pdf->printOrderTable($this->order);
-        $fileName = "receipts/order-{$this->order->id}.pdf";
+        $fileName = "receipts/order-{$this->order->id}-1.pdf";
         Storage::put( $fileName, $pdf->Output('S') );
+
+        OrderReceipt::create([
+           'order_id' => $this->order->id,
+           'version' => 1,
+           'current' => true,
+           'file' => $fileName,
+        ]);
     }
 }
