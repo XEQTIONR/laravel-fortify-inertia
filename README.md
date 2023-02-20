@@ -10,6 +10,7 @@
 ## Requirements 
 
 - node 16
+- PHP BCMath extension
 
 
 ## About Laravel

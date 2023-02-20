@@ -72,7 +72,10 @@ class Product extends Model
     public function currentSellingPrice(): Attribute {
         return Attribute::make(
             get: fn($value) => $value / 100.0,
-            set: fn($value) => (int) ($value * 100)
+            set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ) )
         );
     }
 }

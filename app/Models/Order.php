@@ -14,6 +14,7 @@ class Order extends Model
 
     protected $fillable = [
         'address_id',
+        'delivery_charge',
         'delivery_date',
         'payment_type',
         'status',
@@ -45,11 +46,25 @@ class Order extends Model
         return $this->belongsTo( User::class );
     }
 
+    public function deliveryCharge(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100.0,
+            set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ) )
+        );
+    }
+
     public function subtotal(): Attribute
     {
         return Attribute::make(
             get: fn($value) => $value / 100.0,
-            set: fn($value) => (int) ($value * 100)
+            set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ) )
         );
     }
 
@@ -57,7 +72,10 @@ class Order extends Model
     {
         return Attribute::make(
             get: fn($value) => $value / 100.0,
-            set: fn($value) => (int) ($value * 100)
+            set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ))
         );
     }
 }
