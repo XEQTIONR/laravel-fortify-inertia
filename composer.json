@@ -21,6 +21,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.1",
+        "setasign/fpdf": "^1.8",
         "tightenco/ziggy": "^1.5"
     },
     "require-dev": {
