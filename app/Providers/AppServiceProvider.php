@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\HierarchicalCategories;
+use App\Contracts\PDFCreator;
 use App\Models\Category;
 use App\Services\HierarchicalCategoriesService;
+use App\Services\PDF;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,8 +20,11 @@ class AppServiceProvider extends ServiceProvider
     {
         app()->singleton(HierarchicalCategories::class, function() {
             $service = new HierarchicalCategoriesService();
-
             return $service->categoryTree(Category::all());
+        });
+
+        app()->bind(PDF::class, function() {
+            return new PDF('P', 'mm', 'A4');
         });
     }
 

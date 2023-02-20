@@ -31,6 +31,11 @@ class Order extends Model
         '7PM - 10PM',
     ];
 
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany( OrderItem::class );

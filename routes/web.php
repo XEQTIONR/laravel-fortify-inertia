@@ -9,8 +9,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
 use App\Models\User;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Rules\Password;
@@ -24,6 +25,32 @@ use Laravel\Fortify\Rules\Password;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', function() {
+    $order = \App\Models\Order::find(22);
+    $order->load('address', 'items.product', 'user');
+
+    //$pdf = app(\App\Services\PDF::class);
+    $pdf =  new \App\Services\PDF('P', 'mm', 'A4');
+    $pdf->AddPage();
+    $pdf->SetFont('Arial','',12);
+    $pdf->Cell(40,10, "Order # $order->id", '', 1);
+    $pdf->Cell(40, 10, $order->user->name, '', 1);
+
+    $address = explode("\n", $order->address->address);
+
+    foreach($address as $addressLine) {
+        $pdf->Cell(120, 6, $addressLine, '', 1);
+    }
+    $pdf->Ln(10);
+
+
+    $pdf->printOrderTable($order);
+
+    $fileName = 'receipts/test.pdf';
+    Storage::put( $fileName, $pdf->Output('S') );
+
+    return "DONE";
+});
 
 Route::get('/phone-verification', function(Request $request) {
     $request->session()->reflash();
