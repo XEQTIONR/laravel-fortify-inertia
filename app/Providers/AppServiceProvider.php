@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Contracts\HierarchicalCategories;
-use App\Contracts\PDFCreator;
 use App\Models\Category;
 use App\Services\HierarchicalCategoriesService;
 use App\Services\PDF;

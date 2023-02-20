@@ -48,14 +48,33 @@ class PDF extends \FPDF
             $fill = !$fill;
             $i++;
         }
-        $this->SetFillColor(128,128,128);
+        $this->SetFillColor(180,180,180);
         $this->SetFont('','B');
         $this->SetTextColor(255);
+
         $this->Cell($w[0],6,'','LR',0,'C',true);
         $this->Cell($w[1],6,'Sub-Total','LR',0,'L',true);
         $this->Cell($w[2],6,$order->items->reduce(fn($carry, $item) => $carry+$item->qty, 0),'LR',0,'C',true);
         $this->Cell($w[3],6,'','LR',0,'C',true);
         $this->Cell($w[4],6,number_format($order->subtotal,2,'.',''),'LR',0,'R',true);
+        $this->Ln();
+
+        $this->SetFillColor(128,128,128);
+
+        $this->Cell($w[0],6,'','LR',0,'C',true);
+        $this->Cell($w[1],6,'Delivery Charge','LR',0,'L',true);
+        $this->Cell($w[2],6,'','LR',0,'C',true);
+        $this->Cell($w[3],6,'','LR',0,'C',true);
+        $this->Cell($w[4],6,number_format($order->delivery_charge,2,'.',''),'LR',0,'R',true);
+        $this->Ln();
+
+        $this->SetFillColor(64,64,64);
+
+        $this->Cell($w[0],6,'','LR',0,'C',true);
+        $this->Cell($w[1],6,'Total','LR',0,'L',true);
+        $this->Cell($w[2],6,'','LR',0,'C',true);
+        $this->Cell($w[3],6,'','LR',0,'C',true);
+        $this->Cell($w[4],6,number_format($order->total,2,'.',''),'LR',0,'R',true);
         $this->Ln();
 
         // Closing line
