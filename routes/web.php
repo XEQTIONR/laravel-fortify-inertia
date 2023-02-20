@@ -131,12 +131,8 @@ Route::get('/get-cookie', function() {
     return request()->cookie('shopping-cart');
 });
 
-Route::post('/orders', [OrderController::class, 'store'])
-    ->name('orders.store');
-
-Route::get('/orders/create', [OrderController::class, 'create'])
-    ->middleware(['auth', 'verified.phone'])
-    ->name('orders.create');
+Route::resource('orders', OrderController::class)
+    ->middleware(['auth', 'verified.phone']);
 
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
 

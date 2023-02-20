@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateOrderReceipt;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
 {
@@ -38,19 +39,22 @@ class OrderController extends Controller
 
         $items = collect($validated['items']);
 
-        $subTotal = $items->reduce( fn($carry, $item) => $carry + ($item['qty'] * $item['product']['current_selling_price']));
+        $subTotal = $items->reduce( fn($carry, $item) => $carry + ($item['qty'] * $item['product']['current_selling_price']), 0);
         $serviceChargeType = config('payment.service_charge_type');
         $serviceChargeAmount = config('payment.service_charge_amount');
 
+        $charges = 0;
         switch ($serviceChargeType) {
             case 'percentage':
-                $total = $subTotal + (($subTotal * $serviceChargeAmount)/100.0);
+                $charges = (($subTotal * $serviceChargeAmount)/100.0);
                 break;
 
             case 'amount':
-                $total = $subTotal + $serviceChargeAmount;
+                $charges = $serviceChargeAmount;
                 break;
         }
+
+        $total = $subTotal + $charges;
 
         $order = new Order();
         $order->user_id = auth()->user()->id;
@@ -59,6 +63,7 @@ class OrderController extends Controller
         $order->time_slot = $validated['time_slot'];
         $order->status = 'created';
         $order->subtotal = $subTotal;
+        $order->delivery_charge = $charges;
         $order->total = $total;
         $order->save();
 
@@ -82,18 +87,21 @@ class OrderController extends Controller
             'order_id' => $order->id,
         ]);
 
+        GenerateOrderReceipt::dispatch($order);
+
         return $order;
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  Order  $order
+     * @return OrderResource
      */
-    public function show($id)
+    public function show(Order $order)
     {
-        //
+        $order->load('items.product');
+        return new OrderResource($order);
     }
 
     /**
