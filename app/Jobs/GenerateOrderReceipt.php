@@ -51,6 +51,9 @@ class GenerateOrderReceipt implements ShouldQueue
         $pdf->SetFont('Arial','',12);
         $pdf->Cell(40, 10, $this->order->user->name, '', 1);
 
+        if ($this->order->address->business_name) {
+            $pdf->Cell(120, 6, $this->order->address->business_name, '', 1);
+        }
         $address = explode("\n", $this->order->address->address);
 
         foreach($address as $addressLine) {

@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
+use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
@@ -100,6 +101,9 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
+        if (! Gate::allows('view-order', $order)) {
+            abort(403);
+        }
         $order->load('items.product');
         return new OrderResource($order);
     }
