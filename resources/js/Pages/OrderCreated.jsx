@@ -75,7 +75,7 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                                 </TableRow>
                                 <TableRow>
                                     <TableCell>Item</TableCell>
-                                    <TableCell align="right">Quantity</TableCell>
+                                    <TableCell align="center">Quantity</TableCell>
                                     <TableCell align="right">Unit Price</TableCell>
                                     <TableCell align="right">Total</TableCell>
                                 </TableRow>
@@ -85,29 +85,29 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                                     order.data.items.map((row) => (
                                         <TableRow>
                                             <TableCell>{row.product.english_name}</TableCell>
-                                            <TableCell align="right">{row.qty}</TableCell>
-                                            <TableCell align="right">{row.price}</TableCell>
-                                            <TableCell align="right">{row.qty * row.price}</TableCell>
+                                            <TableCell align="center">{row.qty}</TableCell>
+                                            <TableCell align="right">৳ {row.price.toFixed(2)}</TableCell>
+                                            <TableCell align="right">৳ {(row.qty * row.price).toFixed(2)}</TableCell>
                                         </TableRow>
                                     ))
                                 }
                                 <TableRow>
                                     <TableCell className="font-bold">SubTotal</TableCell>
-                                    <TableCell className="font-bold" align="right">{order.data.items.reduce((total, {qty}) => total + qty, 0)}</TableCell>
+                                    <TableCell className="font-bold" align="center">{order.data.items.reduce((total, {qty}) => total + qty, 0)}</TableCell>
                                     <TableCell></TableCell>
-                                    <TableCell className="font-bold" align="right">{order.data.subtotal}</TableCell>
+                                    <TableCell className="font-bold" align="right">৳ {order.data.subtotal.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-bold">Charges</TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>
-                                    <TableCell className="font-bold" align="right">{order.data.delivery_charge}</TableCell>
+                                    <TableCell className="font-bold" align="right">৳ {order.data.delivery_charge.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-bold">Total</TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>
-                                    <TableCell className="font-bold" align="right">{order.data.total}</TableCell>
+                                    <TableCell className="font-bold" align="right">৳ {order.data.total.toFixed(2)}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>
