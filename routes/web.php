@@ -163,7 +163,7 @@ Route::middleware(['auth', 'verified.phone'])->group(function() {
     Route::resource('orders', OrderController::class);
 
     Route::get('/orders/{order}/receipt', [OrderReceiptController::class, 'show'])
-        ->name('orders.receipts.show');
+        ->name('orders.receipt.show');
 });
 
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
