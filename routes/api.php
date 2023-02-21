@@ -33,6 +33,9 @@ Route::name('api.')
                     return $request->user();
                 })->name('user');
 
+                Route::get('/orders', [ \App\Http\Controllers\Api\OrderController::class, 'index'])
+                    ->name('orders.index');
+
                 Route::get('/products', [ ProductController::class, 'index' ])
                     ->name('products.index');
 

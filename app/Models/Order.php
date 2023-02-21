@@ -24,6 +24,13 @@ class Order extends Model
         'user_id',
     ];
 
+    public static array $statuses = [
+      'created',
+      'confirmed',
+      'prepared',
+      'delivered',
+    ];
+
     public static array $timeSlots = [
         '11AM - 1PM',
         '1PM - 4PM',

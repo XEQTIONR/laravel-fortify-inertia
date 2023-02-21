@@ -238,6 +238,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
         Route::resource('categories', CategoryController::class);
 
+        Route::resource('orders', OrderController::class);
+
         Route::resource('products', ProductController::class);
         Route::post('/products/status', [ ProductController::class, 'toggleActivation'])->name('products.status');
 

@@ -15,6 +15,18 @@ use Inertia\Response;
 class OrderController extends Controller
 {
     /**
+     * Display a listing of the resource.
+     *
+     * @return Response
+     */
+    public function index(Request $request)
+    {
+        $orders = parent::index($request);
+        $statuses = Order::$statuses;
+        return Inertia::render('Admin/Orders', compact('orders', 'statuses'));
+    }
+
+    /**
      * Show the order receipt.
      *
      * @param Order $order

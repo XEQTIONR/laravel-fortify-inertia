@@ -16,11 +16,27 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $ids = $request->ids ?? false;
+
+        if ( $ids ) {
+            $orders = Order::whereIn('id', $ids)->get();
+            return OrderResource::collection($orders);
+        }
+
+        $perPage = $request->perPage ?? 10;
+        $orderBy = $request->orderBy ?? 'id';
+        $order = $request->order ?? 'asc';
+
+        $orders = Order::orderBy($orderBy, $order)->paginate($perPage);
+        $orders->appends(compact('perPage', 'orderBy', 'order'));
+
+        return OrderResource::collection($orders)->additional([
+            'meta' => compact('orderBy', 'order')
+        ]);
     }
 
     /**
