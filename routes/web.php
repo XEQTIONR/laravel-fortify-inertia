@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -158,8 +159,12 @@ Route::get('/get-cookie', function() {
     return request()->cookie('shopping-cart');
 });
 
-Route::resource('orders', OrderController::class)
-    ->middleware(['auth', 'verified.phone']);
+Route::middleware(['auth', 'verified.phone'])->group(function() {
+    Route::resource('orders', OrderController::class);
+
+    Route::get('/orders/{order}/receipt', [OrderReceiptController::class, 'show'])
+        ->name('orders.receipts.show');
+});
 
 Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
 
