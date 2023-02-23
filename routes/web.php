@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
+use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
@@ -160,7 +161,7 @@ Route::get('/get-cookie', function() {
 });
 
 Route::middleware(['auth', 'verified.phone'])->group(function() {
-    Route::resource('orders', OrderController::class);
+    Route::resource('orders', CustomerOrderController::class);
 
     Route::get('/orders/{order}/receipt', [OrderReceiptController::class, 'show'])
         ->name('orders.receipt.show');
