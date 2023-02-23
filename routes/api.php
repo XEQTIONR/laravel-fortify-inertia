@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SupplierController;
@@ -27,13 +28,13 @@ Route::name('api.')
 
         Route::apiResource('carts', ShoppingCartController::class);
 
-        Route::middleware('auth:sanctum')
+        Route::middleware('auth:staff')
             ->group(function() {
                 Route::get('/user', function (Request $request) {
                     return $request->user();
                 })->name('user');
 
-                Route::get('/orders', [ \App\Http\Controllers\Api\OrderController::class, 'index'])
+                Route::get('/orders', [ OrderController::class, 'index'])
                     ->name('orders.index');
 
                 Route::get('/products', [ ProductController::class, 'index' ])
@@ -44,10 +45,11 @@ Route::name('api.')
 
                 Route::get('/categories', [ CategoryController::class, 'index' ])
                     ->name('categories.index');
-
-                Route::apiResource('users.addresses', AddressController::class)
-                    ->shallow();
         });
+
+        Route::apiResource('users.addresses', AddressController::class)
+            ->shallow()
+            ->middleware('auth');
 
         // Non auth routes
         Route::get('/{slug?}', [ HomeController::class, 'index' ])
