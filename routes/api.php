@@ -47,8 +47,7 @@ Route::name('api.')
                     ->name('categories.index');
         });
 
-        Route::apiResource('users.addresses', AddressController::class)
-            ->shallow()
+        Route::apiResource('addresses', AddressController::class)
             ->middleware('auth');
 
         // Non auth routes

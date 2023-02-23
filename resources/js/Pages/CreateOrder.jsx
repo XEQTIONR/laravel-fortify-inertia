@@ -468,7 +468,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                             />
                                             <Button
                                                 onClick={() => {
-                                                    axios.post( route('api.users.addresses.store', { user: user.id }), newAddress)
+                                                    axios.post( route('api.addresses.store'), newAddress)
                                                         .then(({data}) => {
                                                             setData('address_id', data.id );
                                                             setExistingAddresses([...existingAddresses, data]);

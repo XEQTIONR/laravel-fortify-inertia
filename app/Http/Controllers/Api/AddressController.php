@@ -10,23 +10,25 @@ use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(User $user)
+    public function index()
     {
+        $user = auth()->user();
         return AddressResource::collection($user->addresses()->get());
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return false|\Illuminate\Database\Eloquent\Model
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
         $validated = $request->validate([
             'full_name' => 'required|string',
@@ -36,6 +38,7 @@ class AddressController extends Controller
         ]);
 
         $address = new Address($validated);
+        $user = auth()->user();
 
         return $user->addresses()->save($address);
     }
