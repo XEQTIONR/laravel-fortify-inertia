@@ -50,6 +50,10 @@ class User extends Authenticatable implements CanResetPassword
         return $this->hasMany(Address::class);
     }
 
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
+
     public function isPhoneVerified() {
         return $this->sms_verified_at !== null;
     }

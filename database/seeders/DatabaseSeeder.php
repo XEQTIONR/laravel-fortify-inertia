@@ -3,12 +3,18 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Address;
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\Staff;
 use App\Models\Supplier;
+use App\Models\User;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
     /**
      * Seed the application's database.
      *
@@ -80,7 +86,24 @@ class DatabaseSeeder extends Seeder
     }
     public function run()
     {
-        Supplier::factory(50)->create();
+        Staff::create([
+            'name' => 'Staff',
+            'email' => 'staff@gmail.com',
+            'mobile_number' => '01815440669',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+        Supplier::factory(25)->create();
         $this->traverse($this->hierarchy);
+
+        User::factory(50)
+            ->has(Address::factory()
+                ->has(Order::factory()
+                    ->count(2)
+                    ->state(function( array $attributes, Address $address) {
+                        return ['user_id' => $address->user->id];
+                    })
+                )
+            )
+            ->create();
     }
 }
