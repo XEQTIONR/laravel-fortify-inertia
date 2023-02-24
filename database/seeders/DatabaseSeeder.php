@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Address;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\Product;
 use App\Models\Staff;
 use App\Models\Supplier;
 use App\Models\User;
+
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -98,8 +99,20 @@ class DatabaseSeeder extends Seeder
         User::factory(50)
             ->has(Address::factory()
                 ->has(Order::factory()
+                    ->has(OrderItem::factory()
+                        ->count(fake()->numberBetween(1,5))
+                        ->state( function( array $attributes, Order $order ) {
+                            $product = Product::inRandomOrder()->first();
+                            return [
+                                'order_id' => $order->id,
+                                'product_id' => $product->id,
+                                'price' => $product->current_selling_price,
+                            ];
+                        }),
+                        'items'
+                    )
                     ->count(2)
-                    ->state(function( array $attributes, Address $address) {
+                    ->state( function( array $attributes, Address $address ) {
                         return ['user_id' => $address->user->id];
                     })
                 )
