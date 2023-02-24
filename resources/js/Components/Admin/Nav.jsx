@@ -103,29 +103,29 @@ export default function Nav({ children, navLinks }) {
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
                                 <ListItemButton
+                                    selected={item.link === route(route().current())}
                                     onClick={ () => setTimeout( () => Inertia.get(item.link), 300) }
                                 >
+
                                         <ListItemIcon>
-                                            {item.icon}
+                                            {
+                                                item.link === route(route().current())
+                                                ?item.iconActive
+                                                :item.icon
+                                            }
                                         </ListItemIcon>
-                                        <ListItemText primary={item.label} />
+                                        <ListItemText
+                                            primary={item.label}
+                                            primaryTypographyProps={ item.link === route(route().current()) ? {
+                                                className: 'font-bold',
+                                                color: 'primary'
+                                            } : {}}
+                                        />
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
                     <Divider />
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
                 </Box>
             </Drawer>
             <Box

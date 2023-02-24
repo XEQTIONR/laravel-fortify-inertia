@@ -167,8 +167,6 @@ Route::middleware(['auth', 'verified.phone'])->group(function() {
         ->name('orders.receipt.show');
 });
 
-Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
-
 Route::get('/translationtest', function () {
     return view('page2');
 });
@@ -230,6 +228,9 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
         })->name('token');
 
+        Route::get('/', function() {
+           return redirect(route('admin.dashboard'));
+        });
         Route::get('/dashboard', function() {
             return \Inertia\Inertia::render('Admin/Dashboard');
         })->name('dashboard');
@@ -250,3 +251,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('suppliers.products', SupplierProductsController::class);
     });
 });
+
+// after admin so this does not match /admin
+Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
