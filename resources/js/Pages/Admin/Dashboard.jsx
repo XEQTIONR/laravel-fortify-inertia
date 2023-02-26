@@ -1,35 +1,58 @@
+import React from "react";
 import Nav from '@/Components/Admin/Nav';
 import DashboardCard from '@/Components/Admin/DashboardCard';
 
-import {Box, IconButton, Typography} from "@mui/material";
+import {Box, Stack, Typography} from "@mui/material";
 import navItems from  '@/Components/data/AdminNavItems';
-import { FormatListBulleted } from "@mui/icons-material";
+import { CalendarMonthTwoTone, ViewList, LocalShippingTwoTone, ShoppingCartTwoTone, Visibility } from "@mui/icons-material";
 
-export default function Dashboard() {
+export default function Dashboard({today, tomorrowString, past, future}) {
     return (
         <Nav navLinks={navItems}>
-            <Box className="flex flex-row items-start w-full h-full">
+            <Stack spacing={3} className="w-full">
+                <Typography className="w-full mb-2 font-bold">Highlights</Typography>
                 <DashboardCard
                     button={
-                        <IconButton size="small" className="mr-1">
-                            <FormatListBulleted fontSize="inherit" />
-                        </IconButton>
+
+                        <CalendarMonthTwoTone color="primary" className="mt-2 mr-3" fontSize="large"/>
+
                     }
-                    header="New orders"
-                    content="16"
-                    footer="Orders to be processed"
+                    footer={today.month + ' ' + today.year}
+                    content={today.day}
+                    header={today.dayOfWeek}
                 />
-                <DashboardCard
-                    button={
-                        <IconButton size="small" className="mr-1">
-                            <FormatListBulleted fontSize="inherit" />
-                        </IconButton>
-                    }
-                    header="Outstanding deliveries"
-                    content="10"
-                    footer="Orders to be delivered"
-                />
-            </Box>
+                {
+                    Object.entries(future).map(([key, value]) => (
+                        <Box key={key} className="flex flex-row flex-wrap items-start">
+                            <Typography className="w-full mb-2 font-bold">
+                                {
+                                    key === today.date
+                                        ? 'Today'
+                                        : key === tomorrowString
+                                            ? 'Tomorrow'
+                                            : key
+                                }
+                            </Typography>
+                            <DashboardCard
+                                button={<ShoppingCartTwoTone color="primary" className="mt-2 mr-3" fontSize="large"/>}
+                                menuItems={[
+                                   { icon: <Visibility fontSize="small" />, label: 'View orders', onClick: () => console.log('label 1 click')},
+                                   { icon: <ViewList fontSize="small" />, label: 'Generate shopping list', onClick: () => console.log('label 2 click')}
+                                ]}
+                                header="Not started"
+                                content={value.filter(val => val.status === 'created').length}
+                                footer="Process and deliver."
+                            />
+                            <DashboardCard
+                                button={<LocalShippingTwoTone color="primary" className="mt-2 mr-3" fontSize="large"/>}
+                                header="Outstanding deliveries"
+                                content={value.filter(val => val.status === 'prepared').length}
+                                footer="Ready to be delivered"
+                            />
+                        </Box>
+                    ))
+                }
+            </Stack>
         </Nav>
     );
 }

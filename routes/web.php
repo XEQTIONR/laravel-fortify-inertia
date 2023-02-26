@@ -231,9 +231,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/', function() {
            return redirect(route('admin.dashboard'));
         });
-        Route::get('/dashboard', function() {
-            return \Inertia\Inertia::render('Admin/Dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
         Route::get('/second', function() {
             return \Inertia\Inertia::render('Admin/Second');
         });

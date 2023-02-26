@@ -1,9 +1,10 @@
-import {Card, CardContent, CardHeader, CardActions, IconButton, Typography} from "@mui/material";
-import { FormatListBulleted } from "@mui/icons-material";
+import {Card, CardContent, CardHeader, CardActions, IconButton, Tooltip, Typography} from "@mui/material";
 
-export default function DashboardCard({header, content, footer, button}) {
+export default function DashboardCard({header, content, footer, button, menuItems}) {
     return (
         <Card
+            elevation={5}
+            variant="elevation"
             className="md:w-1/3 lg:w-1/4 mr-5 mb-5"
             sx={{ maxWidth: '225px' }}
         >
@@ -16,7 +17,7 @@ export default function DashboardCard({header, content, footer, button}) {
                 }}
             >
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className="py-0">
                 <Typography className="my-3 font-bold" variant="h3">{content}</Typography>
                 {
                     footer
@@ -24,6 +25,15 @@ export default function DashboardCard({header, content, footer, button}) {
                 }
 
             </CardContent>
+            <CardActions disableSpacing>
+                { menuItems &&
+                    menuItems.map( ({ icon, label }) => (
+                        <Tooltip title={label}>
+                            <IconButton>{icon}</IconButton>
+                        </Tooltip>
+                    ))
+                }
+            </CardActions>
         </Card>
     );
 
