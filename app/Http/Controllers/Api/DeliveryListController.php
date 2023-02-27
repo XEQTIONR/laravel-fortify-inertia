@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class DeliveryListController extends Controller
@@ -14,7 +15,7 @@ class DeliveryListController extends Controller
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection|Response
      */
     public function __invoke(Request $request)
     {
@@ -28,7 +29,7 @@ class DeliveryListController extends Controller
             return response($messageBag->first('date'), 422);
         }
         $delivery_date = $request->input('date');
-        return OrderResource::collection(Order::with('items.product')
+        return OrderResource::collection(Order::with([ 'address', 'items.product'])
             ->where('delivery_date',$delivery_date )
             ->where('status' , 'created')
             ->orderBy('time_slot')

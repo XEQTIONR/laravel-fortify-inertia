@@ -24,6 +24,7 @@ class OrderResource extends JsonResource
             'time_slot' => Order::$timeSlots[$this->time_slot],
             'status' => $this->status,
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
+            'address' => new AddressResource($this->whenLoaded('address'))
 
         ];
     }

@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeliveryListController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
@@ -213,6 +214,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
 
 
         Route::get('/shopping-list', ShoppingListController::class)->name('shopping-list');
+
+        Route::get('/delivery-list', DeliveryListController::class)->name('delivery-list');
 
         Route::resource('categories', CategoryController::class);
 
