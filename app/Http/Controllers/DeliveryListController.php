@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\DeliveryListController as Controller;
-use Mpdf\Mpdf;
+//use Mpdf\Mpdf;
 use App\Models\Order;
 
 class DeliveryListController extends Controller
@@ -19,14 +19,34 @@ class DeliveryListController extends Controller
     public function __invoke(Request $request)
     {
         $orders = parent::__invoke($request);
-        
+
 
         $table_headers = [
             'Product' => [ 'width' => '80%', 'align' => 'left'],
             'Qty' => [ 'width' => '20%', 'align' => 'center']
         ];
 
-        $pdf = new Mpdf();
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+
+        $pdf = new \Mpdf\Mpdf([
+            'fontDir' => array_merge($fontDirs, [
+                public_path(''),
+            ]),
+            'fontdata' => $fontData + [ // lowercase letters only in font key
+                    'bangla' => [
+                        'R' => 'Siyamrupali.ttf',
+                        'useOTL' => 0xFF,
+                    ]
+                ],
+            'default_font' => 'bangla'
+        ]);
+
+
+        //$pdf = new \Mpdf\Mpdf();
         $pdf->WriteHTML("<html><head><style>
 
           table {
@@ -59,7 +79,7 @@ class DeliveryListController extends Controller
             foreach($order['items'] as $item) {
                 $tr = $i%2 === 0 ? '<tr>' : '<tr style="background-color: #DDD;">';
                 $pdf->WriteHTML($tr);
-                $pdf->WriteHTML("<td style='1px solid black'>{$item['product']['english_name']} - {$item['product']['amount']} {$item['product']['uom']}</td>");
+                $pdf->WriteHTML("<td style='1px solid black'>{$item['product']['english_name']} / {$item['product']['bangla_name']} - {$item['product']['amount']} {$item['product']['uom']}</td>");
                 $pdf->WriteHTML("<td align='center'>{$item['qty']}</td>");
                 $pdf->WriteHTML('<tr>');
                 $i++;
