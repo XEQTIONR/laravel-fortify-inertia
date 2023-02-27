@@ -3,9 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\HierarchicalCategories;
+use App\Contracts\PDF;
 use App\Models\Category;
 use App\Services\HierarchicalCategoriesService;
-use App\Services\PDF;
+use App\Services\PDF\FPDF;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         app()->bind(PDF::class, function() {
-            return new PDF('P', 'mm', 'A4');
+            return new FPDF('P', 'mm', 'A4');
         });
     }
 

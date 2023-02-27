@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\OrderItemResource;
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Services\PDF;
+use App\Contracts\PDF;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;

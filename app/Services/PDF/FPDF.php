@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\PDF;
 
-class PDF extends \FPDF
+class FPDF extends \FPDF
 {
     const LINE_WIDTH = 190;
 
@@ -94,7 +94,7 @@ class PDF extends \FPDF
         $this->SetDrawColor(0,0,0);
         $this->SetLineWidth(.3);
 
-        $headers = [ 'Product','Orders and quantity',  'Total',];
+        $headers = [ 'Product','(Orders) quantity',  'Total',];
         $w = array(50, 120, 20);
 
         for ($i=0; $i<count($headers); $i++) {
@@ -110,7 +110,7 @@ class PDF extends \FPDF
                 "$key - {$vals[0]['product']['english_name']} - {$vals[0]['product']['amount']} {$vals[0]['product']['uom']}",
                 1, 0, 'L' );
 
-            $orders = $vals->map(fn($thing) => "#{$thing['order_id']} {$thing['qty']}");
+            $orders = $vals->map(fn($thing) => "({$thing['order_id']}){$thing['qty']}");
 
             $this->SetFont('','', 8);
             $this->Cell($w[1], 6,

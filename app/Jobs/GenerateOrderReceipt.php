@@ -37,7 +37,7 @@ class GenerateOrderReceipt implements ShouldQueue
     {
         $this->order->load('address', 'items.product', 'user');
 
-        $pdf = app(\App\Services\PDF::class);
+        $pdf = app(\App\Contracts\PDF::class);
 
         $pdf->AddPage();
         $pdf->SetFont('Arial', 'B', 12);
