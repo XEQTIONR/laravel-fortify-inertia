@@ -27,9 +27,9 @@ export default function DashboardCard({header, content, footer, button, menuItem
             </CardContent>
             <CardActions disableSpacing>
                 { menuItems &&
-                    menuItems.map( ({ icon, label }) => (
-                        <Tooltip title={label}>
-                            <IconButton>{icon}</IconButton>
+                    menuItems.map( ({ icon, label, onClick }, index) => (
+                        <Tooltip key={index} title={label}>
+                            <IconButton onClick={onClick}>{icon}</IconButton>
                         </Tooltip>
                     ))
                 }

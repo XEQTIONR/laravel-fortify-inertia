@@ -36,8 +36,8 @@ export default function Dashboard({today, tomorrowString, past, future}) {
                             <DashboardCard
                                 button={<ShoppingCartTwoTone color="primary" className="mt-2 mr-3" fontSize="large"/>}
                                 menuItems={[
-                                   { icon: <Visibility fontSize="small" />, label: 'View orders', onClick: () => console.log('label 1 click')},
-                                   { icon: <ViewList fontSize="small" />, label: 'Generate shopping list', onClick: () => console.log('label 2 click')}
+                                   { icon: <Visibility fontSize="small" />, label: 'View orders', onClick: () => console.log('view orders') },
+                                   { icon: <ViewList fontSize="small" />, label: 'Generate shopping list', onClick: () => window.open( route('admin.shopping-list', { date: key }), '_blank') }
                                 ]}
                                 header="Not started"
                                 content={value.filter(val => val.status === 'created').length}

@@ -4,16 +4,17 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\CustomerOrderController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Fortify\Rules\Password;
@@ -28,30 +29,7 @@ use Laravel\Fortify\Rules\Password;
 |
 */
 Route::get('/test', function() {
-    $order = \App\Models\Order::find(22);
-    $order->load('address', 'items.product', 'user');
-
-    //$pdf = app(\App\Services\PDF::class);
-    $pdf =  new \App\Services\PDF('P', 'mm', 'A4');
-    $pdf->AddPage();
-    $pdf->SetFont('Arial','',12);
-    $pdf->Cell(40,10, "Order # $order->id", '', 1);
-    $pdf->Cell(40, 10, $order->user->name, '', 1);
-
-    $address = explode("\n", $order->address->address);
-
-    foreach($address as $addressLine) {
-        $pdf->Cell(120, 6, $addressLine, '', 1);
-    }
-    $pdf->Ln(10);
-
-
-    $pdf->printOrderTable($order);
-
-    $fileName = 'receipts/test.pdf';
-    Storage::put( $fileName, $pdf->Output('S') );
-
-    return "DONE";
+    return \Inertia\Inertia::render('Test');
 });
 
 Route::get('/phone-verification', function(Request $request) {
@@ -231,10 +209,10 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/', function() {
            return redirect(route('admin.dashboard'));
         });
-        Route::get('/dashboard', \App\Http\Controllers\DashboardController::class)->name('dashboard');
-        Route::get('/second', function() {
-            return \Inertia\Inertia::render('Admin/Second');
-        });
+        Route::get('/dashboard', DashboardController::class)->name('dashboard');
+
+
+        Route::get('/shopping-list', ShoppingListController::class)->name('shopping-list');
 
         Route::resource('categories', CategoryController::class);
 
