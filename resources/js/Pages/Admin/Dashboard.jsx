@@ -45,6 +45,10 @@ export default function Dashboard({today, tomorrowString, past, future}) {
                             />
                             <DashboardCard
                                 button={<LocalShippingTwoTone color="primary" className="mt-2 mr-3" fontSize="large"/>}
+                                menuItems={[
+                                    { icon: <Visibility fontSize="small" />, label: 'View outstanding deliveries', onClick: () => console.log('view orders') },
+                                    { icon: <ViewList fontSize="small" />, label: 'Generate delivery list', onClick: () => window.open( route('admin.delivery-list', { date: key }), '_blank') }
+                                ]}
                                 header="Outstanding deliveries"
                                 content={value.filter(val => val.status === 'prepared').length}
                                 footer="Ready to be delivered"
