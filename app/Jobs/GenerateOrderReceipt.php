@@ -52,7 +52,13 @@ class GenerateOrderReceipt implements ShouldQueue
               border-right: 1px solid black;
               border-bottom: 1px solid black;
               border-collapse: collapse;
-	      }</style></head><body>"
+	      }
+
+	      tfoot tr td {
+	        font-weight: bold;
+	      }
+
+	      </style></head><body>"
         );
 
         $pdf->WriteHTML("<h2 style='text-align: center'>Order receipt</h2>");
@@ -99,7 +105,7 @@ class GenerateOrderReceipt implements ShouldQueue
             $tr = $i%2 === 0 ? '<tr>' : '<tr style="background-color: #DDD;">';
             $pdf->WriteHTML($tr);
             $sl = $i+1;
-            $pdf->WriteHTML("<td>{$sl}</td>");
+            $pdf->WriteHTML("<td align='center'>{$sl}</td>");
             $pdf->WriteHTML("<td>{$row->product->english_name} / {$row->product->bangla_name} - {$row->product->amount} {$row->product->uom}</td>");
             $pdf->WriteHTML("<td align='center'>$row->qty</td>");
             $price = number_format($row->price, 2, '.', '');
@@ -109,7 +115,8 @@ class GenerateOrderReceipt implements ShouldQueue
             $pdf->WriteHTML('</tr>');
             $i++;
         }
-
+        $pdf->WriteHTML('</tobdy>');
+        $pdf->WriteHTML('<tfoot>');
         $subtotal = number_format($this->order->subtotal,2,'.','');
         $pdf->WriteHTML("<tr style='background-color: #BBB;'><td></td><td>Subtotal</td><td></td><td></td><td align='right'>{$subtotal}</td></tr>");
 
@@ -119,7 +126,7 @@ class GenerateOrderReceipt implements ShouldQueue
         $total = number_format($this->order->total,2,'.','');
         $pdf->WriteHTML("<tr style='background-color: #999;'><td></td><td>Grand Total</td><td></td><td></td><td align='right'>{$total}</td></tr>");
 
-        $pdf->WriteHTML('</tbody>');
+        $pdf->WriteHTML('</tfoot>');
         $pdf->WriteHTML('</table>');
 
         $fileName = "receipts/order-{$this->order->id}-v1.pdf";
