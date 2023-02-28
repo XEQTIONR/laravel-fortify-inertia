@@ -30,8 +30,8 @@ class DeliveryListController extends Controller
         }
         $delivery_date = $request->input('date');
         return OrderResource::collection(Order::with([ 'address', 'items.product'])
-            ->where('delivery_date',$delivery_date )
-            ->where('status' , 'created')
+            ->where('delivery_date', $delivery_date)
+            ->where('status', 'prepared')
             ->orderBy('time_slot')
             ->get());
     }
