@@ -37,45 +37,109 @@ class GenerateOrderReceipt implements ShouldQueue
     {
         $this->order->load('address', 'items.product', 'user');
 
-        $pdf = app(\App\Contracts\PDF::class);
+        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
 
-        $pdf->AddPage();
-        $pdf->SetFont('Arial', 'B', 12);
+        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
 
-        $pdf->Cell(200, 10, "Order Receipt", '', 1, 'C');
+        $pdf = new \Mpdf\Mpdf([
+            'fontDir' => array_merge($fontDirs, [
+                public_path(''),
+            ]),
+            'fontdata' => $fontData + [ // lowercase letters only in font key
+                    'bangla' => [
+                        'R' => 'Nikosh.ttf',
+                        'useOTL' => 0xFF,
+                    ]
+                ],
+            'default_font' => 'bangla'
+        ]);
 
-        $pdf->Ln(10);
+        $pdf->WriteHTML("<html><head><style>
+          table {
+            border-top: 1px solid black;
+            border-collapse: collapse;
+            page-break-inside:avoid;
+          }
 
-        $pdf->Cell(40,10, "Order # {$this->order->id}", '', 1);
+          td, th {
+              border-left: 1px solid black;
+              border-right: 1px solid black;
+              border-bottom: 1px solid black;
+              border-collapse: collapse;
+	      }</style></head><body>"
+        );
 
-        $pdf->SetFont('Arial','',12);
-        $pdf->Cell(40, 10, $this->order->user->name, '', 1);
+        $pdf->WriteHTML("<h2 style='text-align: center'>Order receipt</h2>");
+
+        $pdf->WriteHTML("<h3>Order # {$this->order->id}</h3>");
+
+        $pdf->WriteHTML("<p>{$this->order->user->name}</p>");
 
         if ($this->order->address->business_name) {
-            $pdf->Cell(120, 6, $this->order->address->business_name, '', 1);
+            $pdf->WriteHTML("<p>{$this->order->address->business_name}</p>");
         }
         $address = explode("\n", $this->order->address->address);
 
         foreach($address as $addressLine) {
-            $pdf->Cell(120, 6, $addressLine, '', 1);
+            $pdf->WriteHTML("{$addressLine}");
         }
-
-        $pdf->Ln(4);
-
-        $pdf->SetFont('Arial','B',12);
-        $pdf->Cell(25, 6, 'Deliver on: ', '', 0);
 
         $dateObj = new \Carbon\Carbon($this->order->delivery_date);
         $dateStr = $dateObj->format('jS F Y');
+        $slot = \App\Models\Order::$timeSlots[$this->order->time_slot];
+        $pdf->WriteHTML("<p>Deliver on: $dateStr $slot</p>");
 
-        $pdf->SetFont('Arial','',12);
-        $pdf->Cell(40, 6, $dateStr. '  ' . \App\Models\Order::$timeSlots[$this->order->time_slot], '', 1);
+        $table_headers = [
+            '#' => [ 'width' => '10%', 'align' => 'center'],
+            'Item' => [ 'width' => '45%', 'align' => 'left'],
+            'Qty' => [ 'width' => '10%', 'align' => 'center'],
+            'Unit Price' => [ 'width' => '15%', 'align' => 'center'],
+            'Total' => [ 'width' => '20%', 'align' => 'center'],
+        ];
 
-        $pdf->Ln(10);
+        $pdf->WriteHTML('<table width="100%">');
+        $pdf->WriteHTML('<thead><tr style="background-color: #AAA;">');
 
-        $pdf->printOrderTable($this->order);
-        $fileName = "receipts/order-{$this->order->id}-1.pdf";
-        Storage::put( $fileName, $pdf->Output('S') );
+        foreach ($table_headers as $header => $props) {
+            $pdf->WriteHTML("<th align='{$props['align']}' width='{$props['width']}'>{$header}</th>");
+        }
+
+        $pdf->WriteHTML('</tr></thead>');
+        $pdf->WriteHTML('<tbody>');
+        $i=0;
+
+        foreach($this->order->items as $row)
+        {
+            $tr = $i%2 === 0 ? '<tr>' : '<tr style="background-color: #DDD;">';
+            $pdf->WriteHTML($tr);
+            $sl = $i+1;
+            $pdf->WriteHTML("<td>{$sl}</td>");
+            $pdf->WriteHTML("<td>{$row->product->english_name} / {$row->product->bangla_name} - {$row->product->amount} {$row->product->uom}</td>");
+            $pdf->WriteHTML("<td align='center'>$row->qty</td>");
+            $price = number_format($row->price, 2, '.', '');
+            $pdf->WriteHTML("<td align='right'>{$price}</td>");
+            $rowtotal = number_format($row->price * $row->qty, 2, '.', '');
+            $pdf->WriteHTML("<td align='right'>{$rowtotal}</td>");
+            $pdf->WriteHTML('</tr>');
+            $i++;
+        }
+
+        $subtotal = number_format($this->order->subtotal,2,'.','');
+        $pdf->WriteHTML("<tr style='background-color: #BBB;'><td></td><td>Subtotal</td><td></td><td></td><td align='right'>{$subtotal}</td></tr>");
+
+        $delivery_charge = number_format($this->order->delivery_charge,2,'.','');
+        $pdf->WriteHTML("<tr style='background-color: #AAA;'><td></td><td>Delivery Charge</td><td></td><td></td><td align='right'>{$delivery_charge}</td></tr>");
+
+        $total = number_format($this->order->total,2,'.','');
+        $pdf->WriteHTML("<tr style='background-color: #999;'><td></td><td>Grand Total</td><td></td><td></td><td align='right'>{$total}</td></tr>");
+
+        $pdf->WriteHTML('</tbody>');
+        $pdf->WriteHTML('</table>');
+
+        $fileName = "receipts/order-{$this->order->id}-v1.pdf";
+        Storage::put( $fileName, $pdf->Output('', 'S') );
 
         OrderReceipt::create([
            'order_id' => $this->order->id,
