@@ -29,25 +29,9 @@ class ShoppingListController extends Controller
         if( get_class($items) === Collection::class ) {
 
             return response()->stream(function() use ($items) {
-                $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
-                $fontDirs = $defaultConfig['fontDir'];
 
-                $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
-                $fontData = $defaultFontConfig['fontdata'];
+                $pdf = app(PDF::class);
 
-                $pdf = new \Mpdf\Mpdf([
-                    'fontDir' => array_merge($fontDirs, [
-                        public_path(''),
-                    ]),
-                    'fontdata' => $fontData + [ // lowercase letters only in font key
-                            'bangla' => [
-                                'R' => 'Nikosh.ttf',
-                                'useOTL' => 0xFF,
-                            ]
-                        ],
-                    'default_font' => 'bangla'
-                ]);
-                $pdf->SetHTMLFooter("<h6 style='text-align: center'>{PAGENO}</h6>");
                 $pdf->WriteHTML("<html><head><style>
                   table {
                     font-size: 12px;

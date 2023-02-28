@@ -24,7 +24,27 @@ class AppServiceProvider extends ServiceProvider
         });
 
         app()->bind(PDF::class, function() {
-            return new FPDF('P', 'mm', 'A4');
+            $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
+            $fontDirs = $defaultConfig['fontDir'];
+            $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
+            $fontData = $defaultFontConfig['fontdata'];
+
+            $pdf = new \Mpdf\Mpdf([
+                'fontDir' => array_merge($fontDirs, [
+                    public_path(''),
+                ]),
+                'fontdata' => $fontData + [ // lowercase letters only in font key
+                        'bangla' => [
+                            'R' => 'Nikosh.ttf',
+                            'useOTL' => 0xFF,
+                        ]
+                    ],
+                'default_font' => 'bangla'
+            ]);
+
+            $pdf->SetHTMLFooter("<h6 style='text-align: center'>{PAGENO}</h6>");
+
+            return $pdf;
         });
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Contracts\PDF;
 use App\Models\Order;
 use App\Models\OrderReceipt;
 use Illuminate\Bus\Queueable;
@@ -37,24 +38,7 @@ class GenerateOrderReceipt implements ShouldQueue
     {
         $this->order->load('address', 'items.product', 'user');
 
-        $defaultConfig = (new \Mpdf\Config\ConfigVariables())->getDefaults();
-        $fontDirs = $defaultConfig['fontDir'];
-
-        $defaultFontConfig = (new \Mpdf\Config\FontVariables())->getDefaults();
-        $fontData = $defaultFontConfig['fontdata'];
-
-        $pdf = new \Mpdf\Mpdf([
-            'fontDir' => array_merge($fontDirs, [
-                public_path(''),
-            ]),
-            'fontdata' => $fontData + [ // lowercase letters only in font key
-                    'bangla' => [
-                        'R' => 'Nikosh.ttf',
-                        'useOTL' => 0xFF,
-                    ]
-                ],
-            'default_font' => 'bangla'
-        ]);
+        $pdf = app(PDF::class);
 
         $pdf->WriteHTML("<html><head><style>
           table {
