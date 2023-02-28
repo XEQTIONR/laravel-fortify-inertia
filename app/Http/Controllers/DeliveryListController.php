@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Api\DeliveryListController as Controller;
-//use Mpdf\Mpdf;
-use App\Models\Order;
 
 class DeliveryListController extends Controller
 {
@@ -20,6 +18,7 @@ class DeliveryListController extends Controller
     {
         $orders = parent::__invoke($request);
 
+        $delivery_date = $request->input('date');
 
         $table_headers = [
             'Product' => [ 'width' => '80%', 'align' => 'left'],
@@ -37,18 +36,17 @@ class DeliveryListController extends Controller
                 public_path(''),
             ]),
             'fontdata' => $fontData + [ // lowercase letters only in font key
-                    'bangla' => [
-                        'R' => 'Siyamrupali.ttf',
-                        'useOTL' => 0xFF,
-                    ]
-                ],
+                'bangla' => [
+                    'R' => 'Nikosh.ttf',
+                    'useOTL' => 0xFF,
+                ]
+            ],
             'default_font' => 'bangla'
         ]);
 
+        $pdf->SetHTMLFooter("<h6 style='text-align: center'>{PAGENO}</h6>");
 
-        //$pdf = new \Mpdf\Mpdf();
         $pdf->WriteHTML("<html><head><style>
-
           table {
             border-top: 1px solid black;
             border-collapse: collapse;
@@ -60,7 +58,11 @@ class DeliveryListController extends Controller
               border-right: 1px solid black;
               border-bottom: 1px solid black;
               border-collapse: collapse;
-	      }</style></head><body>");
+	      }</style></head><body>"
+        );
+
+        $pdf->WriteHTML("<h2 style='text-align: center'>Delivery List - {$delivery_date}</h2>");
+
         foreach($orders->toArray($request) as $order) {
             $pdf->WriteHTML("<h4>Order # {$order['id']}</h4>");
             $pdf->WriteHTML("<p>{$order['address']['full_name']} - {$order['address']['business_name']} -  </p>");
