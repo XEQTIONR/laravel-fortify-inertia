@@ -167,6 +167,7 @@ export default function Orders({ orders, statuses }) {
     }, [flash] );
 
     useEffect( () => {
+        setSelected([]);
         if ( filterStatuses.length > 0 || filterDateValue !== null ) {
             const localFilters = {};
             if ( filterStatuses.length > 0 ) {
@@ -320,6 +321,7 @@ export default function Orders({ orders, statuses }) {
                         disableSelectionOnClick
                         experimentalFeatures={ { newEditingApi: true } }
                         loading={ isLoading }
+                        selectionModel={selected}
                         onSelectionModelChange={ (items) => setSelected(items)}
                         onPageSizeChange={ (newPageSize) => {
                             if ( filterStatuses.length > 0 || filterDateValue !== null ) {
