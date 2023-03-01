@@ -117,7 +117,7 @@ export default function Orders({ orders, statuses }) {
         return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
-    function debounce( fn, timeout = 2000) {
+    function debounce( fn, timeout = 500 ) {
         let timer;
         return (...args) => {
             clearTimeout(timer);
@@ -144,8 +144,8 @@ export default function Orders({ orders, statuses }) {
         callOrderIndexApi(ids);
     }), []);
 
-    const debouncedPaginate = useCallback( debounce( ( currentPage, perPage, orderBy, order, fltrs ) => {
-        paginate(currentPage, perPage, orderBy, order, fltrs);
+    const debouncedPaginate = useCallback( debounce( ( currentPage, perPage, orderBy, order, currentFilters ) => {
+        paginate(currentPage, perPage, orderBy, order, currentFilters);
     }), []);
 
     useEffect( () => {
@@ -161,22 +161,25 @@ export default function Orders({ orders, statuses }) {
     }, [ selected ] );
 
     useEffect( () => {
-        if (flash.status === HTTP_CREATED || flash.status === HTTP_OK) {
+        if ( flash.status === HTTP_CREATED || flash.status === HTTP_OK ) {
             setShowSnackbar(true);
         }
-
     }, [flash] );
 
     useEffect( () => {
-        debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
-    }, [orders] );
-
-    useEffect( () => {
-        debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order, {
-            date: filterDateValue,
-            statuses: filterStatuses
-        });
-    }, [filterDateValue, filterStatuses]);
+        if ( filterStatuses.length > 0 || filterDateValue !== null ) {
+            const localFilters = {};
+            if ( filterStatuses.length > 0 ) {
+                localFilters.statuses = filterStatuses;
+            }
+            if ( filterDateValue !== null ) {
+                localFilters.date = filterDateValue;
+            }
+            debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order, localFilters);
+        } else {
+            debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+        }
+    }, [orders, filterDateValue, filterStatuses]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -296,7 +299,7 @@ export default function Orders({ orders, statuses }) {
                                     inputFormat="DD/MM/YYYY"
                                     value={filterDate}
                                     onChange={e => {
-                                        if (e && e._isValid) {
+                                        if ( e && e._isValid ) {
                                             setFilterDate(e);
                                             setFilterDateValue(e.format('YYYY-MM-DD'));
                                         } else {
@@ -307,8 +310,6 @@ export default function Orders({ orders, statuses }) {
                                 />
                             </LocalizationProvider>
                         }
-
-
                     </Box>
                     <DataGrid
                         getRowHeight={() => 'auto'}
@@ -320,17 +321,50 @@ export default function Orders({ orders, statuses }) {
                         experimentalFeatures={ { newEditingApi: true } }
                         loading={ isLoading }
                         onSelectionModelChange={ (items) => setSelected(items)}
-                        onPageSizeChange={ (newPageSize) =>
-                            debouncedPaginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
-                        }
-                        onPageChange={ (newPage) =>
-                            debouncedPaginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
-                        }
-                        onSortModelChange={ ([gridSortItem]) => {
-                            if(gridSortItem) {
-                                debouncedPaginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                        onPageSizeChange={ (newPageSize) => {
+                            if ( filterStatuses.length > 0 || filterDateValue !== null ) {
+                                const localFilters = {};
+                                if ( filterStatuses.length > 0 ) {
+                                    localFilters.statuses = filterStatuses;
+                                }
+                                    if ( filterDateValue !== null ) {
+                                    localFilters.date = filterDateValue;
+                                }
+                                debouncedPaginate(meta.current_page, newPageSize, meta.orderBy, meta.order, localFilters);
+                            } else {
+                                debouncedPaginate(meta.current_page, newPageSize, meta.orderBy, meta.order);
                             }
-                        } }
+                        }}
+                        onPageChange={ (newPage) => {
+                            if ( filterStatuses.length > 0 || filterDateValue !== null ) {
+                                const localFilters = {};
+                                if ( filterStatuses.length > 0 ) {
+                                    localFilters.statuses = filterStatuses;
+                                }
+                                if ( filterDateValue !== null ) {
+                                    localFilters.date = filterDateValue;
+                                }
+                                debouncedPaginate(newPage+1, meta.per_page, meta.orderBy, meta.order, localFilters);
+                            } else {
+                                debouncedPaginate(newPage+1, meta.per_page, meta.orderBy, meta.order);
+                            }
+                        }}
+                        onSortModelChange={ ([gridSortItem]) => {
+                            if ( gridSortItem ) {
+                                if ( filterStatuses.length > 0 || filterDateValue !== null ) {
+                                    const localFilters = {};
+                                    if ( filterStatuses.length > 0 ) {
+                                        localFilters.statuses = filterStatuses;
+                                    }
+                                    if ( filterDateValue !== null ) {
+                                        localFilters.date = filterDateValue;
+                                    }
+                                    debouncedPaginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort, localFilters);
+                                } else {
+                                    debouncedPaginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                                }
+                            }
+                        }}
                         pageSize={ meta.per_page }
                         paginationMode="server"
                         rows={ rows }
