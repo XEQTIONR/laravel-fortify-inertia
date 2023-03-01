@@ -1,19 +1,43 @@
-import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState, useCallback } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
-
-import { Add, Check, Delete, Edit, ShoppingCartCheckout, ToggleOn } from "@mui/icons-material";
-import {Alert, AlertTitle, Box, Chip, Fab, Tooltip, Snackbar, Select, MenuItem, FormControl} from '@mui/material'
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {
+    Alert,
+    AlertTitle,
+    Box,
+    Checkbox,
+    Fab,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Snackbar,
+    Select,
+    TextField,
+    ToggleButton,
+    ToggleButtonGroup,
+    Tooltip,
+    Typography,
+} from '@mui/material'
+import {
+    Add,
+    Check,
+    CalendarMonthOutlined,
+    FilterList,
+    ShoppingCartCheckout,
+    SyncProblem
+} from "@mui/icons-material";
 
 import usePaginate from '@/hooks/usePaginate';
 
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
 
-export default function Orders({ orders }) {
+export default function Orders({ orders, statuses }) {
 
     const { flash } = usePage().props;
 
@@ -24,6 +48,9 @@ export default function Orders({ orders }) {
     const [ showSnackbar, setShowSnackbar ] = useState( false );
     const [ showConfirmButton, setShowConfirmButton ] = useState(false);
     const [ showPrepareButton, setShowPrepareButton ] = useState(false);
+    const [ filters, setFilters ] = useState([])
+    const [ filterDate, setFilterDate ] = useState(null);
+    const [ filterStatuses, setFilterStatuses ] = useState([]);
 
     const paginate = usePaginate( route('api.orders.index'), setIsLoading, setRows, setMeta );
 
@@ -47,16 +74,22 @@ export default function Orders({ orders }) {
             field: 'subtotal',
             headerName: 'Subtotal',
             width: 125,
+            type: 'number',
+            valueGetter: (params) => `৳ ${params.row.subtotal.toFixed(2)}`
         },
         {
             field: 'delivery_charge',
             headerName: 'Delivery Charge',
             width: 150,
+            type: 'number',
+            valueGetter: (params) => `৳ ${params.row.delivery_charge.toFixed(2)}`
         },
         {
             field: 'total',
             headerName: 'Total',
             width: 125,
+            type: 'number',
+            valueGetter: (params) => `৳ ${params.row.total.toFixed(2)}`
         },
         {
             field: 'status',
@@ -65,6 +98,14 @@ export default function Orders({ orders }) {
             width: 90,
         },
     ];
+
+    const filterState = (currentFilters) => {
+        if ( currentFilters.includes('filters') ) {
+            setFilters( currentFilters );
+        } else {
+            setFilters([]);
+        }
+    }
 
     const CustomAlert = React.forwardRef(function CustomAlert(props, ref) {
         return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -145,9 +186,22 @@ export default function Orders({ orders }) {
                 sx={{ height: '100%' }}
             >
                 <Box
-                    className="flex flex-col justify-end"
+                    className="flex flex-col justify-between items-end"
                     sx={{ height: '100%' }}
                 >
+                    <ToggleButtonGroup
+                        orientation="vertical"
+                        color="primary"
+                        className="mb-1"
+                        size="small"
+                        value={filters}
+                        onChange={(e, value) => filterState(value)}
+                    >
+                        <ToggleButton value="filters"><FilterList /></ToggleButton>
+                        { filters.length && <ToggleButton value="status"><SyncProblem /></ToggleButton> }
+                        { filters.length && <ToggleButton value="delivery_date"><CalendarMonthOutlined /></ToggleButton> }
+                    </ToggleButtonGroup>
+                    <Box className="flex flex-col justify-end">
                     <Tooltip title="Prepare orders." placement="right">
                         <Fab
                             // onClick={() => Inertia.post( route('admin.products.status'), { ids: selected } )}
@@ -185,35 +239,94 @@ export default function Orders({ orders }) {
                             <Add />
                         </Fab>
                     </Tooltip>
+                    </Box>
                 </Box>
-                <DataGrid
-                    getRowHeight={() => 'auto'}
-                    keepNonExistentRowsSelected
-                    checkboxSelection
-                    columns={ columns }
-                    disableColumnMenu
-                    disableSelectionOnClick
-                    experimentalFeatures={ { newEditingApi: true } }
-                    loading={ isLoading }
-                    onSelectionModelChange={ (items) => setSelected(items)}
-                    onPageSizeChange={ (newPageSize) =>
-                        paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
-                    }
-                    onPageChange={ (newPage) =>
-                        paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
-                    }
-                    onSortModelChange={ ([gridSortItem]) => {
-                        if(gridSortItem) {
-                            paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                <Box className="w-full h-full flex flex-col">
+                    <Box className="flex justify-end gap-3">
+                        {
+                            filters.length > 1 && <Typography className="mt-2">Filter by :</Typography>
                         }
-                    } }
-                    pageSize={ meta.per_page }
-                    paginationMode="server"
-                    rows={ rows }
-                    rowCount={ meta.total }
-                    rowsPerPageOptions={ [10, 25, 50, 100] }
-                    sortingMode="server"
-                />
+                        {
+                            filters.includes('status') &&
+                            <FormControl className="mb-2" size="small" sx={{ minWidth: 200 }}>
+                                <InputLabel id="select-label">Select a status</InputLabel>
+                                <Select
+                                    onChange={(e) => {
+                                        setFilterStatuses(e.target.value);
+                                    }}
+                                    value={filterStatuses}
+                                    renderValue={(selected) => selected.map(status => status.charAt(0).toUpperCase() + status.substring(1)).join(', ')}
+                                    multiple
+                                    labelId="select-label"
+                                    label="Select a status"
+                                >
+                                {
+                                    statuses.map((status) =>
+                                        <MenuItem key={status} value={status}>
+                                            <Checkbox size="small" checked={filterStatuses.indexOf(status) > -1} />
+                                            {status.charAt(0).toUpperCase() + status.substring(1)}
+                                        </MenuItem>)
+                                }
+                                </Select>
+                            </FormControl>
+                        }
+                        {
+                            filters.includes('delivery_date') &&
+                            <LocalizationProvider dateAdapter={AdapterMoment}>
+                                <DesktopDatePicker
+                                    className="mb-2"
+                                    label="Delivery Date"
+                                    inputFormat="DD/MM/YYYY"
+                                    value={filterDate}
+                                    onChange={e => {
+                                        if (e && e._isValid) {
+                                            setFilterDate(e)
+                                            //setData('delivery_date', e.format('YYYY-MM-DD'));
+                                            // refValidDate.current = true;
+                                        }
+                                    }}
+                                    renderInput={(params) =>
+                                        <TextField
+                                            size="small"
+                                            {...params}
+                                            // error={!refValidDate.current}
+                                            // helperText={!refValidDate.current && 'Invalid date'}
+                                        />}
+                                />
+                            </LocalizationProvider>
+                        }
+
+
+                    </Box>
+                    <DataGrid
+                        getRowHeight={() => 'auto'}
+                        keepNonExistentRowsSelected
+                        checkboxSelection
+                        columns={ columns }
+                        disableColumnMenu
+                        disableSelectionOnClick
+                        experimentalFeatures={ { newEditingApi: true } }
+                        loading={ isLoading }
+                        onSelectionModelChange={ (items) => setSelected(items)}
+                        onPageSizeChange={ (newPageSize) =>
+                            paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
+                        }
+                        onPageChange={ (newPage) =>
+                            paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
+                        }
+                        onSortModelChange={ ([gridSortItem]) => {
+                            if(gridSortItem) {
+                                paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                            }
+                        } }
+                        pageSize={ meta.per_page }
+                        paginationMode="server"
+                        rows={ rows }
+                        rowCount={ meta.total }
+                        rowsPerPageOptions={ [10, 25, 50, 100] }
+                        sortingMode="server"
+                    />
+                </Box>
             </Box>
         </Nav>
     )
