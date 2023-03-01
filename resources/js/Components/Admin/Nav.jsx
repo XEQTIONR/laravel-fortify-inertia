@@ -103,20 +103,20 @@ export default function Nav({ children, navLinks }) {
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
                                 <ListItemButton
-                                    selected={item.link === route(route().current())}
-                                    onClick={ () => setTimeout( () => Inertia.get(item.link), 300) }
+                                    selected={route().current(item.route.split('.', 2).join('.') +'.*')}
+                                    onClick={ () => setTimeout( () => Inertia.get(route(item.route)), 300) }
                                 >
 
                                         <ListItemIcon>
                                             {
-                                                item.link === route(route().current())
+                                                route().current(item.route.split('.', 2).join('.') +'.*')
                                                 ?item.iconActive
                                                 :item.icon
                                             }
                                         </ListItemIcon>
                                         <ListItemText
                                             primary={item.label}
-                                            primaryTypographyProps={ item.link === route(route().current()) ? {
+                                            primaryTypographyProps={ route().current(item.route.split('.', 2).join('.') +'.*') ? {
                                                 className: 'font-bold',
                                                 color: 'primary'
                                             } : {}}
