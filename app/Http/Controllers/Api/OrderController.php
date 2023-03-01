@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\GenerateOrderReceipt;
 use App\Models\Order;
-use App\Models\OrderItem;
-use App\Models\ShoppingCart;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
-use Illuminate\Support\Facades\Gate;
 
 class OrderController extends Controller
 {
@@ -31,7 +27,21 @@ class OrderController extends Controller
         $orderBy = $request->orderBy ?? 'id';
         $order = $request->order ?? 'asc';
 
-        $orders = Order::orderBy($orderBy, $order)->paginate($perPage);
+        $query = Order::orderBy($orderBy, $order);
+
+        $filters = $request->filters;
+
+        if ($filters !== null) {
+            if (isset($filters['statuses'])) {
+                $query->whereIn('status', $filters['statuses']);
+            }
+
+            if (isset($filters['date'])) {
+                $query->where('delivery_date', $filters['date']);
+            }
+        }
+
+        $orders = $query->paginate($perPage);
         $orders->appends(compact('perPage', 'orderBy', 'order'));
 
         return OrderResource::collection($orders)->additional([

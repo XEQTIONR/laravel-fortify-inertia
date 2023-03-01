@@ -1,12 +1,13 @@
 export default function usePaginate(route, setIsLoading, setRows, setMeta) {
 
-    function paginate(page, perPage = null, orderBy = null, order = null) {
+    function paginate(page, perPage = null, orderBy = null, order = null, filters = null) {
         setIsLoading(true);
         const params = {
             page,
             perPage,
             orderBy,
-            order
+            order,
+            filters
         }
         axios.get( route, {
             params

@@ -50,6 +50,7 @@ export default function Orders({ orders, statuses }) {
     const [ showPrepareButton, setShowPrepareButton ] = useState(false);
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
+    const [ filterDateValue, setFilterDateValue ] = useState(null);
     const [ filterStatuses, setFilterStatuses ] = useState([]);
 
     const paginate = usePaginate( route('api.orders.index'), setIsLoading, setRows, setMeta );
@@ -64,6 +65,7 @@ export default function Orders({ orders, statuses }) {
             field: 'delivery_date',
             headerName: 'Delivery Date',
             width: 140,
+            valueGetter: (params) => params.row.delivery_date.split('-').reverse().join('/')
         },
         {
             field: 'time_slot',
@@ -96,6 +98,7 @@ export default function Orders({ orders, statuses }) {
             headerName: 'Status',
             sortable: true,
             width: 90,
+            valueGetter: (params) => params.row.status.charAt(0).toUpperCase() + params.row.status.substring(1)
         },
     ];
 
@@ -104,6 +107,9 @@ export default function Orders({ orders, statuses }) {
             setFilters( currentFilters );
         } else {
             setFilters([]);
+            setFilterDate(null);
+            setFilterDateValue(null);
+            setFilterStatuses([]);
         }
     }
 
@@ -111,7 +117,7 @@ export default function Orders({ orders, statuses }) {
         return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
-    function debounce( fn, timeout = 1000) {
+    function debounce( fn, timeout = 2000) {
         let timer;
         return (...args) => {
             clearTimeout(timer);
@@ -134,17 +140,21 @@ export default function Orders({ orders, statuses }) {
         }
     }
 
-    const callDebounce = useCallback( debounce( (ids) => {
+    const debouncedOrderIndexApiCall = useCallback( debounce( (ids) => {
         callOrderIndexApi(ids);
+    }), []);
+
+    const debouncedPaginate = useCallback( debounce( ( currentPage, perPage, orderBy, order, fltrs ) => {
+        paginate(currentPage, perPage, orderBy, order, fltrs);
     }), []);
 
     useEffect( () => {
         setShowConfirmButton(false);
         setShowPrepareButton(false);
         if ( selected.length > 0 ) {
-            callDebounce(selected);
+            debouncedOrderIndexApiCall(selected);
         } else {
-            callDebounce(false);
+            debouncedOrderIndexApiCall(false);
             setShowConfirmButton(false);
             setShowPrepareButton(false);
         }
@@ -158,8 +168,15 @@ export default function Orders({ orders, statuses }) {
     }, [flash] );
 
     useEffect( () => {
-        paginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
+        debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order);
     }, [orders] );
+
+    useEffect( () => {
+        debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order, {
+            date: filterDateValue,
+            statuses: filterStatuses
+        });
+    }, [filterDateValue, filterStatuses]);
 
     useEffect(() => {
         setTimeout(() => {
@@ -280,18 +297,13 @@ export default function Orders({ orders, statuses }) {
                                     value={filterDate}
                                     onChange={e => {
                                         if (e && e._isValid) {
-                                            setFilterDate(e)
-                                            //setData('delivery_date', e.format('YYYY-MM-DD'));
-                                            // refValidDate.current = true;
+                                            setFilterDate(e);
+                                            setFilterDateValue(e.format('YYYY-MM-DD'));
+                                        } else {
+                                            setFilterDateValue(null);
                                         }
                                     }}
-                                    renderInput={(params) =>
-                                        <TextField
-                                            size="small"
-                                            {...params}
-                                            // error={!refValidDate.current}
-                                            // helperText={!refValidDate.current && 'Invalid date'}
-                                        />}
+                                    renderInput={(params) => <TextField size="small" {...params} />}
                                 />
                             </LocalizationProvider>
                         }
@@ -309,14 +321,14 @@ export default function Orders({ orders, statuses }) {
                         loading={ isLoading }
                         onSelectionModelChange={ (items) => setSelected(items)}
                         onPageSizeChange={ (newPageSize) =>
-                            paginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
+                            debouncedPaginate(meta.current_page, newPageSize, meta.orderBy, meta.order)
                         }
                         onPageChange={ (newPage) =>
-                            paginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
+                            debouncedPaginate(newPage+1, meta.per_page, meta.orderBy, meta.order)
                         }
                         onSortModelChange={ ([gridSortItem]) => {
                             if(gridSortItem) {
-                                paginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
+                                debouncedPaginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort);
                             }
                         } }
                         pageSize={ meta.per_page }
