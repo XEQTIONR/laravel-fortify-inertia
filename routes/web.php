@@ -220,12 +220,13 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('categories', CategoryController::class);
 
         Route::resource('orders', OrderController::class);
+        Route::post('/orders/status', [ OrderController::class, 'updateStatus' ])->name('orders.status');
 
         Route::resource('products', ProductController::class);
-        Route::post('/products/status', [ ProductController::class, 'toggleActivation'])->name('products.status');
+        Route::post('/products/status', [ ProductController::class, 'toggleActivation' ])->name('products.status');
 
         Route::resource('suppliers', SupplierController::class);
-        Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation'])->name('suppliers.status');
+        Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation' ])->name('suppliers.status');
 
         Route::resource('suppliers.products', SupplierProductsController::class);
     });

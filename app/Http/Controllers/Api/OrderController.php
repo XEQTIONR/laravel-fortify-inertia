@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Resources\OrderResource;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -47,5 +48,18 @@ class OrderController extends Controller
         return OrderResource::collection($orders)->additional([
             'meta' => compact('orderBy', 'order')
         ]);
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => 'required|array|min:1',
+            'status' => [ 'required', Rule::in(Order::$statuses) ]
+        ]);
+
+        Order::whereIn('id', $validated['ids'])
+            ->update([ 'status' => $validated['status']]);
+
+        return [ 'message' => 'Status updated to '. ucfirst($validated['status'])  ];
     }
 }

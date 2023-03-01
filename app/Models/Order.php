@@ -26,7 +26,6 @@ class Order extends Model
 
     public static array $statuses = [
       'created',
-      'confirmed',
       'prepared',
       'delivered',
     ];

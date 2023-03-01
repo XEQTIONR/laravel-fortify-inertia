@@ -1,3 +1,4 @@
+import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState, useCallback } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Admin/Nav';
@@ -28,7 +29,7 @@ import {
     Check,
     CalendarMonthOutlined,
     FilterList,
-    ShoppingCartCheckout,
+    LocalShipping,
     SyncProblem
 } from "@mui/icons-material";
 
@@ -46,8 +47,8 @@ export default function Orders({ orders, statuses }) {
     const [meta, setMeta] = useState(orders.meta);
     const [ selected, setSelected ] =  useState([]);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
-    const [ showConfirmButton, setShowConfirmButton ] = useState(false);
-    const [ showPrepareButton, setShowPrepareButton ] = useState(false);
+    const [ showPreparedButton, setShowPreparedButton ] = useState(false);
+    const [ showDeliveredButton, setShowDeliveredButton ] = useState(false);
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
     const [ filterDateValue, setFilterDateValue ] = useState(null);
@@ -129,9 +130,9 @@ export default function Orders({ orders, statuses }) {
             axios.get( route('api.orders.index'), { params: { ids: ids }})
                 .then(({data}) => {
                     if ( data.data.every(({status}) => status === 'created') ) {
-                        setShowConfirmButton(true);
-                    } else if ( data.data.every(({status}) => status === 'confirmed') ) {
-                        setShowPrepareButton(true);
+                        setShowPreparedButton(true);
+                    } else if ( data.data.every(({status}) => status === 'prepared') ) {
+                        setShowDeliveredButton(true);
                     }
                 })
                 .catch((e) => {
@@ -149,14 +150,14 @@ export default function Orders({ orders, statuses }) {
     }), []);
 
     useEffect( () => {
-        setShowConfirmButton(false);
-        setShowPrepareButton(false);
+        setShowDeliveredButton(false);
+        setShowPreparedButton(false);
         if ( selected.length > 0 ) {
             debouncedOrderIndexApiCall(selected);
         } else {
             debouncedOrderIndexApiCall(false);
-            setShowConfirmButton(false);
-            setShowPrepareButton(false);
+            setShowDeliveredButton(false);
+            setShowPreparedButton(false);
         }
     }, [ selected ] );
 
@@ -223,43 +224,43 @@ export default function Orders({ orders, statuses }) {
                         { filters.length && <ToggleButton value="delivery_date"><CalendarMonthOutlined /></ToggleButton> }
                     </ToggleButtonGroup>
                     <Box className="flex flex-col justify-end">
-                    <Tooltip title="Prepare orders." placement="right">
-                        <Fab
-                            // onClick={() => Inertia.post( route('admin.products.status'), { ids: selected } )}
-                            className={`transition duration-200 ${ showPrepareButton ? 'hover:scale-125' : 'scale-0' }`}
-                            color="success"
-                            size="medium"
-                            aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
-                        >
-                            <ShoppingCartCheckout />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip title="Confirm orders." placement="right">
-                        <Fab
-                            // onClick={() => Inertia.post( route('admin.products.status'), { ids: selected } )}
-                            className={`transition duration-200 ${ showConfirmButton ? 'hover:scale-125' : 'scale-0' }`}
-                            color="success"
-                            size="medium"
-                            aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
-                        >
-                            <Check />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip title="Add a new product." placement="right">
-                        <Fab
-                            // onClick={() => Inertia.visit(route('admin.products.create')) }
-                            id="addButton"
-                            className="transition hover:scale-125 duration-200 scale-0"
-                            color="primary"
-                            size="medium"
-                            aria-label="add"
-                            sx={{ ml: 2, mt: 2 }}
-                        >
-                            <Add />
-                        </Fab>
-                    </Tooltip>
+                        <Tooltip title="Mark orders as delivered." placement="right">
+                            <Fab
+                                onClick={() => Inertia.post( route('admin.orders.status'), { ids: selected, status: 'delivered' } )}
+                                className={`transition duration-200 ${ showDeliveredButton ? 'hover:scale-125' : 'scale-0' }`}
+                                color="success"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <LocalShipping />
+                            </Fab>
+                        </Tooltip>
+                        <Tooltip title="Orders prepared." placement="right">
+                            <Fab
+                                onClick={() => Inertia.post( route('admin.orders.status'), { ids: selected, status: 'prepared' } )}
+                                className={`transition duration-200 ${ showPreparedButton ? 'hover:scale-125' : 'scale-0' }`}
+                                color="success"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Check />
+                            </Fab>
+                        </Tooltip>
+                        <Tooltip title="Add a new product." placement="right">
+                            <Fab
+                                // onClick={() => Inertia.visit(route('admin.products.create')) }
+                                id="addButton"
+                                className="transition hover:scale-125 duration-200 scale-0"
+                                color="primary"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Add />
+                            </Fab>
+                        </Tooltip>
                     </Box>
                 </Box>
                 <Box className="w-full h-full flex flex-col">

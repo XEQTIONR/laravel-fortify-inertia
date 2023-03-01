@@ -34,7 +34,7 @@ Route::name('api.')
                     return $request->user();
                 })->name('user');
 
-                Route::get('/orders', [ OrderController::class, 'index'])
+                Route::get('/orders', [ OrderController::class, 'index' ])
                     ->name('orders.index');
 
                 Route::get('/products', [ ProductController::class, 'index' ])

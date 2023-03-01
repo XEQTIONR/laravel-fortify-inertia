@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\HierarchicalCategories;
-use App\Http\Resources\AddressResource;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\OrderController as Controller;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,5 +20,16 @@ class OrderController extends Controller
         $orders = parent::index($request);
         $statuses = Order::$statuses;
         return Inertia::render('Admin/Orders', compact('orders', 'statuses'));
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $response = parent::updateStatus($request);
+
+        return redirect( route('admin.orders.index') )->with([
+            'title' => 'Statuses updated for orders.',
+            'message' => $response['message'],
+            'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 }
