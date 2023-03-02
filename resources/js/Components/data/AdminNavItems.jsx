@@ -2,13 +2,15 @@
 import {
     AccountTree,
     AccountTreeOutlined,
-    Ballot,
-    BallotOutlined,
     Dashboard,
     DashboardOutlined,
+    FoodBank,
+    FoodBankOutlined,
+    Kitchen,
+    KitchenOutlined,
     Restaurant,
-    ShoppingBag,
-    ShoppingBagOutlined,
+    Store,
+    StoreOutlined,
     SupervisedUserCircle,
     ViewList,
     ViewListOutlined,
@@ -24,8 +26,8 @@ export default [
     },
     {
         label: 'Products',
-        icon: <ShoppingBagOutlined />,
-        iconActive: <ShoppingBag color="primary" />,
+        icon: <KitchenOutlined />,
+        iconActive: <Kitchen color="primary" />,
         route: 'admin.products.index'
     },
     {
@@ -42,14 +44,14 @@ export default [
     },
     {
         label: 'Customers',
-        icon: <Restaurant />,
-        iconActive: <Restaurant color="primary" />,
+        icon: <FoodBankOutlined />,
+        iconActive: <FoodBank color="primary" />,
         route: 'admin.customers.index'
     },
     {
         label: 'Suppliers',
-        icon: <SupervisedUserCircle />,
-        iconActive: <SupervisedUserCircle color="primary" />,
+        icon: <StoreOutlined />,
+        iconActive: <Store color="primary" />,
         route: 'admin.suppliers.index'
     },
 ]
