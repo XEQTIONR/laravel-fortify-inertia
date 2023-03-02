@@ -1,37 +1,43 @@
 
 import {
+    AccountTree,
+    AccountTreeOutlined,
+    Ballot,
+    BallotOutlined,
     Dashboard,
-    List,
-    LocalOffer,
+    DashboardOutlined,
     Restaurant,
     ShoppingBag,
+    ShoppingBagOutlined,
     SupervisedUserCircle,
+    ViewList,
+    ViewListOutlined,
 
 } from '@mui/icons-material';
 
 export default [
     {
         label: 'Dashboard',
-        icon: <Dashboard />,
+        icon: <DashboardOutlined />,
         iconActive: <Dashboard color="primary" />,
         route: 'admin.dashboard'
     },
     {
         label: 'Products',
-        icon: <ShoppingBag />,
+        icon: <ShoppingBagOutlined />,
         iconActive: <ShoppingBag color="primary" />,
         route: 'admin.products.index'
     },
     {
         label: 'Categories',
-        icon: <LocalOffer />,
-        iconActive: <LocalOffer color="primary" />,
+        icon: <AccountTreeOutlined />,
+        iconActive: <AccountTree color="primary" />,
         route: 'admin.categories.index'
     },
     {
         label: 'Orders',
-        icon: <List />,
-        iconActive: <List color="primary" />,
+        icon: <ViewListOutlined />,
+        iconActive: <ViewList color="primary" />,
         route: 'admin.orders.index'
     },
     {

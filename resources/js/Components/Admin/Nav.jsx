@@ -103,20 +103,27 @@ export default function Nav({ children, navLinks }) {
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
                                 <ListItemButton
-                                    selected={route().current(item.route.split('.', 2).join('.') +'.*')}
+                                    selected={
+                                        route().current(item.route.split('.', 2).join('.') +'.*')
+                                        || route().current(item.route) // for admin.dashboard
+                                    }
                                     onClick={ () => setTimeout( () => Inertia.get(route(item.route)), 300) }
                                 >
 
                                         <ListItemIcon>
                                             {
-                                                route().current(item.route.split('.', 2).join('.') +'.*')
+                                                ( route().current(item.route.split('.', 2).join('.') +'.*')
+                                                || route().current(item.route) )
                                                 ?item.iconActive
                                                 :item.icon
                                             }
                                         </ListItemIcon>
                                         <ListItemText
                                             primary={item.label}
-                                            primaryTypographyProps={ route().current(item.route.split('.', 2).join('.') +'.*') ? {
+                                            primaryTypographyProps={
+                                                ( route().current(item.route.split('.', 2).join('.') +'.*')
+                                                || route().current(item.route) )
+                                                    ? {
                                                 className: 'font-bold',
                                                 color: 'primary'
                                             } : {}}
