@@ -40,7 +40,6 @@ export default function Login ({ loginRoute }) {
                             <TextField
                                 size="small"
                                 required
-                                autoFocus
                                 label={trans('labels.Password')}
                                 type="password"
                                 defaultValue={data.password}

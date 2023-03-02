@@ -56,7 +56,6 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         <TextField
                             size="small"
                             required
-                            autoFocus
                             label={trans('labels.Password')}
                             type="password"
                             defaultValue={data.password}
