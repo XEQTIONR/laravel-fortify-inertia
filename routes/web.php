@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryListController;
@@ -216,6 +217,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/shopping-list', ShoppingListController::class)->name('shopping-list');
 
         Route::get('/delivery-list', DeliveryListController::class)->name('delivery-list');
+
+        Route::resource('customers', CustomerController::class);
 
         Route::resource('categories', CategoryController::class);
 

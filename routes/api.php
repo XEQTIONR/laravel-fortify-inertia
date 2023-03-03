@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AddressController;
@@ -45,6 +46,9 @@ Route::name('api.')
 
                 Route::get('/categories', [ CategoryController::class, 'index' ])
                     ->name('categories.index');
+
+                Route::get('/customers', [ CustomerController::class, 'index' ])
+                    ->name('customers.index');
         });
 
         Route::apiResource('addresses', AddressController::class)
