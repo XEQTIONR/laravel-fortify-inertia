@@ -195,7 +195,12 @@ export default function Nav({
                                     }}
                                 >
                                     <MenuItem onClick={() => setUserMenuOpen(false)} >Profile</MenuItem>
-                                    <MenuItem onClick={() => setUserMenuOpen(false)} >My account</MenuItem>
+                                    <MenuItem onClick={() => {
+                                        setUserMenuOpen(false)
+                                        Inertia.visit(route('orders.index'))
+                                    }}
+                                    >
+                                        My orders</MenuItem>
                                     <MenuItem onClick={() => {
                                         setUserMenuOpen(false)
                                         Inertia.post(route('logout') )
