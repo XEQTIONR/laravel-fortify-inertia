@@ -194,7 +194,10 @@ export default function Nav({
                                         'aria-labelledby': 'basic-button',
                                     }}
                                 >
-                                    <MenuItem onClick={() => setUserMenuOpen(false)} >Profile</MenuItem>
+                                    <MenuItem onClick={() => {
+                                        setUserMenuOpen(false)
+                                        Inertia.visit(route('profile'))
+                                    }} >Profile</MenuItem>
                                     <MenuItem onClick={() => {
                                         setUserMenuOpen(false)
                                         Inertia.visit(route('orders.index'))

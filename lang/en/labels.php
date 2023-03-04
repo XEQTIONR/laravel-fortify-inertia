@@ -3,6 +3,7 @@
 return [
     'Address' => 'Street address',
     'Business name' => 'Business name',
+    'Cancel' => 'Cancel',
     'Confirm password' => 'Confirm password',
     'Confirm new password' => 'Confirm new password',
     'Email' => 'Email',

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -145,6 +147,14 @@ Route::middleware(['auth', 'verified.phone'])->group(function() {
 
     Route::get('/orders/{order}/receipt', [OrderReceiptController::class, 'show'])
         ->name('orders.receipt.show');
+});
+
+Route::middleware('auth')->group(function() {
+
+    Route::get('/address/create', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/address/store', [AddressController::class, 'store'])->name('addresses.store');
+
+    Route::get('/profile', ProfileController::class)->name('profile');
 });
 
 Route::get('/translationtest', function () {

@@ -3,6 +3,7 @@
 return [
     'Address' => 'ঠিকানা',
     'Business name' => 'ব্যবসার নাম',
+    'Cancel' => 'বাতিল করুন',
     'Confirm password' => 'পাসওয়ার্ড নিশ্চিত করুন',
     'Confirm new password' => 'নতুন পাসওয়ার্ড নিশ্চিত করুন',
     'Email' => 'ইমেইল',
