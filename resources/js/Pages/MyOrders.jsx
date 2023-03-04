@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef}  from 'react';
+import React, { useEffect, useState }  from 'react';
 import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
 import * as moment from 'moment';
@@ -9,6 +9,7 @@ import {
     Table,
     TableBody,
     TableCell,
+    TableContainer,
     TableHead,
     TableRow,
     Tooltip,
@@ -19,16 +20,26 @@ import { Receipt, Cancel } from "@mui/icons-material";
 
 export default function MyOrders ({ shopping_cart, categories, user, orders }) {
 
+    const [cart, setCart] = useState(shopping_cart);
+
+    useEffect(() => {
+        const cookie = Cookies.get('shopping-cart')
+        if ( ! cookie ) {
+            axios.get(route('cookie'));
+        }
+    }, [])
+
     return (
         <Nav navLinks={categories.data}
              selectedCategory={null}
              showUserMenu={true}
-             shoppingCart={shopping_cart}
+             shoppingCart={cart}
+             setShoppingCart={setCart}
              user
         >
             <Box className="w-full flex flex-col m-0 p-6">
                 <Typography variant="h5">My orders</Typography>
-                <Paper className="my-3" elevation={5}>
+                <TableContainer className="my-3" component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
@@ -52,7 +63,7 @@ export default function MyOrders ({ shopping_cart, categories, user, orders }) {
                                     <TableCell align="right">৳ {order.total.toFixed(2)}</TableCell>
                                     <TableCell>{moment(order.delivery_date).format('DD/MM/YYYY')}</TableCell>
                                     <TableCell>{order.time_slot}</TableCell>
-                                    <TableCell>{order.status}</TableCell>
+                                    <TableCell>{order.status.charAt(0).toUpperCase() + order.status.substring(1)}</TableCell>
                                     <TableCell align="center">
                                         <IconButton><Tooltip title="View receipt"><Receipt /></Tooltip></IconButton>
                                         {
@@ -67,7 +78,7 @@ export default function MyOrders ({ shopping_cart, categories, user, orders }) {
                         }
                         </TableBody>
                     </Table>
-                </Paper>
+                </TableContainer>
             </Box>
 
         </Nav>
