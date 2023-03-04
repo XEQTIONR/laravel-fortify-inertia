@@ -7,7 +7,7 @@ use App\Http\Resources\AddressResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class ProfileController extends Controller
+class AccountController extends Controller
 {
     /**
      * Handle the incoming request.
@@ -17,9 +17,7 @@ class ProfileController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $addresses = auth()->user()->addresses;
-        return Inertia::render('MyProfile', [
-            'addresses' => AddressResource::collection( auth()->user()->addresses ),
+        return Inertia::render('MyAccount', [
             'categories' => app(HierarchicalCategories::class)
         ]);
     }

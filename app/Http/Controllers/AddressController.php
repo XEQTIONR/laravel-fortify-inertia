@@ -11,6 +11,13 @@ use Inertia\Response;
 
 class AddressController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('MyAddresses', [
+           'addresses' => parent::index(),
+           'categories' => app(HierarchicalCategories::class)
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *

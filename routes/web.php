@@ -12,7 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -151,10 +151,11 @@ Route::middleware(['auth', 'verified.phone'])->group(function() {
 
 Route::middleware('auth')->group(function() {
 
-    Route::get('/address/create', [AddressController::class, 'create'])->name('addresses.create');
-    Route::post('/address/store', [AddressController::class, 'store'])->name('addresses.store');
+    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
+    Route::get('/addresses/create', [AddressController::class, 'create'])->name('addresses.create');
+    Route::post('/addresses/store', [AddressController::class, 'store'])->name('addresses.store');
 
-    Route::get('/profile', ProfileController::class)->name('profile');
+    Route::get('/account', AccountController::class)->name('account');
 });
 
 Route::get('/translationtest', function () {
