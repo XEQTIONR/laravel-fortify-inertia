@@ -59,9 +59,7 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
         Fortify::loginView( function() {
-            return Inertia::render('Login', [
-                'categories' => app(HierarchicalCategories::class)
-            ]);
+            return Inertia::render('Login');
         });
         Fortify::registerView( function(Request $request) {
             $validated = $request->validate([
@@ -76,6 +74,10 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::requestPasswordResetLinkView( function () {
             return Inertia::render('ForgotPasswordRequest');
+        });
+
+        Fortify::confirmPasswordView( function () {
+           return Inertia::render('ConfirmPassword');
         });
 
         Fortify::resetPasswordView( function () {

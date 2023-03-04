@@ -28,13 +28,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
     }
 
     return (
-        <Nav
-            navLinks={categories.data}
-            shoppingCart={shopping_cart}
-            selectedCategory={null}
-            showUserMenu={false}
-        >
-            <Box className="w-full h-full flex flex-col items-center">
+        <Box className="w-full h-screen flex flex-col justify-center items-center">
             <Paper className="p-5 mt-5" elevation={5}>
             <form onSubmit={handleLogin}>
                 <Stack
@@ -114,7 +108,6 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                     </Stack>
                 </form>
             </Paper>
-            </Box>
-        </Nav>
+        </Box>
     );
 }

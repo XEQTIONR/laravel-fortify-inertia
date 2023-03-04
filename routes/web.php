@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierProductsController;
@@ -151,15 +152,13 @@ Route::middleware(['auth', 'verified.phone'])->group(function() {
 
 Route::middleware('auth')->group(function() {
 
-    Route::get('/addresses', [AddressController::class, 'index'])->name('addresses.index');
-    Route::get('/addresses/create', [AddressController::class, 'create'])->name('addresses.create');
-    Route::post('/addresses/store', [AddressController::class, 'store'])->name('addresses.store');
+    Route::resource('addresses', AddressController::class);
 
-    Route::get('/account', AccountController::class)->name('account');
-});
+    Route::get('/account', AccountController::class)
+        ->middleware('password.confirm')
+        ->name('account');
 
-Route::get('/translationtest', function () {
-    return view('page2');
+    Route::get('/security', [SecurityController::class, 'index'])->name('security');
 });
 
 Route::get('/forget', function() {
