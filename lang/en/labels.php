@@ -6,6 +6,7 @@ return [
     'Cancel' => 'Cancel',
     'Confirm password' => 'Confirm password',
     'Confirm new password' => 'Confirm new password',
+    'Current password' => 'Current password',
     'Email' => 'Email',
     'Email or phone number' => 'Email or phone number',
     'Forgot my password' => 'Forgot my password',

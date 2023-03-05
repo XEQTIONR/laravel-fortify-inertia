@@ -6,6 +6,7 @@ return [
     'Cancel' => 'বাতিল করুন',
     'Confirm password' => 'পাসওয়ার্ড নিশ্চিত করুন',
     'Confirm new password' => 'নতুন পাসওয়ার্ড নিশ্চিত করুন',
+    'Current password' => 'বর্তমান পাসওয়ার্ড',
     'Email' => 'ইমেইল',
     'Email or phone number' => 'ইমেইল বা ফোন নম্বর',
     'Forgot my password' => 'আমার পাসওয়ার্ড ভুলে গেছি',

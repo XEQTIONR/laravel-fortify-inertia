@@ -65,7 +65,7 @@ export default function Security({shopping_cart, categories, user}) {
                                 primary={trans('labels.Password')}
                                 secondary="*************"
                             />
-                            <Button variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'password' }))} variant="contained">Edit</Button>
                         </ListItem>
                     </List>
                 </Card>

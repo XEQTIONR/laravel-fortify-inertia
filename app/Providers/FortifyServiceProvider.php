@@ -21,6 +21,7 @@ use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Responses\LogoutResponse;
 use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse;
+use Laravel\Fortify\Contracts\PasswordUpdateResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -48,6 +49,10 @@ class FortifyServiceProvider extends ServiceProvider
 
         app()->bind(ProfileInformationUpdatedResponse::class, function() {
            return redirect(route('security.index'));
+        });
+
+        app()->bind(PasswordUpdateResponse::class, function() {
+            return redirect(route('security.index'));
         });
     }
 

@@ -75,6 +75,12 @@ class SecurityController extends Controller
            ]
         ]);
 
+        if ( $validated['field'] === 'password' ) {
+            return Inertia::render('UpdatePassword', [
+                'categories' => app(HierarchicalCategories::class),
+            ]);
+        }
+
         return Inertia::render('EditUser', [
             'categories' => app(HierarchicalCategories::class),
             'field' => $validated['field'],
