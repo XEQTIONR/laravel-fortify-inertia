@@ -6,21 +6,27 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 export default function EditUser({shopping_cart, categories, field, label, user}) {
 
     const [cart, setCart] = useState(shopping_cart);
-
     const formData = {
         'field': field,
         [field] : user[field],
     }
-
+    const [validationErrors, setValidationErrors] = useState({});
     const { data, setData, put } = useForm(formData);
 
     function handleSubmit(e) {
         e.preventDefault();
         put( route('user-profile-information.update' ), {
             onError: (err) => {
-                console.log('errored', err)
+                setValidationErrors(err);
             }
         });
+    }
+    const removeError = function(key) {
+        if ( validationErrors.hasOwnProperty('updateProfileInformation') ) {
+            const localAddressErrors = validationErrors;
+            delete localAddressErrors[key];
+            setValidationErrors(localAddressErrors);
+        }
     }
 
     return (
@@ -37,9 +43,17 @@ export default function EditUser({shopping_cart, categories, field, label, user}
                         <Typography>Change Your {label}</Typography>
                         <TextField
                             value={data[field]}
-                            onChange={({target}) => setData(field, target.value)}
+                            onChange={({target}) => {
+                                setData(field, target.value)
+                                removeError('updateProfileInformation')
+                            }}
                             size="small"
                             label={label}
+                            error={validationErrors.hasOwnProperty('updateProfileInformation')}
+                            helperText={
+                                validationErrors.hasOwnProperty('updateProfileInformation')
+                                && validationErrors.updateProfileInformation[field]
+                            }
                             variant="outlined"
                             InputProps={{
                                 startAdornment: [
