@@ -158,7 +158,8 @@ Route::middleware('auth')->group(function() {
         ->middleware('password.confirm')
         ->name('account');
 
-    Route::get('/security', [SecurityController::class, 'index'])->name('security');
+    Route::get('/security', [SecurityController::class, 'index'])->name('security.index');
+    Route::get('/security/edit', [SecurityController::class, 'edit'])->name('security.edit');
 });
 
 Route::get('/forget', function() {

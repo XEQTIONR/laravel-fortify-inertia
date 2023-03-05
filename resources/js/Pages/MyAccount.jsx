@@ -53,7 +53,7 @@ export default function MyAccount ({ shopping_cart, categories }) {
                     subtitle="View past orders."
                 />
                 <AccountCard
-                    link={route('orders.index')}
+                    link={route('security.index')}
                     icon={<AdminPanelSettingsTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
                     title="Login & Security"
                     subtitle="Manage your login info and password."

@@ -20,6 +20,7 @@ use Inertia\Inertia;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Responses\LogoutResponse;
+use Laravel\Fortify\Contracts\ProfileInformationUpdatedResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -43,6 +44,10 @@ class FortifyServiceProvider extends ServiceProvider
                             httpOnly: false,
                         ));
             }
+        });
+
+        app()->bind(ProfileInformationUpdatedResponse::class, function() {
+           return redirect(route('security.index'));
         });
     }
 

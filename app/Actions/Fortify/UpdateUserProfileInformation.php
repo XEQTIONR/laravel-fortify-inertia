@@ -9,6 +9,13 @@ use Laravel\Fortify\Contracts\UpdatesUserProfileInformation;
 
 class UpdateUserProfileInformation implements UpdatesUserProfileInformation
 {
+    protected static array $fields = [
+        'name',
+        'email',
+        'password',
+        'primary_contact_number',
+        'secondary_contact_number',
+    ];
     /**
      * Validate and update the given user's profile information.
      *
@@ -19,26 +26,30 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     public function update($user, array $input)
     {
         Validator::make($input, [
-            'name' => ['required', 'string', 'max:255'],
-
-            'email' => [
+            'field' => [
                 'required',
+                Rule::in(self::$fields),
+            ],
+            'name' => ['required_if:field,name', 'string', 'max:255'],
+            'email' => [
+                'required_if:field,email',
                 'string',
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'primary_contact_number' => 'required_if:field,primary_contact_number|regex:/01\d{9}/',
+            'secondary_contact_number' => 'required_if:field,secondary_contact_number|regex:/(01\d{9}|02\d{7})/',
         ])->validateWithBag('updateProfileInformation');
 
-        if ($input['email'] !== $user->email &&
-            $user instanceof MustVerifyEmail) {
-            $this->updateVerifiedUser($user, $input);
-        } else {
+//        if ($input['email'] !== $user->email &&
+//            $user instanceof MustVerifyEmail) {
+//            $this->updateVerifiedUser($user, $input);
+//        } else {
             $user->forceFill([
-                'name' => $input['name'],
-                'email' => $input['email'],
+                $input['field'] => $input[$input['field']]
             ])->save();
-        }
+//        }
     }
 
     /**

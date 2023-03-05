@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-
+import { Inertia } from '@inertiajs/inertia';
 import Nav from '@/Components/Nav';
+import {Verified} from '@mui/icons-material';
 
-import { Box, Button, Card, Divider, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Button, Card, Divider, List, ListItem, ListItemText, Tooltip, Typography } from '@mui/material';
 
 export default function Security({shopping_cart, categories, user}) {
 
@@ -26,23 +27,37 @@ export default function Security({shopping_cart, categories, user}) {
                                 secondary={user.name}
 
                             />
-                            <Button variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'name' }))} variant="contained">Edit</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
                             <ListItemText
                                 primary={trans('labels.Email')}
-                                secondary={user.email}
+                                secondary={
+                                    <>
+                                        {user.email}
+
+                                    </>
+                                }
                             />
-                            <Button variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'email' }))} variant="contained">Edit</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
                             <ListItemText
                                 primary={trans('labels.Mobile number')}
-                                secondary={'+88'+user.primary_contact_number}
+                                secondary={
+                                    <>
+                                        {'+88'+user.primary_contact_number}
+                                        {
+                                            user.sms_verified_at && (<Tooltip title="Verified">
+                                                <Verified color="success" fontSize="small" className="ml-2" />
+                                            </Tooltip>)
+                                        }
+                                    </>
+                                }
                             />
-                            <Button variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'primary_contact_number' }))} variant="contained">Edit</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
@@ -54,7 +69,13 @@ export default function Security({shopping_cart, categories, user}) {
                         </ListItem>
                     </List>
                 </Card>
-                <Button className="mt-4" variant="contained">Done</Button>
+                <Button
+                    onClick={() => { Inertia.visit( route('account') ) }}
+                    className="mt-4"
+                    variant="contained"
+                >
+                    Done
+                </Button>
             </Box>
         </Nav>
     )

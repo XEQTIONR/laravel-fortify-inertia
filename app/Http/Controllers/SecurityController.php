@@ -4,10 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Contracts\HierarchicalCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class SecurityController extends Controller
 {
+    protected static array $fields = [
+        'Full name' => 'name',
+        'Email' => 'email',
+        'Password' => 'password',
+        'Mobile number' => 'primary_contact_number',
+        'Other contact number' => 'secondary_contact_number',
+    ];
     /**
      * Display a listing of the resource.
      *
@@ -55,12 +64,22 @@ class SecurityController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Inertia\Response
      */
-    public function edit($id)
+    public function edit(Request $request)
     {
-        //
+        $validated = $request->validate([
+           'field' => [
+               'required',
+               Rule::in(array_values(self::$fields)),
+           ]
+        ]);
+
+        return Inertia::render('EditUser', [
+            'categories' => app(HierarchicalCategories::class),
+            'field' => $validated['field'],
+            'label' => array_search($validated['field'], self::$fields)
+        ]);
     }
 
     /**
