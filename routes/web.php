@@ -16,6 +16,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplierListController;
 use App\Http\Controllers\SupplierProductsController;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -224,10 +225,11 @@ Route::prefix('admin')->name('admin.')->group(function() {
         });
         Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
+        Route::get('/delivery-list', DeliveryListController::class)->name('delivery-list');
 
         Route::get('/shopping-list', ShoppingListController::class)->name('shopping-list');
 
-        Route::get('/delivery-list', DeliveryListController::class)->name('delivery-list');
+        Route::get('/supplier-list', SupplierListController::class)->name('supplier-list');
 
         Route::resource('customers', CustomerController::class);
 

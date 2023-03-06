@@ -20,6 +20,7 @@ class ProductResource extends JsonResource
             'english_name' => $this->english_name,
             'bangla_name' => $this->bangla_name,
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
+            'suppliers' => SupplierWithoutProductsResource::collection($this->whenLoaded('suppliers')),
             'uom' => Product::$unitsOfMeasurement[$this->uom],
             'amount' => $this->amount,
             'current_selling_price' => $this->current_selling_price,

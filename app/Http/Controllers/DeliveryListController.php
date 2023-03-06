@@ -65,7 +65,7 @@ class DeliveryListController extends Controller
                 $pdf->WriteHTML($tr);
                 $pdf->WriteHTML("<td style='1px solid black'>{$item['product']['english_name']} / {$item['product']['bangla_name']} - {$item['product']['amount']} {$item['product']['uom']}</td>");
                 $pdf->WriteHTML("<td align='center'>{$item['qty']}</td>");
-                $pdf->WriteHTML('<tr>');
+                $pdf->WriteHTML('</tr>');
                 $i++;
             }
 

@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
@@ -37,11 +39,22 @@ class Product extends Model
     ];
 
     /**
+     * A Product may be added as an order item to many orders.
+     *
+     * @return BelongsToMany
+     */
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    /**
      * A Product may have many suppliers.
      *
      * @return BelongsToMany
      */
-    public function suppliers(): BelongsToMany {
+    public function suppliers(): BelongsToMany
+    {
         return $this->belongsToMany( Supplier::class, 'supplier_products' )->withTimestamps();
     }
 
@@ -50,7 +63,8 @@ class Product extends Model
      *
      * @return BelongsToMany
      */
-    public function categories(): BelongsToMany {
+    public function categories(): BelongsToMany
+    {
         return $this->belongsToMany( Category::class, 'product_categories' )->withTimestamps();
     }
     /**
@@ -58,7 +72,8 @@ class Product extends Model
      *
      * @return Attribute
      */
-    public function image(): Attribute {
+    public function image(): Attribute
+    {
         return Attribute::make(
             get: fn ($value) =>  str_starts_with($value, 'http') ? $value : Storage::url($value)
         );
@@ -69,7 +84,8 @@ class Product extends Model
      *
      * @return Attribute
      */
-    public function currentSellingPrice(): Attribute {
+    public function currentSellingPrice(): Attribute
+    {
         return Attribute::make(
             get: fn($value) => $value / 100.0,
             set: fn($value) => intval( bcmul(

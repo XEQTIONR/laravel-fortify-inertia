@@ -29,7 +29,7 @@ class DeliveryListController extends Controller
             return response($messageBag->first('date'), 422);
         }
         $delivery_date = $request->input('date');
-        return OrderResource::collection(Order::with([ 'address', 'items.product'])
+        return OrderResource::collection(Order::with(['address', 'items.product'])
             ->where('delivery_date', $delivery_date)
             ->where('status', 'prepared')
             ->orderBy('time_slot')
