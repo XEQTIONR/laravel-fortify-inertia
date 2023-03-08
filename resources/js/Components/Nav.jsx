@@ -112,49 +112,48 @@ export default function Nav({
         <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Stack spacing={1} direction="row" justifyContent="flex-start">
-                <Toolbar className="pl-1 pr-0">
-                    <Box className="flex items-center"
-                         sx={{ width: show ? drawerWidth : '50px' }}
-                    >
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                            onClick={() => { setShow( !show )}}
+                    <Toolbar className="pl-1 pr-0">
+                        <Box className="flex items-center"
+                             sx={{ width: show ? drawerWidth : '50px' }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography
-                            className={'flex-shrink-0 ' + (show ? '' : 'hidden') }
-                            variant="h6"
-                            noWrap component="div"
-                        >
-                            Clipped drawer
-                        </Typography>
-                    </Box>
-                </Toolbar>
-                        <Toolbar className="w-full px-0">
-                            {   setSearchItems
-                                ? <NavSearchBar
-                                    value={searchQuery}
-                                    onChange={({target}) => {
-                                        setSearchQuery(target.value);
-                                        setIsSearching(true);
-                                        if (target.value.length > 0) {
-                                            search(target.value);
-                                        } else {
-                                            setIsSearching(false);
-                                            setSearchItems([]);
-                                        }
-                                    }}
-                                />
-                                : null
-                            }
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="inherit"
+                                onClick={() => { setShow( !show )}}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography
+                                className={'flex-shrink-0 ' + (show ? '' : 'hidden') }
+                                variant="h6"
+                                noWrap component="div"
+                            >
+                                Clipped drawer
+                            </Typography>
+                        </Box>
+                    </Toolbar>
+                    <Toolbar className="w-full px-0">
+                        {   setSearchItems
+                            ? <NavSearchBar
+                                value={searchQuery}
+                                onChange={({target}) => {
+                                    setSearchQuery(target.value);
+                                    setIsSearching(true);
+                                    if (target.value.length > 0) {
+                                        search(target.value);
+                                    } else {
+                                        setIsSearching(false);
+                                        setSearchItems([]);
+                                    }
+                                }}
+                            />
+                            : null
+                        }
 
-                        </Toolbar>
-
+                    </Toolbar>
                     <Toolbar className="pl-0 pr-4">
                         {
                             showUserMenu ?
@@ -215,7 +214,6 @@ export default function Nav({
                                 </>) : null
                         }
                         {
-
                             shoppingCart
                                 ? <>
                                     <IconButton color="inherit"
@@ -241,7 +239,6 @@ export default function Nav({
                                 </> : null
                         }
                     </Toolbar>
-
                 </Stack>
             </AppBar>
 

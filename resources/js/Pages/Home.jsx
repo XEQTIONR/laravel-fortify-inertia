@@ -26,6 +26,8 @@ export default function Home ({ categories, products, shopping_cart, user }) {
         setItems([...items, ...rows]);
     }
 
+    const findCartItem = (product_id) => cart.find((item) => item.product_id === product_id);
+
     const paginate = usePaginate( route('api.home', { slug: selectedCategory ? selectedCategory.slug : null }),
         setIsLoading, setRows, setMeta );
 
@@ -42,8 +44,6 @@ export default function Home ({ categories, products, shopping_cart, user }) {
             } else {
                 setCart([...cart, res.data]);
             }
-
-           console.log('add to cart response', res);
         }).catch(err => {
             console.log('ERROR:', err);
         });
@@ -134,18 +134,24 @@ export default function Home ({ categories, products, shopping_cart, user }) {
                                     cbAdd={() => {
                                         addToCart(item.id, user ? user.id : null)
                                     }}
+                                    cbSubtract={() => {
+                                        console.log('product item', item);
+                                        console.log('shopping_cart', cart);
+                                    }}
                                 />)
                             : items.map((item) =>
                                 <ProductCard
                                     key={item.id}
                                     product={item}
+                                    cartItem={findCartItem(item.id)}
                                     cbAdd={() => {
                                         addToCart(item.id, user ? user.id : null)
                                     }}
+                                    cbSubtract={() => {
+                                        console.log('product item', item);
+                                        console.log('shopping_cart', cart);
+                                    }}
                                 />)
-                }
-                {
-
                 }
                 {/*{*/}
                 {/*    (isLoading && (meta.current_page < meta.last_page))*/}

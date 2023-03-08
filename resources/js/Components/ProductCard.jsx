@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
+import {Add, Remove} from '@mui/icons-material/';
 
-export default function ProductCard ({product, cbAdd }) {
+export default function ProductCard ({product, cartItem, cbAdd }) {
 
     const [imgUrl, setImgUrl] = useState('none');
     useEffect(() => {
@@ -43,17 +44,42 @@ export default function ProductCard ({product, cbAdd }) {
             </Box>
             <Typography className="my-2" variant="caption"  align="center">{ product.amount } {product.uom}</Typography>
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
+            {
+                cartItem
+                    ? (<ButtonGroup className="mt-2" variant="contained">
+                            <Button className="p-0"><Remove fontSize="small" /></Button>
+                            <Button
+                                className="lowercase flex-grow"
+                                onClick={ (e) => {
+                                    e.stopPropagation();
+                                    cbAdd();
+                                }}
+                            >
+                                {cartItem.qty} in cart
+                            </Button>
+                            <Button
+                                className="p-0"
+                                onClick={ (e) => {
+                                    e.stopPropagation();
+                                    cbAdd();
+                                } }
+                            >
+                                <Add fontSize="small" />
+                            </Button>
+                        </ButtonGroup>)
+                    : (<Button
+                        onClick={ (e) => {
+                            e.stopPropagation()
+                            cbAdd();
+                        }}
+                        className="mt-2 border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
+                        variant="outlined"
+                    >
+                        Add to cart
+                    </Button>)
+            }
 
-                <Button
-                    onClick={ (e) => {
-                        e.stopPropagation()
-                        cbAdd();
-                    }}
-                    className="mt-2 border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
-                    variant="outlined"
-                >
-                    Add to cart
-                </Button>
+
         </Box>
         )
 }
