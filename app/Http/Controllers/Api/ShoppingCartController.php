@@ -108,6 +108,7 @@ class ShoppingCartController extends Controller
                 $cart->qty = $validated['qty'];
                 $cart->status = 'updated';
                 $cart->save();
+                $cart->load('product');
                 $action = 'update';
             }
         }

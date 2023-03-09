@@ -4,7 +4,7 @@ import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 import {Add, Remove} from '@mui/icons-material/';
 
-export default function ProductCard ({product, cartItem, cbAdd }) {
+export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
 
     const [imgUrl, setImgUrl] = useState('none');
     useEffect(() => {
@@ -19,7 +19,6 @@ export default function ProductCard ({product, cartItem, cbAdd }) {
         ? <ProductCardSkeleton />
         : (
         <Box
-            onClick={() => console.log('click')}
             key={product.id}
             className="p-3 mt-2 mb-6 mx-1 flex flex-col border cursor-pointer hover:border-gray-300 hover:shadow-xl "
             sx={{ width: `${cardWidth}px` }}
@@ -47,7 +46,15 @@ export default function ProductCard ({product, cartItem, cbAdd }) {
             {
                 cartItem
                     ? (<ButtonGroup className="mt-2" variant="contained">
-                            <Button className="p-0"><Remove fontSize="small" /></Button>
+                            <Button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    cbSubtract();
+                                }}
+                                className="p-0"
+                            >
+                                <Remove fontSize="small" />
+                            </Button>
                             <Button
                                 className="lowercase flex-grow"
                                 onClick={ (e) => {

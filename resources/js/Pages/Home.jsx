@@ -7,8 +7,6 @@ import ProductCardSkeleton from "../Components/ProductCardSkeleton";
 import { Box, CircularProgress } from "@mui/material";
 import flatten from "@/functions/flatten";
 import { cardWidth } from "@/constants/card";
-
-
 import usePaginate from '@/hooks/usePaginate';
 
 export default function Home ({ categories, products, shopping_cart, user }) {
@@ -48,6 +46,26 @@ export default function Home ({ categories, products, shopping_cart, user }) {
             console.log('ERROR:', err);
         });
 
+    }
+
+    const removeFromCart = (cartItem) => {
+        axios.put( route('api.carts.update', { cart: cartItem.id }), {
+            qty: cartItem.qty-1
+        }).then((res) => {
+            switch(res.data.action) {
+                case 'update':
+                    const index = cart.findIndex(({ id }) => id === res.data.id);
+                    if (index >= 0 ) {
+                        const localCart = [...cart];
+                        localCart[index] = res.data.cart;
+                        setCart(localCart);
+                    }
+                    break;
+                case 'delete':
+                    setCart(cart.filter(({id}) => id !== res.data.id));
+                    break;
+            }
+        })
     }
 
     const scrollPercentage = () => {
@@ -124,33 +142,24 @@ export default function Home ({ categories, products, shopping_cart, user }) {
                         : null
                 }
                 {
-                    isSearching ?
-                        <CircularProgress sx={{ mt: '33vh' }} />
+                    isSearching
+                        ? <CircularProgress sx={{ mt: '33vh' }} />
                         : ( searchItems.length > 0 )
                             ? searchItems.map((item) =>
                                 <ProductCard
                                     key={item.id}
                                     product={item}
-                                    cbAdd={() => {
-                                        addToCart(item.id, user ? user.id : null)
-                                    }}
-                                    cbSubtract={() => {
-                                        console.log('product item', item);
-                                        console.log('shopping_cart', cart);
-                                    }}
+                                    cartItem={findCartItem(item.id)}
+                                    cbAdd={() => addToCart(item.id, user ? user.id : null)}
+                                    cbSubtract={() => removeFromCart(findCartItem(item.id))}
                                 />)
                             : items.map((item) =>
                                 <ProductCard
                                     key={item.id}
                                     product={item}
                                     cartItem={findCartItem(item.id)}
-                                    cbAdd={() => {
-                                        addToCart(item.id, user ? user.id : null)
-                                    }}
-                                    cbSubtract={() => {
-                                        console.log('product item', item);
-                                        console.log('shopping_cart', cart);
-                                    }}
+                                    cbAdd={() => addToCart(item.id, user ? user.id : null)}
+                                    cbSubtract={() => removeFromCart(findCartItem(item.id))}
                                 />)
                 }
                 {/*{*/}
