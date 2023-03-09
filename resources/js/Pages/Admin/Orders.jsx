@@ -52,7 +52,7 @@ export default function Orders({ orders, statuses }) {
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
     const [ filterDateValue, setFilterDateValue ] = useState(orders.meta?.filters?.delivery_date);
-    const [ filterStatuses, setFilterStatuses ] = useState([]);
+    const [ filterStatuses, setFilterStatuses ] = useState(orders.meta?.filters?.statuses ?? []);
 
     const paginate = usePaginate( route('api.orders.index'), setIsLoading, setRows, setMeta );
 
@@ -168,20 +168,31 @@ export default function Orders({ orders, statuses }) {
     }, [flash] );
 
     useEffect(() => {
+        const localFilterButtonOptions = [...filters];
+        let flagUpdateFilters = false;
         if (filterDateValue) {
             const aMoment = moment(filterDateValue);
-            if(aMoment._isValid) {
+            if (aMoment._isValid) {
                 setFilterDate(aMoment);
-                const localFilterButtonOptions = [...filters];
                 ['filters', 'delivery_date'].forEach((item) => {
                     if ( ! localFilterButtonOptions.includes(item)) {
                         localFilterButtonOptions.push(item);
+                        flagUpdateFilters = true;
                     }
                 });
-                if ( localFilterButtonOptions.length > 0) {
-                    setFilters([...filters, ...localFilterButtonOptions]);
-                }
             }
+        }
+        if (Array.isArray(filterStatuses) && filterStatuses.length > 0) {
+            ['filters', 'status'].forEach((item) => {
+                if ( ! localFilterButtonOptions.includes(item)) {
+                    localFilterButtonOptions.push(item);
+                    flagUpdateFilters = true;
+                }
+            });
+        }
+
+        if ( flagUpdateFilters ) {
+            setFilters(localFilterButtonOptions);
         }
     }, []); //do this once for when redirected from dashboard card.
 
