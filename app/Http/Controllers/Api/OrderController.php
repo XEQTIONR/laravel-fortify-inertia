@@ -37,8 +37,8 @@ class OrderController extends Controller
                 $query->whereIn('status', $filters['statuses']);
             }
 
-            if (isset($filters['date'])) {
-                $query->where('delivery_date', $filters['date']);
+            if (isset($filters['delivery_date'])) {
+                $query->where('delivery_date', $filters['delivery_date']);
             }
         }
 

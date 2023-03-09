@@ -175,7 +175,7 @@ export default function Orders({ orders, statuses }) {
                 localFilters.statuses = filterStatuses;
             }
             if ( filterDateValue !== null ) {
-                localFilters.date = filterDateValue;
+                localFilters.delivery_date = filterDateValue;
             }
             debouncedPaginate(meta.current_page, meta.per_page, meta.orderBy, meta.order, localFilters);
         } else {
@@ -330,8 +330,8 @@ export default function Orders({ orders, statuses }) {
                                 if ( filterStatuses.length > 0 ) {
                                     localFilters.statuses = filterStatuses;
                                 }
-                                    if ( filterDateValue !== null ) {
-                                    localFilters.date = filterDateValue;
+                                if ( filterDateValue !== null ) {
+                                    localFilters.delivery_date = filterDateValue;
                                 }
                                 debouncedPaginate(meta.current_page, newPageSize, meta.orderBy, meta.order, localFilters);
                             } else {
@@ -345,7 +345,7 @@ export default function Orders({ orders, statuses }) {
                                     localFilters.statuses = filterStatuses;
                                 }
                                 if ( filterDateValue !== null ) {
-                                    localFilters.date = filterDateValue;
+                                    localFilters.delivery_date = filterDateValue;
                                 }
                                 debouncedPaginate(newPage+1, meta.per_page, meta.orderBy, meta.order, localFilters);
                             } else {
@@ -360,7 +360,7 @@ export default function Orders({ orders, statuses }) {
                                         localFilters.statuses = filterStatuses;
                                     }
                                     if ( filterDateValue !== null ) {
-                                        localFilters.date = filterDateValue;
+                                        localFilters.delivery_date = filterDateValue;
                                     }
                                     debouncedPaginate(meta.current_page, meta.per_page, gridSortItem.field, gridSortItem.sort, localFilters);
                                 } else {
