@@ -46,7 +46,7 @@ class OrderController extends Controller
         $orders->appends(compact('perPage', 'orderBy', 'order'));
 
         return OrderResource::collection($orders)->additional([
-            'meta' => compact('orderBy', 'order')
+            'meta' => compact('orderBy', 'order', 'filters')
         ]);
     }
 

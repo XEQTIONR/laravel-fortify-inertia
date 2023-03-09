@@ -32,8 +32,8 @@ import {
     LocalShipping,
     SyncProblem
 } from "@mui/icons-material";
-
 import usePaginate from '@/hooks/usePaginate';
+import * as moment from 'moment';
 
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;
@@ -51,7 +51,7 @@ export default function Orders({ orders, statuses }) {
     const [ showDeliveredButton, setShowDeliveredButton ] = useState(false);
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
-    const [ filterDateValue, setFilterDateValue ] = useState(null);
+    const [ filterDateValue, setFilterDateValue ] = useState(orders.meta?.filters?.delivery_date);
     const [ filterStatuses, setFilterStatuses ] = useState([]);
 
     const paginate = usePaginate( route('api.orders.index'), setIsLoading, setRows, setMeta );
@@ -166,6 +166,24 @@ export default function Orders({ orders, statuses }) {
             setShowSnackbar(true);
         }
     }, [flash] );
+
+    useEffect(() => {
+        if (filterDateValue) {
+            const aMoment = moment(filterDateValue);
+            if(aMoment._isValid) {
+                setFilterDate(aMoment);
+                const localFilterButtonOptions = [...filters];
+                ['filters', 'delivery_date'].forEach((item) => {
+                    if ( ! localFilterButtonOptions.includes(item)) {
+                        localFilterButtonOptions.push(item);
+                    }
+                });
+                if ( localFilterButtonOptions.length > 0) {
+                    setFilters([...filters, ...localFilterButtonOptions]);
+                }
+            }
+        }
+    }, []); //do this once for when redirected from dashboard card.
 
     useEffect( () => {
         setSelected([]);
