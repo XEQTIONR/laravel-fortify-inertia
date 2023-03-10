@@ -60,6 +60,10 @@ class OrderController extends Controller
         Order::whereIn('id', $validated['ids'])
             ->update([ 'status' => $validated['status']]);
 
-        return [ 'message' => 'Status updated to '. ucfirst($validated['status'])  ];
+        return [
+            'message' => 'Status updated to `'
+            . ucfirst($validated['status'])
+            . '` for orders '. implode(', ', $validated['ids'])
+        ];
     }
 }
