@@ -46,6 +46,7 @@ export default function Orders({ orders, statuses }) {
     const [rows, setRows] = useState(orders.data);
     const [meta, setMeta] = useState(orders.meta);
     const [ selected, setSelected ] =  useState([]);
+    const [ selectedRows, setSelectedRows ] = useState([]);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
     const [ showPreparedButton, setShowPreparedButton ] = useState(false);
     const [ showDeliveredButton, setShowDeliveredButton ] = useState(false);
@@ -125,41 +126,45 @@ export default function Orders({ orders, statuses }) {
             timer = setTimeout(() => { fn(...args); }, timeout);
         };
     }
-    const callOrderIndexApi = (ids) => {
-        if (ids !== false) {
-            axios.get( route('api.orders.index'), { params: { ids: ids }})
-                .then(({data}) => {
-                    if ( data.data.every(({status}) => status === 'created') ) {
-                        setShowPreparedButton(true);
-                    } else if ( data.data.every(({status}) => status === 'prepared') ) {
-                        setShowDeliveredButton(true);
-                    }
-                })
-                .catch((e) => {
-                    console.log('error',e);
-                });
-        }
-    }
-
-    const debouncedOrderIndexApiCall = useCallback( debounce( (ids) => {
-        callOrderIndexApi(ids);
-    }), []);
 
     const debouncedPaginate = useCallback( debounce( ( currentPage, perPage, orderBy, order, currentFilters ) => {
         paginate(currentPage, perPage, orderBy, order, currentFilters);
     }), []);
 
     useEffect( () => {
-        setShowDeliveredButton(false);
-        setShowPreparedButton(false);
-        if ( selected.length > 0 ) {
-            debouncedOrderIndexApiCall(selected);
-        } else {
-            debouncedOrderIndexApiCall(false);
-            setShowDeliveredButton(false);
-            setShowPreparedButton(false);
-        }
+        const array = [];
+        selected.forEach( function(id) {
+            const item = rows.find((row) => row.id === id);
+            if ( item !== undefined ) {
+                array.push(item);
+            } else {
+                const alreadySelectedItem = selectedRows.find((row) => row.id === id)
+                if ( alreadySelectedItem !== undefined ) {
+                    array.push(alreadySelectedItem)
+                }
+            }
+        });
+        setSelectedRows(array);
     }, [ selected ] );
+
+    useEffect( () => {
+        if (selectedRows.length > 0) {
+            if ( selectedRows.every(({status}) => status === 'created') ) {
+                setShowPreparedButton(true);
+            } else {
+                setShowPreparedButton(false);
+            }
+
+            if ( selectedRows.every(({status}) => status === 'prepared') ) {
+                setShowDeliveredButton(true);
+            } else {
+                setShowDeliveredButton(false);
+            }
+        } else {
+            setShowPreparedButton(false);
+            setShowDeliveredButton(false);
+        }
+    }, [selectedRows]);
 
     useEffect( () => {
         if ( flash.status === HTTP_CREATED || flash.status === HTTP_OK ) {
