@@ -28,6 +28,7 @@ class Order extends Model
       'created',
       'prepared',
       'delivered',
+      'paid'
     ];
 
     public static array $timeSlots = [

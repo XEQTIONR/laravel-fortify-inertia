@@ -4,6 +4,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <script src="{{ route('translations') }}"></script>
+    <style>
+        .order-created .MuiStepLabel-iconContainer.Mui-active.MuiStepLabel-alternativeLabel::after{
+            content: '';
+            display: block;
+            position: absolute;
+            width:24px;
+            height:24px;
+            top: 0;
+            bottom: 0;
+            animation: pulse2 4s infinite;
+            border-radius: 50%;
+            border: 4px solid #1876D1;
+        }
+
+        @keyframes pulse2 {
+            0% {
+                transform: scale(1, 1);
+                opacity: 0;
+            }
+
+            25% {
+                opacity: .7;
+            }
+
+            50% {
+                transform: scale(1.5, 1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1, 1);
+                opacity: 0;
+            }
+        }
+    </style>
     @routes
     @viteReactRefresh
     @vite('resources/js/app.jsx')

@@ -55,7 +55,7 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
         >
             <Stack spacing={3} className="w-full md:w-3/4 lg:w-3/5 mt-4 mx-3">
                 <Card className="py-3" variant="outlined">
-                    <Stepper activeStep={ (steps.indexOf(order.data.status) + 1) } alternativeLabel>
+                    <Stepper className="order-created" activeStep={ (steps.indexOf(order.data.status) + 1) } alternativeLabel>
                     {
                         steps.map((label, index) => (
                             <Step>
