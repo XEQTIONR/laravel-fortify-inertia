@@ -40,7 +40,7 @@ class Order extends Model
 
     public function address(): BelongsTo
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo( Address::class );
     }
 
     public function items(): HasMany
@@ -55,12 +55,17 @@ class Order extends Model
 
     public function shoppingCarts(): HasMany
     {
-        return $this->hasMany(ShoppingCart::class);
+        return $this->hasMany( ShoppingCart::class );
     }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo( User::class );
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany( Payment::class );
     }
 
     public function deliveryCharge(): Attribute
@@ -86,6 +91,17 @@ class Order extends Model
     }
 
     public function total(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value / 100.0,
+            set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ))
+        );
+    }
+
+    public function paymentsTotal(): Attribute
     {
         return Attribute::make(
             get: fn($value) => $value / 100.0,

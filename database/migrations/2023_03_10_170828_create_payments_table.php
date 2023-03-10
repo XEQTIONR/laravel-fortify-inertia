@@ -13,18 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable();
+            $table->foreignId('order_id');
+            $table->integer('amount');
             $table->string('payment_type')->default('cash');
-            $table->foreignId('address_id')->nullable();
-            $table->integer('subtotal');
-            $table->integer('delivery_charge');
-            $table->integer('total');
-            $table->integer('payments_total')->default(0);
-            $table->date('delivery_date');
-            $table->integer('time_slot');
-            $table->string('status');
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }
@@ -36,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('payments');
     }
 };

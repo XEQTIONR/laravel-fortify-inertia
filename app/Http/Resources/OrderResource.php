@@ -23,10 +23,10 @@ class OrderResource extends JsonResource
             'delivery_date' => $this->delivery_date,
             'time_slot' => Order::$timeSlots[$this->time_slot],
             'status' => $this->status,
-            'items' => OrderItemResource::collection($this->whenLoaded('items')),
-            'address' => new AddressResource($this->whenLoaded('address')),
+            'items' => OrderItemResource::collection( $this->whenLoaded( 'items' ) ),
+            'payments' => PaymentResource::collection( $this->whenLoaded( 'payments' ) ),
+            'address' => new AddressResource( $this->whenLoaded( 'address' ) ),
             'created_at' => $this->created_at,
-
         ];
     }
 }
