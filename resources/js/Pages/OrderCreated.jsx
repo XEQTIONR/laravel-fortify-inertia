@@ -22,11 +22,28 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
 
     const [cart, setCart] = useState(shopping_cart);
     const steps = [
-        'Create',
-        'Confirm',
-        'Prepare',
-        'Deliver',
+        'created',
+        'prepared',
+        'delivered',
+        'paid'
     ];
+    const stepsPresentTense = [
+        'creating',
+        'preparing',
+        'delivering',
+        'paying'
+    ];
+
+    const stepsFutureTense = [
+        'create',
+        'prepare',
+        'delivery',
+        'payment'
+    ];
+
+    function ucfirst(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1)
+    }
     return (
         <Nav
             navLinks={categories.data}
@@ -38,12 +55,18 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
         >
             <Stack spacing={3} className="w-full md:w-3/4 lg:w-3/5 mt-4 mx-3">
                 <Card className="py-3" variant="outlined">
-                    <Stepper activeStep={1} alternativeLabel>
+                    <Stepper activeStep={ (steps.indexOf(order.data.status) + 1) } alternativeLabel>
                     {
-                        steps.map((label) => (
+                        steps.map((label, index) => (
                             <Step>
                                 <StepLabel>
-                                    {label.charAt(0).toUpperCase() + label.slice(1)}
+                                    {
+                                        index <= steps.indexOf(order.data.status)
+                                        ? ucfirst(label)
+                                        : (index === (steps.indexOf(order.data.status)+1)
+                                            ? ucfirst(stepsPresentTense[index])
+                                            : ucfirst(stepsFutureTense[index]))
+                                    }
                                 </StepLabel>
                             </Step>
                         ))
@@ -70,7 +93,7 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                                 <TableRow>
                                     <TableCell colSpan={2}>Order # {order.data.id}</TableCell>
                                     <TableCell align="right" colSpan={2}>
-                                        Status: {order.data.status.charAt(0).toUpperCase() + order.data.status.slice(1)}
+                                        Status: {ucfirst(order.data.status)}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
