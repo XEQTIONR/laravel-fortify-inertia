@@ -30,6 +30,7 @@ import {
     CalendarMonthOutlined,
     FilterList,
     LocalShipping,
+    Payments,
     SyncProblem
 } from "@mui/icons-material";
 import usePaginate from '@/hooks/usePaginate';
@@ -50,6 +51,7 @@ export default function Orders({ orders, statuses }) {
     const [ showSnackbar, setShowSnackbar ] = useState( false );
     const [ showPreparedButton, setShowPreparedButton ] = useState(false);
     const [ showDeliveredButton, setShowDeliveredButton ] = useState(false);
+    const [ recordPaymentButton,  setRecordPaymentButton ] = useState(false);
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
     const [ filterDateValue, setFilterDateValue ] = useState(orders.meta?.filters?.delivery_date);
@@ -66,7 +68,7 @@ export default function Orders({ orders, statuses }) {
         {
             field: 'delivery_date',
             headerName: 'Delivery Date',
-            width: 140,
+            width: 130,
             valueGetter: (params) => params.row.delivery_date.split('-').reverse().join('/')
         },
         {
@@ -77,7 +79,7 @@ export default function Orders({ orders, statuses }) {
         {
             field: 'subtotal',
             headerName: 'Subtotal',
-            width: 125,
+            width: 100,
             type: 'number',
             valueGetter: (params) => `৳ ${params.row.subtotal.toFixed(2)}`
         },
@@ -91,9 +93,16 @@ export default function Orders({ orders, statuses }) {
         {
             field: 'total',
             headerName: 'Total',
-            width: 125,
+            width: 100,
             type: 'number',
             valueGetter: (params) => `৳ ${params.row.total.toFixed(2)}`
+        },
+        {
+            field: 'payments_total',
+            headerName: 'Payments total',
+            width: 125,
+            type: 'number',
+            valueGetter: (params) => `৳ ${params.row.payments_total.toFixed(2)}`
         },
         {
             field: 'status',
@@ -164,6 +173,13 @@ export default function Orders({ orders, statuses }) {
             setShowPreparedButton(false);
             setShowDeliveredButton(false);
         }
+
+        if (selectedRows.length === 1 && selectedRows[0].status === 'delivered') {
+            setRecordPaymentButton(true);
+        } else {
+            setRecordPaymentButton(false);
+        }
+
     }, [selectedRows]);
 
     useEffect( () => {
@@ -258,6 +274,18 @@ export default function Orders({ orders, statuses }) {
                         { filters.length && <ToggleButton value="delivery_date"><CalendarMonthOutlined /></ToggleButton> }
                     </ToggleButtonGroup>
                     <Box className="flex flex-col justify-end">
+                        <Tooltip className="" title="Record payment." placement="right">
+                            <Fab
+                                //onClick={() => Inertia.post( route('admin.orders.status'), { ids: selected, status: 'delivered' } )}
+                                className={`transition duration-200 ${ recordPaymentButton ? 'hover:scale-125' : 'scale-0' }`}
+                                color="success"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <Payments />
+                            </Fab>
+                        </Tooltip>
                         <Tooltip title="Mark orders as delivered." placement="right">
                             <Fab
                                 onClick={() => Inertia.post( route('admin.orders.status'), { ids: selected, status: 'delivered' } )}
@@ -280,19 +308,6 @@ export default function Orders({ orders, statuses }) {
                                 sx={{ ml: 2, mt: 2 }}
                             >
                                 <Check />
-                            </Fab>
-                        </Tooltip>
-                        <Tooltip title="Add a new product." placement="right">
-                            <Fab
-                                // onClick={() => Inertia.visit(route('admin.products.create')) }
-                                id="addButton"
-                                className="transition hover:scale-125 duration-200 scale-0"
-                                color="primary"
-                                size="medium"
-                                aria-label="add"
-                                sx={{ ml: 2, mt: 2 }}
-                            >
-                                <Add />
                             </Fab>
                         </Tooltip>
                     </Box>
