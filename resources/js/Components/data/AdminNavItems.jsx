@@ -8,10 +8,10 @@ import {
     FoodBankOutlined,
     Kitchen,
     KitchenOutlined,
-    Restaurant,
+    Payments,
+    PaymentsOutlined,
     Store,
     StoreOutlined,
-    SupervisedUserCircle,
     ViewList,
     ViewListOutlined,
 
@@ -41,6 +41,12 @@ export default [
         icon: <ViewListOutlined />,
         iconActive: <ViewList color="primary" />,
         route: 'admin.orders.index'
+    },
+    {
+        label: 'Payments',
+        icon: <PaymentsOutlined />,
+        iconActive: <Payments color="primary" />,
+        route: 'admin.payments.index'
     },
     {
         label: 'Customers',

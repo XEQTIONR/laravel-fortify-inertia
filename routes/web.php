@@ -12,6 +12,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
 use App\Http\Controllers\OrderPaymentController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\SecurityController;
@@ -248,6 +249,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::post('/suppliers/status', [ SupplierController::class, 'toggleActivation' ])->name('suppliers.status');
 
         Route::resource('suppliers.products', SupplierProductsController::class);
+
+        Route::get('/payments', [ PaymentController::class, 'index' ])->name('payments.index');
     });
 });
 

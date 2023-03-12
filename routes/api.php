@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SupplierController;
@@ -49,6 +50,9 @@ Route::name('api.')
 
                 Route::get('/customers', [ CustomerController::class, 'index' ])
                     ->name('customers.index');
+
+                Route::get('/payments', [ PaymentController::class, 'index' ])
+                    ->name('payments.index');
         });
 
         Route::apiResource('addresses', AddressController::class)
