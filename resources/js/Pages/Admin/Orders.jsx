@@ -283,7 +283,7 @@ export default function Orders({ orders, statuses }) {
                     <Box className="flex flex-col justify-end">
                         <Tooltip className="" title="Record payment." placement="right">
                             <Fab
-                                //onClick={() => Inertia.post( route('admin.orders.status'), { ids: selected, status: 'delivered' } )}
+                                onClick={() => Inertia.visit( route('admin.orders.payments.create', { order: selected[0] }) )}
                                 className={`transition duration-200 ${ recordPaymentButton ? 'hover:scale-125' : 'scale-0' }`}
                                 color="success"
                                 size="medium"
