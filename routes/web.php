@@ -11,6 +11,7 @@ use App\Http\Controllers\DeliveryListController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderReceiptController;
+use App\Http\Controllers\OrderPaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\SecurityController;
@@ -238,6 +239,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('orders', OrderController::class);
         Route::post('/orders/status', [ OrderController::class, 'updateStatus' ])->name('orders.status');
 
+        Route::resource('orders.payments', OrderPaymentController::class);
+
         Route::resource('products', ProductController::class);
         Route::post('/products/status', [ ProductController::class, 'toggleActivation' ])->name('products.status');
 
@@ -249,4 +252,4 @@ Route::prefix('admin')->name('admin.')->group(function() {
 });
 
 // after admin so this does not match /admin
-Route::get('/{slug?}', [HomeController::class, 'index'])->name('welcome');
+Route::get('/{slug?}', [ HomeController::class, 'index' ])->name('welcome');

@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\Request;
 
-class PaymentController extends Controller
+class OrderPaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,11 +30,26 @@ class PaymentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return Payment
      */
-    public function store(Request $request)
+    public function store(Request $request, Order $order)
     {
-        //
+        $validated = $request->validate([
+            'payment' => 'numeric|min:0'
+        ]);
+
+        $payment = new Payment();
+        $payment->amount = $validated['payment'];
+
+        $order->payments()->save($payment);
+
+        $payments = $order->payments()->get();
+
+        $paymentsTotal = $payments->reduce( fn($carry, $item) => $carry + $item->amount, 0);
+        $order->payments_total = $paymentsTotal;
+        $order->save();
+
+        return $payment;
     }
 
     /**

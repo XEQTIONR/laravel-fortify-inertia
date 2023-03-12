@@ -24,6 +24,7 @@ class OrderResource extends JsonResource
             'time_slot' => Order::$timeSlots[$this->time_slot],
             'status' => $this->status,
             'payments_total' => $this->payments_total,
+            'balance' => $this->total - $this->payments_total,
             'items' => OrderItemResource::collection( $this->whenLoaded( 'items' ) ),
             'payments' => PaymentResource::collection( $this->whenLoaded( 'payments' ) ),
             'address' => new AddressResource( $this->whenLoaded( 'address' ) ),

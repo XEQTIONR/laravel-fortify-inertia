@@ -105,9 +105,16 @@ export default function Orders({ orders, statuses }) {
             valueGetter: (params) => `৳ ${params.row.payments_total.toFixed(2)}`
         },
         {
+            field: 'balance',
+            headerName: 'Balance',
+            width: 100,
+            type: 'number',
+            sortable: false,
+            valueGetter: (params) => `৳ ${params.row.balance.toFixed(2)}`
+        },
+        {
             field: 'status',
             headerName: 'Status',
-            sortable: true,
             width: 90,
             valueGetter: (params) => params.row.status.charAt(0).toUpperCase() + params.row.status.substring(1)
         },

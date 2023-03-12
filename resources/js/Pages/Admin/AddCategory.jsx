@@ -4,7 +4,7 @@ import CategoryForm from '@/Components/Admin/CategoryForm';
 import navItems from  '@/Components/data/AdminNavItems';
 
 import { ArrowBack } from "@mui/icons-material";
-import { Box, Fab, Tooltip } from '@mui/material'
+import { Box, Fab, Tooltip } from '@mui/material';
 
 export default function AddCategory({ categories }) {
 
