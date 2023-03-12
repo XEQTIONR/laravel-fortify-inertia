@@ -19,7 +19,7 @@ import {
 export default function ViewOrder({ order }) {
     return (
         <Nav navLinks={ navItems }>
-            <Box className="flex">
+            <Box className="flex flex-wrap">
                 <List className="w-full md:w-1/2">
                     <ListItemText
                         primary="Order ID"
@@ -40,7 +40,7 @@ export default function ViewOrder({ order }) {
                     />
                     <ListItemText
                         primary={"Status"}
-                        secondary={order.data.status}
+                        secondary={order.data.status.charAt(0).toUpperCase()+order.data.status.substring(1)}
                     />
                 </List>
                 <List className="w-full md:w-1/2">
@@ -73,7 +73,7 @@ export default function ViewOrder({ order }) {
                             <TableCell>Product</TableCell>
                             <TableCell align="center">Qty</TableCell>
                             <TableCell align="right">Price</TableCell>
-                            <TableCell align="right">Subtotal</TableCell>
+                            <TableCell align="right">Item total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
