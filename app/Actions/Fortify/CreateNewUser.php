@@ -42,7 +42,7 @@ class CreateNewUser implements CreatesNewUsers
             'primary_contact_number' => 'This mobile number is already registered.'
         ])->validate();
 
-        $code = strval( random_int(100000, 999999) );
+        $code = 123456; //strval( random_int(100000, 999999) );
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
