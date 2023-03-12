@@ -28,6 +28,8 @@ class OrderFactory extends Factory
             'payment_type' => 'cash',
             'address_id' => Address::factory(),
             'subtotal' => $subtotal,
+            'delivery_charge_type' => config('payment.service_charge_type'),
+            'delivery_charge_amount' => config('payment.service_charge_amount'),
             'delivery_charge' => $delivery,
             'total' => $subtotal + $delivery,
             'delivery_date' => fake()->dateTimeBetween('+1 day', '+5 days'),

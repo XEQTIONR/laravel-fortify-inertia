@@ -50,6 +50,19 @@ class OrderController extends Controller
         ]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  Order $order
+     * @return OrderResource
+     */
+    public function show(Order $order)
+    {
+        $order->load('items.product', 'user');
+
+        return new OrderResource($order);
+    }
+
     public function updateStatus(Request $request)
     {
         $validated = $request->validate([

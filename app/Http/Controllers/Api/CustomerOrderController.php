@@ -60,6 +60,8 @@ class CustomerOrderController extends Controller
 
         $order = new Order();
         $order->user_id = auth()->user()->id;
+        $order->delivery_charge_type = $serviceChargeType;
+        $order->delivery_charge_amount = $serviceChargeAmount;
         $order->address_id = $validated['address_id'];
         $order->delivery_date = $validated['delivery_date'];
         $order->time_slot = $validated['time_slot'];

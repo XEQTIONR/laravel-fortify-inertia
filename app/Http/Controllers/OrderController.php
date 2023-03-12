@@ -22,6 +22,19 @@ class OrderController extends Controller
         return Inertia::render('Admin/Orders', compact('orders', 'statuses'));
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  Order $order
+     * @return Response
+     */
+    public function show(Order $order)
+    {
+        return Inertia::render('Admin/ViewOrder', [
+           'order' => parent::show($order),
+        ]);
+    }
+
     public function updateStatus(Request $request)
     {
         $response = parent::updateStatus($request);

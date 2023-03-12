@@ -17,6 +17,8 @@ class Order extends Model
         'delivery_charge',
         'delivery_date',
         'payment_type',
+        'delivery_charge_type',
+        'delivery_type_amount',
         'status',
         'subtotal',
         'time_slot',

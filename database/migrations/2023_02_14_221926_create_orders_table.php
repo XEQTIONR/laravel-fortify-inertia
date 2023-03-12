@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('payment_type')->default('cash');
             $table->foreignId('address_id')->nullable();
             $table->integer('subtotal');
+            $table->string('delivery_charge_type');
+            $table->float('delivery_charge_amount');
             $table->integer('delivery_charge');
             $table->integer('total');
             $table->integer('payments_total')->default(0);
