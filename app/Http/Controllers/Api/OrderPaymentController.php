@@ -47,6 +47,11 @@ class OrderPaymentController extends Controller
 
         $paymentsTotal = $payments->reduce( fn($carry, $item) => $carry + $item->amount, 0);
         $order->payments_total = $paymentsTotal;
+
+        if ( $paymentsTotal === $order->total ) {
+            $order->status = 'paid';
+        }
+
         $order->save();
 
         return $payment;
