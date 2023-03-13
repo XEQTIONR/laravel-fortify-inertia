@@ -1,4 +1,5 @@
 import React, { useEffect, useState }  from 'react';
+import { Inertia } from '@inertiajs/inertia';
 import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
 import * as moment from 'moment';
@@ -16,7 +17,7 @@ import {
     Typography
 } from '@mui/material';
 
-import { Receipt, Cancel } from "@mui/icons-material";
+import { Receipt, Cancel, Visibility } from "@mui/icons-material";
 
 export default function MyOrders ({ shopping_cart, categories, user, orders }) {
 
@@ -65,6 +66,7 @@ export default function MyOrders ({ shopping_cart, categories, user, orders }) {
                                     <TableCell>{order.time_slot}</TableCell>
                                     <TableCell>{order.status.charAt(0).toUpperCase() + order.status.substring(1)}</TableCell>
                                     <TableCell align="center">
+                                        <IconButton onClick={() => Inertia.visit( route('orders.show', {order: order.id}))}><Tooltip title="View order"><Visibility /></Tooltip></IconButton>
                                         <IconButton><Tooltip title="View receipt"><Receipt /></Tooltip></IconButton>
                                         {
                                             order.status === 'created'
