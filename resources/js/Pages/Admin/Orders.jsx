@@ -246,13 +246,6 @@ export default function Orders({ orders, statuses }) {
         }
     }, [orders, filterDateValue, filterStatuses]);
 
-    useEffect(() => {
-        setTimeout(() => {
-            const addButton = document.querySelector('#addButton');
-            addButton.classList.remove('scale-0');
-        }, 125);
-    });
-
     return (
         <Nav navLinks={ navItems }>
             <Snackbar
