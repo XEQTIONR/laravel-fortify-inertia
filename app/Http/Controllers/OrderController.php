@@ -19,7 +19,11 @@ class OrderController extends Controller
     {
         $orders = parent::index($request);
         $statuses = Order::$statuses;
-        return Inertia::render('Admin/Orders', compact('orders', 'statuses'));
+        $otherStatuses = Order::$otherStatuses;
+        return Inertia::render('Admin/Orders', [
+            'orders' => $orders,
+            'statuses' => array_merge($statuses, $otherStatuses)
+        ]);
     }
 
     /**

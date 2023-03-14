@@ -78,6 +78,12 @@ export default function Orders({ orders, statuses }) {
             width: 125,
         },
         {
+            field: 'status',
+            headerName: 'Status',
+            width: 90,
+            valueGetter: (params) => params.row.status.charAt(0).toUpperCase() + params.row.status.substring(1)
+        },
+        {
             field: 'subtotal',
             headerName: 'Subtotal',
             width: 100,
@@ -114,10 +120,13 @@ export default function Orders({ orders, statuses }) {
             valueGetter: (params) => `৳ ${params.row.balance.toFixed(2)}`
         },
         {
-            field: 'status',
-            headerName: 'Status',
-            width: 90,
-            valueGetter: (params) => params.row.status.charAt(0).toUpperCase() + params.row.status.substring(1)
+            field: 'total_cost',
+            headerName: 'Total Cost',
+            width: 120,
+            type: 'number',
+            valueGetter: (params) => params.row.total_cost === null
+                ? 'Not provided'
+                : `৳ ${params.row.total_cost.toFixed(2)}`
         },
     ];
 

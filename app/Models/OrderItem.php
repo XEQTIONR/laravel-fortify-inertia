@@ -16,7 +16,8 @@ class OrderItem extends Model
         'product_id',
         'status',
         'qty',
-        'price'
+        'price',
+        'cost'
     ];
 
     public function order():BelongsTo
@@ -38,6 +39,16 @@ class OrderItem extends Model
         return Attribute::make(
             get: fn($value) => $value / 100.0,
             set: fn($value) => intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ) )
+        );
+    }
+
+    public function cost(): Attribute {
+        return Attribute::make(
+            get: fn($value) => $value === null ? null : ($value / 100.0  ),
+            set: fn($value) => $value === null ? null : intval( bcmul(
                 number_format($value, 2,'.', ''),
                 '100'
             ) )

@@ -33,6 +33,10 @@ class Order extends Model
       'paid'
     ];
 
+    public static array $otherStatuses = [
+      'cancelled'
+    ];
+
     public static array $timeSlots = [
         '11AM - 1PM',
         '1PM - 4PM',
@@ -99,7 +103,18 @@ class Order extends Model
             set: fn($value) => intval( bcmul(
                 number_format($value, 2,'.', ''),
                 '100'
-            ))
+            ) )
+        );
+    }
+
+    public function totalCost(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value === null ? null : ($value / 100.0  ),
+            set: fn($value) => $value === null ? null : intval( bcmul(
+                number_format($value, 2,'.', ''),
+                '100'
+            ) )
         );
     }
 
@@ -110,7 +125,7 @@ class Order extends Model
             set: fn($value) => intval( bcmul(
                 number_format($value, 2,'.', ''),
                 '100'
-            ))
+            ) )
         );
     }
 }

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('delivery_charge_amount');
             $table->integer('delivery_charge');
             $table->integer('total');
+            $table->integer('total_cost')->nullable();
             $table->integer('payments_total')->default(0);
             $table->date('delivery_date');
             $table->integer('time_slot');

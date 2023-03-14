@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id');
             $table->foreignId('product_id');
             $table->integer('price');
+            $table->integer('cost')->nullable();
             $table->integer('qty');
             $table->string('status')->default('created');
             $table->timestamps();

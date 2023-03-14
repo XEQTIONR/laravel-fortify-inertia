@@ -4,13 +4,14 @@ import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import {
     Box,
+    Card,
     List,
+    ListItem,
     ListItemText,
     Paper,
     Table,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
     TableFooter,
@@ -66,7 +67,7 @@ export default function ViewOrder({ order }) {
                     />
                 </List>
             </Box>
-            <TableContainer component={Paper}>
+            <Paper elevation={3}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -74,6 +75,7 @@ export default function ViewOrder({ order }) {
                             <TableCell align="center">Qty</TableCell>
                             <TableCell align="right">Price</TableCell>
                             <TableCell align="right">Item total</TableCell>
+                            <TableCell align="right">Item Cost</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -84,6 +86,14 @@ export default function ViewOrder({ order }) {
                                     <TableCell align="center">{item.qty}</TableCell>
                                     <TableCell align="right">৳ {item.price.toFixed(2)}</TableCell>
                                     <TableCell align="right">৳ {(item.qty*item.price).toFixed(2)}</TableCell>
+                                    <TableCell align="right">
+                                        {
+                                            item.cost === null
+                                                ? 'Not provided'
+                                                : '৳ ' + item.cost.toFixed(2)
+                                        }
+
+                                    </TableCell>
                                 </TableRow>
                             ))
                         }
@@ -94,6 +104,7 @@ export default function ViewOrder({ order }) {
                             <TableCell align="center">{order.data.items.reduce( (acc, item) => acc + item.qty, 0)}</TableCell>
                             <TableCell></TableCell>
                             <TableCell align="right">৳ {order.data.subtotal.toFixed(2)}</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>Delivery Charge</TableCell>
@@ -103,16 +114,30 @@ export default function ViewOrder({ order }) {
                                 { order.data.delivery_charge_amount }
                                 { order.data.delivery_charge_type === 'percentage' ? ' %' : null }</TableCell>
                             <TableCell align="right">৳ {order.data.delivery_charge.toFixed(2)}</TableCell>
+                            <TableCell></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell className="font-bold">Grand Total</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                             <TableCell className="font-bold" align="right">৳ {order.data.total.toFixed(2)}</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell className="font-bold">Total Cost</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                            <TableCell className="font-bold" align="right">
+                                {order.data.total_cost === null
+                                    ? 'Not provided'
+                                    : '৳ ' + order.data.total_cost.toFixed(2)
+                                }
+                            </TableCell>
                         </TableRow>
                     </TableFooter>
                 </Table>
-            </TableContainer>
+            </Paper>
         </Nav>
     );
 }
