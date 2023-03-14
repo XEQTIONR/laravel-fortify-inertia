@@ -25,6 +25,7 @@ import {
     Typography,
 } from '@mui/material'
 import {
+    AccountBalanceWallet,
     Check,
     CalendarMonthOutlined,
     FilterList,
@@ -53,6 +54,7 @@ export default function Orders({ orders, statuses }) {
     const [ showPreparedButton, setShowPreparedButton ] = useState(false);
     const [ showDeliveredButton, setShowDeliveredButton ] = useState(false);
     const [ recordPaymentButton,  setRecordPaymentButton ] = useState(false);
+    const [ showRecordCostButton,  setShowRecordCostButton ] = useState(false);
     const [ filters, setFilters ] = useState([])
     const [ filterDate, setFilterDate ] = useState(null);
     const [ filterDateValue, setFilterDateValue ] = useState(orders.meta?.filters?.delivery_date);
@@ -201,6 +203,11 @@ export default function Orders({ orders, statuses }) {
         } else {
             setRecordPaymentButton(false);
         }
+        if (selectedRows.length === 1 && selectedRows[0].total_cost === null ) {
+            setShowRecordCostButton(true);
+        } else {
+            setShowRecordCostButton(false);
+        }
 
     }, [selectedRows]);
 
@@ -289,6 +296,18 @@ export default function Orders({ orders, statuses }) {
                         { filters.length && <ToggleButton value="delivery_date"><CalendarMonthOutlined /></ToggleButton> }
                     </ToggleButtonGroup>
                     <Box className="flex flex-col justify-end">
+                        <Tooltip className="" title="Record Cost" placement="right">
+                            <Fab
+                                //onClick={() => Inertia.visit( route('admin.orders.show', { order: selected[0] }) )}
+                                className={`transition duration-200 ${ showRecordCostButton ? 'hover:scale-125' : 'scale-0' }`}
+                                color="warning"
+                                size="medium"
+                                aria-label="add"
+                                sx={{ ml: 2, mt: 2 }}
+                            >
+                                <AccountBalanceWallet />
+                            </Fab>
+                        </Tooltip>
                         <Tooltip className="" title="Show order" placement="right">
                             <Fab
                                 onClick={() => Inertia.visit( route('admin.orders.show', { order: selected[0] }) )}
