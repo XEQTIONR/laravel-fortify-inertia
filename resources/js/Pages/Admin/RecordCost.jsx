@@ -75,7 +75,7 @@ export default function RecordCost(props) {
                         </Fab>
                     </Tooltip>
                 </Box>
-                <Box className="flex flex-col">
+                <Box component="form" onSubmit={handleSubmit} className="flex flex-col">
                     <TableContainer>
                         <Table>
                             <TableHead>
@@ -147,7 +147,7 @@ export default function RecordCost(props) {
                         </Table>
                     </TableContainer>
                     <Box className="flex justify-end mt-4">
-                        <Button onClick={handleSubmit} variant="contained">Submit</Button>
+                        <Button type="submit" variant="contained">Submit</Button>
                     </Box>
                 </Box>
             </Box>
