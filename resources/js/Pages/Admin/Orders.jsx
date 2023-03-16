@@ -298,7 +298,7 @@ export default function Orders({ orders, statuses }) {
                     <Box className="flex flex-col justify-end">
                         <Tooltip className="" title="Record Cost" placement="right">
                             <Fab
-                                //onClick={() => Inertia.visit( route('admin.orders.show', { order: selected[0] }) )}
+                                onClick={() => Inertia.visit( route('admin.orders.cost.create', { order: selected[0] }) )}
                                 className={`transition duration-200 ${ showRecordCostButton ? 'hover:scale-125' : 'scale-0' }`}
                                 color="warning"
                                 size="medium"

@@ -23,6 +23,7 @@ class Order extends Model
         'subtotal',
         'time_slot',
         'total',
+        'total_cost',
         'user_id',
     ];
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
+use App\Http\Controllers\CostController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerOrderController;
 use App\Http\Controllers\DashboardController;
@@ -238,9 +239,12 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::resource('categories', CategoryController::class);
 
         Route::resource('orders', OrderController::class);
+
         Route::post('/orders/status', [ OrderController::class, 'updateStatus' ])->name('orders.status');
 
         Route::resource('orders.payments', OrderPaymentController::class);
+
+        Route::resource('orders.cost', CostController::class);
 
         Route::resource('products', ProductController::class);
         Route::post('/products/status', [ ProductController::class, 'toggleActivation' ])->name('products.status');
