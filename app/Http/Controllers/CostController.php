@@ -6,7 +6,6 @@ use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class CostController extends Controller
@@ -71,7 +70,13 @@ class CostController extends Controller
         $order->total_cost =  ($orderTotalDefined ? $total : null);
         $order->save();
 
-        return redirect(route('admin.orders.index'));
+        $message = ($orderTotalDefined ? '' : 'partially ') . 'updated cost for order.';
+
+        return redirect( route('admin.orders.index') )->with([
+            'title' => "Updated cost for order# {$order->id}",
+            'message' => ucfirst($message),
+            'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 
     /**
