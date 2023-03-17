@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\CustomerController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +54,9 @@ Route::name('api.')
 
                 Route::get('/payments', [ PaymentController::class, 'index' ])
                     ->name('payments.index');
+
+                Route::get('/staff', [ AdminController::class, 'index' ])
+                    ->name('staff.index');
         });
 
         Route::apiResource('addresses', AddressController::class)

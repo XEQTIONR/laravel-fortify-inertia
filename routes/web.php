@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CartCookieController;
 use App\Http\Controllers\CostController;
@@ -220,7 +221,6 @@ Route::prefix('admin')->name('admin.')->group(function() {
             return response('Bad Request', 400)
                 ->header('Content-Type', 'text/plain');
 
-
         })->name('token');
 
         Route::get('/', function() {
@@ -233,6 +233,8 @@ Route::prefix('admin')->name('admin.')->group(function() {
         Route::get('/shopping-list', ShoppingListController::class)->name('shopping-list');
 
         Route::get('/supplier-list', SupplierListController::class)->name('supplier-list');
+
+        Route::resource('staff', AdminController::class);
 
         Route::resource('customers', CustomerController::class);
 
