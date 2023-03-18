@@ -2,6 +2,8 @@
 import {
     AccountTree,
     AccountTreeOutlined,
+    Badge,
+    BadgeOutlined,
     Dashboard,
     DashboardOutlined,
     FoodBank,
@@ -59,5 +61,11 @@ export default [
         icon: <StoreOutlined />,
         iconActive: <Store color="primary" />,
         route: 'admin.suppliers.index'
+    },
+    {
+        label: 'Staff',
+        icon: <BadgeOutlined />,
+        iconActive: <Badge color="primary" />,
+        route: 'admin.staff.index'
     },
 ]
