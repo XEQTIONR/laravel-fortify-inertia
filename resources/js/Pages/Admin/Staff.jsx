@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import navItems from  '@/Components/data/AdminNavItems';
 import Nav from "@/Components/Admin/Nav";
-import {Inertia} from "@inertiajs/inertia";
-import {Add, Delete, Edit, ToggleOn} from "@mui/icons-material";
+import { Inertia } from "@inertiajs/inertia";
+import { Add } from "@mui/icons-material";
 import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import * as moment from 'moment';

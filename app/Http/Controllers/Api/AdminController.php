@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\StaffResource;
 use App\Models\Staff;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -44,7 +45,12 @@ class AdminController extends Controller
            'password' => 'required|confirmed|min:8'
         ]);
 
-        return $validated;
+        return Staff::create([
+           'name' => $validated['name'],
+           'email' => $validated['email'],
+           'mobile_number' => $validated['mobile_number'],
+           'password' => Hash::make( $validated['password'] ),
+        ]);
     }
 
     /**

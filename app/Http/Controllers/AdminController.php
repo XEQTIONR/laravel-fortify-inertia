@@ -40,10 +40,12 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $res = parent::store($request);
-        Log::info($res);
+        $admin = parent::store($request);
 
-        return redirect( route('admin.staff.index') );
+        return redirect( route('admin.staff.index') )->with([
+            'message' => "Account for $admin->name was created.",
+            'status' => \Illuminate\Http\Response::HTTP_CREATED,
+        ]);
     }
 
     /**
