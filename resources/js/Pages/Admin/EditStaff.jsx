@@ -5,7 +5,7 @@ import { Box, Fab, Tooltip } from "@mui/material";
 import { ArrowBack } from "@mui/icons-material";
 import StaffForm from '@/Components/Admin/StaffForm';
 
-export default function AddStaff() {
+export default function EditStaff({ staff }) {
 
     useEffect( () => {
         setTimeout(() => {
@@ -32,7 +32,7 @@ export default function AddStaff() {
                     </Tooltip>
                 </Box>
                 <Box className="w-full flex justify-center">
-                    <StaffForm action="add" />
+                    <StaffForm action="edit" staff={staff.data} />
                 </Box>
             </Box>
         </Nav>

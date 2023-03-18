@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StaffResource;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -43,6 +44,7 @@ class AdminController extends Controller
         $admin = parent::store($request);
 
         return redirect( route('admin.staff.index') )->with([
+            'title' => 'New account created.',
             'message' => "Account for $admin->name was created.",
             'status' => \Illuminate\Http\Response::HTTP_CREATED,
         ]);
@@ -62,19 +64,23 @@ class AdminController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  int $staff
+     * @return \Inertia\Response
      */
-    public function edit($id)
+    public function edit($staff)
     {
-        //
+        $record = Staff::withTrashed()->findOrFail($staff);
+
+        return Inertia::render('Admin/EditStaff', [
+            'staff' => new StaffResource($record),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  $staff
+     * @param  int $staff
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $staff)

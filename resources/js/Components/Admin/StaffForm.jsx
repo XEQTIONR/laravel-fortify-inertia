@@ -37,33 +37,48 @@ const FormWrapper = styled( Paper )(({ theme }) => ({
     },
 }));
 
-export default function StaffForm () {
+export default function StaffForm ({ staff, action }) {
 
     const formData = {
-      'name': '',
-      'email': '',
-      'mobile_number': '',
+      'name': staff ? staff.name : '',
+      'email': staff ? (staff.email ?? '') : '',
+      'mobile_number': staff ? (staff.mobile_number ?? '') : '',
       'password': '',
       'password_confirmation': '',
     };
 
-    const { data, setData, post, processing, errors } = useForm(formData);
+    const { data, setData, post, put, processing, errors } = useForm(formData);
 
     function handleSubmit(e) {
         e.preventDefault();
 
-        post( route('admin.staff.store'), {
-            onError: (err) => {
-                console.log(err);
-            }
-        });
+        switch (action) {
+            case 'add':
+                post( route( 'admin.staff.store' ), {
+                    onError: (err) => {
+                        console.log(err);
+                    }
+                } );
+                break;
+
+            case 'edit':
+                put( route( 'admin.staff.update', { staff: staff?.id } ), {
+                    onError: (err) => {
+                        console.log(err);
+                    }
+                } );
+                break;
+
+        }
     }
 
     return (
         <FormWrapper elevation={24}>
             <form onSubmit={handleSubmit}>
                 <Stack spacing={2} className="p-10">
-                    <Typography align="center" variant="h6" sx={{ fontWeight: 'bold' }}>Add a new admin user</Typography>
+                    <Typography align="center" variant="h6" sx={{ fontWeight: 'bold' }}>
+                        { action.charAt(0).toUpperCase() + action.substring(1) +' an admin user'}
+                    </Typography>
                     <Divider />
                     <TextField
                         value={data.name}

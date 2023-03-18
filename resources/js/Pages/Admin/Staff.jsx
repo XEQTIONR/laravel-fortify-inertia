@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import navItems from  '@/Components/data/AdminNavItems';
 import Nav from "@/Components/Admin/Nav";
 import { Inertia } from "@inertiajs/inertia";
-import { Add, CheckCircle, Cancel, ToggleOn, ToggleOff } from "@mui/icons-material";
+import { Add, CheckCircle, Cancel, Edit, ToggleOn, ToggleOff } from "@mui/icons-material";
 import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import * as moment from 'moment';
@@ -83,7 +83,7 @@ export default function Staff({ staff }) {
         }, 125);
     });
 
-    function toggleButton() {
+    function showToggleButton() {
         if (selected.length === 1) {
             const item = rows.find(({id}) => id === selected[0]);
             if ( ! item.is_active ) {
@@ -115,7 +115,18 @@ export default function Staff({ staff }) {
                   sx={{ height: '100%' }}
                 >
 
-                     <Tooltip title={(toggleButton() ? "Disable" :"Enable") + " staff user"} placement="right">
+                    <Tooltip title="Edit admin user." placement="right">
+                        <Fab
+                            onClick={ () => { Inertia.visit( route( 'admin.staff.edit', { staff: selected[0] } ) ) } }
+                            className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            color="warning"
+                            size="medium"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            <Edit />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title={(showToggleButton() ? "Disable" :"Enable") + " staff user"} placement="right">
                         <Fab
                             onClick={ () => {
                                 const item = rows.find(({id}) => id === selected[0]);
@@ -123,11 +134,11 @@ export default function Staff({ staff }) {
                                     { is_active: !item.is_active } );
                             }}
                             className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
-                            color={ toggleButton() ? 'error' : 'success' }
+                            color={ showToggleButton() ? 'error' : 'success' }
                             size="medium"
                             sx={{ ml: 2, mt: 2 }}
                         >
-                            { toggleButton() ? <ToggleOff /> : <ToggleOn /> }
+                            { showToggleButton() ? <ToggleOff /> : <ToggleOn /> }
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Add a new admin user." placement="right">

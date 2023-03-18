@@ -41,7 +41,7 @@ class AdminController extends Controller
         $validated = $request->validate([
            'name' => 'required|min:5',
            'email' => 'nullable|email|required_if:mobile_number,null',
-           'mobile_number' => 'nullable|numeric|required_if:email,null',
+           'mobile_number' => 'nullable|string|required_if:email,null',
            'password' => 'required|confirmed|min:8'
         ]);
 
@@ -68,19 +68,19 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  $staff
+     * @param  int $staff
      * @return array
      */
     public function update(Request $request, $staff)
     {
         $record = Staff::withTrashed()->findOrFail($staff);
-        $validated = $request->validate([
-            'is_active' => 'boolean'
-        ]);
-        $action = null;
         $id = $record->id;
 
-        if ( array_key_exists('is_active', $validated) ) {
+        if ( array_key_exists('is_active', $request->all()) ) {
+            $validated = $request->validate([
+                'is_active' => 'boolean'
+            ]);
+
             if ( $validated['is_active'] ) {
                 $record->restore();
                 $action = 'activated';
@@ -88,6 +88,23 @@ class AdminController extends Controller
                 $record->delete();
                 $action = 'deactivated';
             }
+        } else {
+            $validated = $request->validate([
+                'name' => 'required|min:5',
+                'email' => 'nullable|email|required_if:mobile_number,null',
+                'mobile_number' => 'nullable|numeric|required_if:email,null',
+                'password' => 'required|confirmed|min:8'
+            ]);
+
+            $record->name = $validated['name'];
+            $record->email = $validated['email'];
+            $record->email = $validated['email'];
+            $record->mobile_number = $validated['mobile_number'];
+            $record->password = Hash::make($validated['password']);
+
+            $record->save();
+
+            $action = 'updated';
         }
 
         return [
