@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import navItems from  '@/Components/data/AdminNavItems';
 import Nav from "@/Components/Admin/Nav";
 import { Inertia } from "@inertiajs/inertia";
-import { Add } from "@mui/icons-material";
+import { Add, CheckCircle, Cancel, ToggleOn, ToggleOff } from "@mui/icons-material";
 import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
 import * as moment from 'moment';
@@ -34,7 +34,7 @@ export default function Staff({ staff }) {
         {
             field: 'name',
             headerName: 'Name',
-            width: 250,
+            width: 225,
         },
         {
             field: 'email',
@@ -52,6 +52,13 @@ export default function Staff({ staff }) {
             width: 200,
             valueGetter: (params) => moment(params.row.created_at).format("DD/MM/YYYY h:mm:ss a")
         },
+        {
+            field: 'is_active',
+            headerName: 'Active?',
+            width: 75,
+            sortable: false,
+            renderCell: (params) => params.row.is_active ? <CheckCircle color="success" /> : <Cancel color="error" />
+        }
     ];
 
     const CustomAlert = React.forwardRef(function CustomAlert(props, ref) {
@@ -76,6 +83,16 @@ export default function Staff({ staff }) {
         }, 125);
     });
 
+    function toggleButton() {
+        if (selected.length === 1) {
+            const item = rows.find(({id}) => id === selected[0]);
+            if ( ! item.is_active ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     return (
         <Nav navLinks={ navItems }>
             <Snackbar
@@ -97,6 +114,17 @@ export default function Staff({ staff }) {
                   className="flex flex-col justify-end"
                   sx={{ height: '100%' }}
                 >
+
+                     <Tooltip title={(toggleButton() ? "Disable" :"Enable") + " staff user"} placement="right">
+                        <Fab
+                            className={`transition duration-200 ${ selected.length === 1 ? 'hover:scale-125' : 'scale-0' }`}
+                            color={toggleButton() ? 'error' : 'success'}
+                            size="medium"
+                            sx={{ ml: 2, mt: 2 }}
+                        >
+                            { toggleButton() ? <ToggleOff /> : <ToggleOn />}
+                        </Fab>
+                    </Tooltip>
                     <Tooltip title="Add a new admin user." placement="right">
                         <Fab
                           onClick={() => Inertia.visit(route('admin.staff.create')) }

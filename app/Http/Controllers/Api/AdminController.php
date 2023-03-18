@@ -21,7 +21,7 @@ class AdminController extends Controller
         $orderBy = $request->orderBy ?? 'id';
         $order = $request->order ?? 'asc';
 
-        $staff = Staff::orderBy($orderBy, $order)->paginate($perPage);
+        $staff = Staff::withTrashed()->orderBy($orderBy, $order)->paginate($perPage);
         $staff->appends(compact('perPage', 'orderBy', 'order'));
 
         return StaffResource::collection($staff)->additional([
