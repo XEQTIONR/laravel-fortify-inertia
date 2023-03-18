@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staff;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Http\Controllers\Api\AdminController as Controller;
@@ -73,12 +74,20 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $staff
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $staff)
     {
-        //
+        $data = parent::update($request, $staff);
+        $record = Staff::withTrashed()->findOrFail($staff);
+        $name = $record->name;
+
+        return redirect( route( 'admin.staff.index' ) )->with([
+           'title' => "Staff {$data['id']} {$data['action']}",
+           'message' => "{$name} as {$data['action']}.",
+           'status' => \Illuminate\Http\Response::HTTP_OK,
+        ]);
     }
 
     /**

@@ -68,12 +68,32 @@ class AdminController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param  $staff
+     * @return array
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $staff)
     {
-        //
+        $record = Staff::withTrashed()->findOrFail($staff);
+        $validated = $request->validate([
+            'is_active' => 'boolean'
+        ]);
+        $action = null;
+        $id = $record->id;
+
+        if ( array_key_exists('is_active', $validated) ) {
+            if ( $validated['is_active'] ) {
+                $record->restore();
+                $action = 'activated';
+            } else {
+                $record->delete();
+                $action = 'deactivated';
+            }
+        }
+
+        return [
+            'action' => $action,
+            'id' => $id,
+        ];
     }
 
     /**
