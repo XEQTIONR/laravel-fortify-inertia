@@ -186,7 +186,7 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
 
                 <Divider variant="middle" />
                 <ListItem key="total">
-                    <Typography sx={{ width: '60%', ml: 2, fontWeight: 'bolder' }}>Subtotal</Typography>
+                    <Typography sx={{ width: '60%', ml: 2, fontWeight: 'bolder' }}>{trans('labels.Subtotal')}</Typography>
                     <Typography sx={{ width: '40%', mr: 1, textAlign: 'right', fontWeight: 'bold' }}>৳
                         <Typography component="span" sx={{ mx: 2, fontWeight: 'bold' }}>{
                         items.reduce((total, {qty, product}) => total+(product.current_selling_price*qty), 0)
@@ -203,7 +203,7 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
 
                         }}
                     >
-                        Checkout
+                        {trans('labels.Checkout')}
                     </Button>
                 </ListItem>
 
