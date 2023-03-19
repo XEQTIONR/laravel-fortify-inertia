@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { usePage } from '@inertiajs/inertia-react'
+import { usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import {Box, Button, Divider, IconButton, List, ListItem, Popover, Stack, Typography} from "@mui/material";
 import {Clear, KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";

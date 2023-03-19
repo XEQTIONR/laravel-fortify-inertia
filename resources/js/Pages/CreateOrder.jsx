@@ -1,4 +1,5 @@
 import React, {useState, useEffect, useRef}  from 'react';
+import { usePage } from '@inertiajs/inertia-react';
 import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
 import useInput from '@/hooks/useInput';
@@ -42,6 +43,8 @@ import {
 
 export default function CreateOrder({addresses, categories, paymentConfig, shopping_cart, user}) {
 
+    const { locale } = usePage().props;
+
     const currentMoment = moment()
     const [date, setDate] = useState(currentMoment);
     const [cart, setCart] = useState(shopping_cart.data);
@@ -65,9 +68,9 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
     })
 
     const steps = [
-        'Confirm items',
-        'Choose Address',
-        'Select delivery time',
+        trans('labels.Confirm items'),
+        trans('labels.Choose address'),
+        trans('labels.Select delivery time'),
     ];
 
     const [activeStep, setActiveStep] = useState(0);
@@ -105,11 +108,33 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
         return cart.reduce((total, {qty}) => total + qty, 0)
     }
 
+    function name(product) {
+        switch(locale) {
+            case 'en':
+                return product.english_name;
+            case 'bn':
+                return product.bangla_name;
+            default:
+                return product.english_name;
+        }
+    }
+
+    function uom(product) {
+        switch(locale) {
+            case 'en':
+                return product.uom;
+            case 'bn':
+                return product.uomBangla;
+            default:
+                return product.uom;
+        }
+    }
+
     const SelectedAddress = function() {
         return (
             <Card variant="outlined">
                 <Stack spacing={0} className="p-3">
-                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>Deliver To:</Typography>
+                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>{ trans( 'labels.Deliver to' ) }:</Typography>
                     <Typography variant="body1" gutterBottom={true}>{selectedAddress.full_name}</Typography>
                     {
                         selectedAddress.business_name && selectedAddress.business_name.length
@@ -139,14 +164,14 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
 
         switch (step) {
             case 0:
-                return <Button onClick={() => setActiveStep(1)} variant="contained">Confirm Items</Button>
+                return <Button onClick={() => setActiveStep(1)} variant="contained">{trans('labels.Confirm items')}</Button>
             case 1:
                 return <Button onClick={() => setActiveStep(0)} startIcon={<ChevronLeft />} variant="outlined" >
-                    Back to cart
+                    { trans('labels.Back to cart') }
                 </Button>
             case 2:
                 return <Button onClick={() => setActiveStep(1)} startIcon={<ChevronLeft />} variant="outlined" >
-                    Back to address
+                    { trans('labels.Back to address') }
                 </Button>
         }
     }
@@ -156,7 +181,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
             <Card className="w-full" variant="outlined">
                 <Stack spacing={2} className="py-3 px-5">
                     <Stack justifyContent="space-between" direction="row">
-                        <Typography align="center">Subtotal ({qtyTotal()} items)
+                        <Typography align="center">{trans('labels.Subtotal')} ({ trans( 'labels.N items', { N: qtyTotal() } ) } )
                         </Typography>
                         <Typography align="center" className="font-bold">
                             ৳ {subTotal()}
@@ -164,7 +189,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                     </Stack>
                     <Stack justifyContent="space-between" direction="row">
                         <Typography align="center">
-                            Service Charge
+                            { trans('labels.Service charge') }
                         </Typography>
                         <Typography align="center" className="font-bold">
                             ৳ {serviceCharge()}
@@ -172,7 +197,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                     </Stack>
                     <Stack className="border-t-2" justifyContent="space-between" direction="row">
                         <Typography align="center" className="font-bold mt-3 mb-2">
-                            Total
+                            { trans( 'labels.Total' ) }
                         </Typography>
                         <Typography align="center" className="font-bold text-2xl mt-3 mb-2">
                             ৳ {subTotal() + serviceCharge()}
@@ -215,15 +240,15 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                     (
                         <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
                             <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
-                                <Typography className="font-bold text-lg mx-4 mt-3">1. Confirm your items.</Typography>
+                                <Typography className="font-bold text-lg mx-4 mt-3">1. {trans('labels.Confirm your items')}</Typography>
                                 <TableContainer>
                                     <Table>
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>Item</TableCell>
-                                                <TableCell align="right">Quantity</TableCell>
-                                                <TableCell align="right">Unit Price</TableCell>
-                                                <TableCell align="right">Total</TableCell>
+                                                <TableCell>{ trans('labels.Item') }</TableCell>
+                                                <TableCell align="right">{trans('labels.Quantity')}</TableCell>
+                                                <TableCell align="right">{trans('labels.Unit price')}</TableCell>
+                                                <TableCell align="right">{trans('labels.Total')}</TableCell>
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -238,8 +263,8 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                                 backgroundImage: "url('" + row.product.image + "')"
                                                             }} />
                                                             <Stack>
-                                                                <Typography>{row.product.english_name}</Typography>
-                                                                <Typography variant="caption">{row.product.amount} {row.product.uom}</Typography>
+                                                                <Typography>{ name(row.product) }</Typography>
+                                                                <Typography variant="caption">{ row.product.amount } { uom(row.product) }</Typography>
                                                             </Stack>
                                                         </Stack>
                                                     </TableCell>
@@ -304,7 +329,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                         <TableFooter>
                                             <TableRow>
                                                 <TableCell sx={{ width: '50%'}}>
-                                                    <Typography className="font-bold" variant="subtitle2">Sub Total</Typography>
+                                                    <Typography className="font-bold" variant="subtitle2">{ trans( 'labels.Subtotal' ) }</Typography>
                                                 </TableCell>
                                                 <TableCell sx={{ width: '10%'}} align="center">
                                                     <Typography className="font-bold" variant="subtitle2">{qtyTotal()}</Typography>
@@ -316,7 +341,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell sx={{ width: '50%'}}>
-                                                    <Typography className="font-bold" variant="subtitle2">Service Charge</Typography>
+                                                    <Typography className="font-bold" variant="subtitle2">{ trans( 'labels.Service charge' ) }</Typography>
                                                 </TableCell>
                                                 <TableCell sx={{ width: '10%'}} align="center">
                                                     <Typography className="font-bold" variant="subtitle2">{
@@ -332,7 +357,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell sx={{ width: '50%'}}>
-                                                    <Typography className="font-bold" variant="subtitle2">Total</Typography>
+                                                    <Typography className="font-bold" variant="subtitle2">{ trans('labels.Total') }</Typography>
                                                 </TableCell>
                                                 <TableCell sx={{ width: '10%'}} align="center">
                                                 </TableCell>
@@ -357,13 +382,13 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                         <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
                             <Card className="w-full lg:w-3/5 mb-2 lg:mr-2" variant="outlined">
                                 <Stack className="px-4 py-3" spacing={2} component="form">
-                                    <Typography className="font-bold text-lg">2. Select delivery address.</Typography>
+                                    <Typography className="font-bold text-lg">2. {trans('labels.Select your delivery address')}</Typography>
                                     {
                                         ! useNewAddress && (
                                             <FormControl size="small"  required={true}>
-                                                <InputLabel id="demo-simple-select-helper-label">Select Existing Address</InputLabel>
+                                                <InputLabel id="demo-simple-select-helper-label">{ trans( 'labels.Select an existing address' ) }</InputLabel>
                                                 <Select
-                                                    label="Select Existing Address"
+                                                    label={ trans( 'labels.Select an existing address' ) }
                                                     value={data.address_id}
                                                     onChange={(e) => {
                                                         setData('address_id', e.target.value);
@@ -396,7 +421,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                             }}
                                             startIcon={useNewAddress ? <Remove /> : <Add />}
                                         >
-                                            { useNewAddress ? 'Use an existing address' : 'Add a new address' }
+                                            { useNewAddress ? trans('labels.Use an existing address' ): trans('labels.Add a new address') }
                                         </Button>
                                         {
                                             selectedAddress &&
@@ -405,7 +430,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 endIcon={<ChevronRight/>}
                                                 variant="contained"
                                             >
-                                                Select delivery time
+                                                {trans('labels.Select delivery time')}
                                             </Button>
                                         }
                                     </Box>
@@ -504,11 +529,11 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                         <Box className="w-full items-start flex flex-wrap lg:flex-nowrap">
                             <Card className="w-full lg:w-3/5 mb-2 lg:mr-2 " variant="outlined">
                                 <Stack className="px-4 py-3" spacing={2} component="form">
-                                    <Typography className="font-bold text-lg">3. Select delivery window.</Typography>
+                                    <Typography className="font-bold text-lg">3. {trans('labels.Select delivery time')}</Typography>
                                     <LocalizationProvider className="flex-grow" dateAdapter={AdapterMoment}>
                                         <DesktopDatePicker
                                             className="w-1/2"
-                                            label="Delivery Date"
+                                            label={ trans('labels.Delivery date' ) }
                                             inputFormat="DD/MM/YYYY"
                                             value={date}
                                             disablePast={true}
@@ -538,7 +563,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                         />
                                     </LocalizationProvider>
                                     <FormControl  required={true}>
-                                        <InputLabel id="demo-simple-select-helper-label">Time slot</InputLabel>
+                                        <InputLabel id="demo-simple-select-helper-label">{ trans( 'labels.Time slot' ) }</InputLabel>
 
                                         <Select label="Time slot"
                                                 value={data.time_slot}
@@ -562,7 +587,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                             });
                                         }}
                                     >
-                                        Place order
+                                        { trans('labels.Place order') }
                                     </Button>
                                 </Stack>
                             </Card>
