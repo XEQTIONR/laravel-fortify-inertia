@@ -51,6 +51,7 @@ return [
     'Password' => 'Password',
     'Place order' => 'Place order',
     'Quantity' => 'Quantity',
+    'Receipt' => 'Receipt',
     'Register' => 'Register',
     'Register with your mobile number' => 'Register with your mobile number',
     'Remember me' => 'Remember me',

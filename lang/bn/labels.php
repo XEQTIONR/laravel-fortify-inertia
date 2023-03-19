@@ -51,6 +51,7 @@ return [
     'Password' => 'পাসওয়ার্ড',
     'Place order' => 'অর্ডার করুন',
     'Quantity' => 'পরিমাণ',
+    'Receipt' => 'রসিদ',
     'Register' => 'নিবন্ধন করুন',
     'Register with your mobile number' => 'আপনার মোবাইল নম্বর দিয়ে নিবন্ধন করুন।',
     'Remember me' => 'আমাকে মনে রাখো',

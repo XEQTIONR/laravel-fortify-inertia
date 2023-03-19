@@ -22,23 +22,23 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
 
     const [cart, setCart] = useState(shopping_cart.data);
     const steps = [
-        'created',
-        'prepared',
-        'delivered',
-        'paid'
+        trans('statuses.created'),
+        trans('statuses.prepared'),
+        trans('statuses.delivered'),
+        trans('statuses.paid')
     ];
     const stepsPresentTense = [
-        'creating',
-        'preparing',
-        'delivering',
-        'paying'
+        trans('statuses.creating'),
+        trans('statuses.preparing'),
+        trans('statuses.delivering'),
+        trans('statuses.paying')
     ];
 
     const stepsFutureTense = [
-        'create',
-        'prepare',
-        'delivery',
-        'payment'
+        trans('statuses.create'),
+        trans('statuses.prepare'),
+        trans('statuses.delivery'),
+        trans('statuses.payment')
     ];
 
     function ucfirst(word) {
@@ -55,15 +55,15 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
         >
             <Stack spacing={3} className="w-full md:w-3/4 lg:w-3/5 mt-4 mx-3">
                 <Card className="py-3" variant="outlined">
-                    <Stepper className="order-created" activeStep={ (steps.indexOf(order.data.status) + 1) } alternativeLabel>
+                    <Stepper className="order-created" activeStep={ (steps.indexOf( trans('statuses.' + order.data.status) ) + 1) } alternativeLabel>
                     {
                         steps.map((label, index) => (
                             <Step>
                                 <StepLabel>
                                     {
-                                        index <= steps.indexOf(order.data.status)
+                                        index <= steps.indexOf( trans('statuses.' + order.data.status) )
                                         ? ucfirst(label)
-                                        : (index === (steps.indexOf(order.data.status)+1)
+                                        : (index === (steps.indexOf( trans('statuses.' + order.data.status) )+1)
                                             ? ucfirst(stepsPresentTense[index])
                                             : ucfirst(stepsFutureTense[index]))
                                     }
@@ -83,7 +83,7 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                         color="primary"
                         startIcon={<Receipt />}
                     >
-                        Receipt
+                        { trans('labels.Receipt') }
                     </Button>
                 </Box>
                 <Card variant="outlined">
@@ -91,23 +91,23 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell colSpan={2}>Order # {order.data.id}</TableCell>
+                                    <TableCell colSpan={2}>{ trans('labels.Order ID') } {order.data.id}</TableCell>
                                     <TableCell align="right" colSpan={2}>
-                                        Status: {ucfirst(order.data.status)}
+                                        { trans('labels.Status') }: {trans('statuses.'+order.data.status)}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell>Item</TableCell>
-                                    <TableCell align="center">Quantity</TableCell>
-                                    <TableCell align="right">Unit Price</TableCell>
-                                    <TableCell align="right">Total</TableCell>
+                                    <TableCell>{ trans('labels.Item') }</TableCell>
+                                    <TableCell align="center">{ trans( 'labels.Quantity' ) }</TableCell>
+                                    <TableCell align="right">{ trans( 'labels.Unit price' ) }</TableCell>
+                                    <TableCell align="right">{ trans( 'labels.Total' ) }</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {
                                     order.data.items.map((row) => (
                                         <TableRow>
-                                            <TableCell>{row.product.english_name}</TableCell>
+                                            <TableCell>{row.product.english_name} / {row.product.bangla_name}</TableCell>
                                             <TableCell align="center">{row.qty}</TableCell>
                                             <TableCell align="right">৳ {row.price.toFixed(2)}</TableCell>
                                             <TableCell align="right">৳ {(row.qty * row.price).toFixed(2)}</TableCell>
@@ -115,19 +115,19 @@ export default function OrderCreated({order, categories, shopping_cart, user}) {
                                     ))
                                 }
                                 <TableRow>
-                                    <TableCell className="font-bold">SubTotal</TableCell>
+                                    <TableCell className="font-bold">{ trans('labels.Subtotal') }</TableCell>
                                     <TableCell className="font-bold" align="center">{order.data.items.reduce((total, {qty}) => total + qty, 0)}</TableCell>
                                     <TableCell></TableCell>
                                     <TableCell className="font-bold" align="right">৳ {order.data.subtotal.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell className="font-bold">Charges</TableCell>
+                                    <TableCell className="font-bold">{ trans('labels.Service charge') }</TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell className="font-bold" align="right">৳ {order.data.delivery_charge.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell className="font-bold">Total</TableCell>
+                                    <TableCell className="font-bold">{ trans('labels.Total') }</TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell align="right"></TableCell>
                                     <TableCell className="font-bold" align="right">৳ {order.data.total.toFixed(2)}</TableCell>

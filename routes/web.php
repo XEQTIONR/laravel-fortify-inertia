@@ -179,6 +179,7 @@ Route::get('js/translations.js', function () {
             lang_path($lang . '/auth.php'),
             lang_path($lang . '/pagination.php'),
             lang_path($lang . '/labels.php'),
+            lang_path($lang . '/statuses.php'),
         ];
         $strings = [];
 
