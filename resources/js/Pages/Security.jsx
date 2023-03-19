@@ -27,7 +27,7 @@ export default function Security({shopping_cart, categories, user}) {
                                 secondary={user.name}
 
                             />
-                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'name' }))} variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'name' }))} variant="contained">{trans('labels.Edit')}</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
@@ -40,7 +40,7 @@ export default function Security({shopping_cart, categories, user}) {
                                     </>
                                 }
                             />
-                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'email' }))} variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'email' }))} variant="contained">{trans('labels.Edit')}</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
@@ -57,7 +57,7 @@ export default function Security({shopping_cart, categories, user}) {
                                     </>
                                 }
                             />
-                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'primary_contact_number' }))} variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'primary_contact_number' }))} variant="contained">{trans('labels.Edit')}</Button>
                         </ListItem>
                         <Divider />
                         <ListItem>
@@ -65,7 +65,7 @@ export default function Security({shopping_cart, categories, user}) {
                                 primary={trans('labels.Password')}
                                 secondary="*************"
                             />
-                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'password' }))} variant="contained">Edit</Button>
+                            <Button onClick={() => Inertia.visit(route('security.edit', { field: 'password' }))} variant="contained">{trans('labels.Edit')}</Button>
                         </ListItem>
                     </List>
                 </Card>
@@ -74,7 +74,7 @@ export default function Security({shopping_cart, categories, user}) {
                     className="mt-4"
                     variant="contained"
                 >
-                    Done
+                    {trans('labels.Done')}
                 </Button>
             </Box>
         </Nav>

@@ -45,7 +45,7 @@ export default function UpdatePassword({ shopping_cart, categories, user}) {
             <Box component="form" onSubmit={handleSubmit} className="w-full flex justify-center mt-4 mx-3">
                 <Card className="w-full sm:w-3/4 md:w-3/5 lg:w-2/5 2xl:w-1/4 p-5 flex flex-col" variant="outlined">
                     <Stack spacing={2}>
-                        <Typography>Update Password</Typography>
+                        <Typography>{trans('labels.Change your', { label: trans('labels.Password') })}</Typography>
                         <TextField
                             required
                             value={data.current_password}
