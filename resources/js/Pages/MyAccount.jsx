@@ -38,37 +38,37 @@ export default function MyAccount ({ shopping_cart, categories }) {
 
             <Box className="w-full flex flex-wrap pt-3 pl-3">
                 <Box className="w-full mb-3">
-                    <Typography variant="h6">My Account</Typography>
+                    <Typography variant="h6">{ trans('labels.My account')}</Typography>
                 </Box>
                 <AccountCard
                     link={route('addresses.index')}
                     icon={<HomeTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
-                    title="My Addresses"
-                    subtitle="View or add your delivery addresses."
+                    title={trans('labels.My addresses')}
+                    subtitle={trans('labels.View or add your delivery addresses')}
                 />
                 <AccountCard
                     link={route('orders.index')}
                     icon={<ViewListTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
-                    title="My Orders"
-                    subtitle="View past orders."
+                    title={trans('labels.My orders')}
+                    subtitle={trans('labels.View your past orders')}
                 />
                 <AccountCard
                     link={route('security.index')}
                     icon={<AdminPanelSettingsTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
-                    title="Login & Security"
-                    subtitle="Manage your login info and password."
+                    title={trans('labels.Log in and security')}
+                    subtitle={trans('labels.Manage your login information and password')}
                 />
                 <AccountCard
                     link={route('orders.index')}
                     icon={<PaymentsTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
-                    title="Your payments."
-                    subtitle="View your payments."
+                    title={trans('labels.My payments')}
+                    subtitle={trans('labels.View your payments')}
                 />
                 <AccountCard
                     link={route('orders.index')}
                     icon={<HeadsetMicTwoTone className="mr-3" color="primary" sx={{ fontSize: 50 }} />}
-                    title="Customer Service"
-                    subtitle="Manage your login info and password."
+                    title={trans('labels.Customer service')}
+                    subtitle={trans('labels.Contact us')}
                 />
             </Box>
         </Nav>
