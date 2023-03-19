@@ -18,7 +18,7 @@ import {
 
 export default function MyAccount ({ shopping_cart, categories }) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     useEffect(() => {
         const cookie = Cookies.get('shopping-cart')

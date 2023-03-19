@@ -20,7 +20,7 @@ import { Receipt } from '@mui/icons-material';
 
 export default function OrderCreated({order, categories, shopping_cart, user}) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
     const steps = [
         'created',
         'prepared',

@@ -17,7 +17,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [searchItems, setSearchItems] = useState([]);
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
     const container = useRef(null);
 
     const setRows = (rows) => {
@@ -91,7 +91,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
         }
     }
 
-    useEffect( () => setCart(shopping_cart), [shopping_cart]);
+    useEffect( () => setCart(shopping_cart.data), [shopping_cart]);
 
     useEffect(() => {
         window.addEventListener('scroll', onScroll );

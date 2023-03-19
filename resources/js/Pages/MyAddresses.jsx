@@ -14,7 +14,7 @@ import { Add } from "@mui/icons-material";
 
 export default function MyAddresses ({ shopping_cart, categories, user, addresses }) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     useEffect(() => {
         const cookie = Cookies.get('shopping-cart')

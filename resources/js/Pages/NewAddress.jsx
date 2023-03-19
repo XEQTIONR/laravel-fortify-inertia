@@ -6,7 +6,7 @@ import useInput from '@/hooks/useInput';
 
 export default function NewAddress({categories, shopping_cart, user}) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     const formData = {
         'full_name': '',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ShoppingCartResource;
 use App\Models\ShoppingCart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -99,7 +100,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'locale' => config('app.locale'),
             'user' => $user,
-            'shopping_cart' => $items
+            'shopping_cart' => ShoppingCartResource::collection($items)
         ]);
     }
 }

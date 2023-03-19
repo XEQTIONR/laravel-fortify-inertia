@@ -44,7 +44,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
 
     const currentMoment = moment()
     const [date, setDate] = useState(currentMoment);
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
     const [existingAddresses, setExistingAddresses] = useState(addresses.data);
     const [useNewAddress, setUseNewAddress] = useState(false);
     const [newAddress, setNewAddress, resetNewAddress] = useInput({

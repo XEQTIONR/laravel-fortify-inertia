@@ -21,7 +21,7 @@ import { Receipt, Cancel, Visibility } from "@mui/icons-material";
 
 export default function MyOrders ({ shopping_cart, categories, user, orders }) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     useEffect(() => {
         const cookie = Cookies.get('shopping-cart')

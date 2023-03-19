@@ -40,6 +40,6 @@ class AddressController extends Controller
     {
         parent::store($request);
 
-        return redirect('profile');
+        return redirect( route( 'addresses.index' ) );
     }
 }
