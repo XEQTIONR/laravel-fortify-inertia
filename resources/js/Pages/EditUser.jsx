@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 
 export default function EditUser({shopping_cart, categories, field, label, user}) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
     const formData = {
         'field': field,
         [field] : user[field],

@@ -5,7 +5,7 @@ import { Box, Button, Card, Stack, TextField, Typography } from "@mui/material";
 
 export default function UpdatePassword({ shopping_cart, categories, user}) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     const formData = {
         'current_password': '',

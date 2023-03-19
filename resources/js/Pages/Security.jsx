@@ -7,7 +7,7 @@ import { Box, Button, Card, Divider, List, ListItem, ListItemText, Tooltip, Typo
 
 export default function Security({shopping_cart, categories, user}) {
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
     return (
         <Nav navLinks={categories.data}
