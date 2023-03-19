@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
-import {Add, Remove} from '@mui/icons-material/';
+import {Add, Remove, InsertPhoto} from '@mui/icons-material/';
 
 export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
 
     const [imgUrl, setImgUrl] = useState('none');
+    const [ imgUnavailable, setImgUnavailable ] = useState(false)
     useEffect(() => {
         const img = new Image();
         img.src = product.image;
         img.onload = () => {
             setImgUrl("url('" + img.src + "')")
+        }
+        img.onerror = () => {
+            console.log('image loading errored');
+            setImgUnavailable(true);
+            setImgUrl("url('/image-unavailable.jpeg')");
         }
     }, []);
 
