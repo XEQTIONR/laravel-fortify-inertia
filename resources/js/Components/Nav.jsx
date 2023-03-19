@@ -199,19 +199,18 @@ export default function Nav({
                                         setShow(false);
                                         setUserMenuOpen(false)
                                         Inertia.visit(route('account'))
-                                    }} >My Account</MenuItem>
+                                    }} >{trans('labels.My account')}</MenuItem>
                                     <MenuItem onClick={() => {
                                         setShow(false);
                                         setUserMenuOpen(false)
                                         Inertia.visit(route('orders.index'))
                                     }}
-                                    >
-                                        My orders</MenuItem>
+                                    >{trans('labels.My orders')}</MenuItem>
                                     <MenuItem onClick={() => {
                                         setUserMenuOpen(false)
                                         Inertia.post(route('logout') )
 
-                                    }} >Logout</MenuItem>
+                                    }} >{trans('labels.Log out')}</MenuItem>
                                 </Menu>
                                 </>) : null
                         }

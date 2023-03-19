@@ -21,6 +21,7 @@ return [
     'Log in' => 'Log in',
     'Log in and security' => 'Log in and security',
     'Log in to continue' => 'Log in to continue',
+    'Log out' => 'Log out',
     'Manage your login information and password' => 'Manage your login information and password.',
     'Mobile number' => 'Mobile number',
     'My account' => 'My account',

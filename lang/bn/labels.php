@@ -21,6 +21,7 @@ return [
     'Log in' => 'সাইন ইন করুন',
     'Log in and security' => 'লগ ইন এবং নিরাপত্তা',
     'Log in to continue' => 'চালিয়ে যেতে সাইন ইন করুন',
+    'Log out' => 'লগ আউট',
     'Manage your login information and password' => 'আপনার লগইন তথ্য এবং পাসওয়ার্ড পরিচালনা করুন।',
     'Mobile number' => 'মোবাইল নম্বর',
     'My account' => 'আমার অ্যাকাউন্ট',
