@@ -21,6 +21,7 @@ class ProductObserver
                 'english_name' => $product->english_name,
                 'bangla_name' => $product->bangla_name,
                 'uom' => Product::$unitsOfMeasurement[$product->uom],
+                'uomBangla' => Product::$unitsOfMeasurementBangla[$product->uom],
                 'amount' => $product->amount,
                 'current_selling_price' => $product->current_selling_price,
                 'image' => $product->image,

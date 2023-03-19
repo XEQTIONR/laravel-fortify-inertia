@@ -1,5 +1,6 @@
-import { Inertia } from '@inertiajs/inertia';
 import React, { useEffect, useState } from "react";
+import { Inertia } from '@inertiajs/inertia';
+import { usePage } from '@inertiajs/inertia-react'
 import {alpha, styled} from "@mui/material/styles";
 import TreeItem, {treeItemClasses} from "@mui/lab/TreeItem";
 import TreeView from "@mui/lab/TreeView";
@@ -39,9 +40,22 @@ const ancestorIds = function(cat, nodeList) {
 
 export default function LinkTree({links, selectedCategory, onSelect}) {
 
+    const { locale } = usePage().props;
+
     const [ flattenedCategories, setFlattenedCategories ] = useState( flatten(links) )
     const [ expanded, setExpanded ] = useState([]);
     const [ selected, setSelected ] = useState(null);
+
+    function name(category) {
+        switch(locale) {
+            case 'en':
+                return category.english_name;
+            case 'bn':
+                return category.bangla_name;
+            default:
+                return category.english_name;
+        }
+    }
 
     useEffect(() => {
         if (selectedCategory !== null) {
@@ -66,7 +80,7 @@ export default function LinkTree({links, selectedCategory, onSelect}) {
                 }}
                 disabled
                 key={link.id}
-                label={link.english_name}
+                label={name(link)}
                 nodeId={link.id.toString()}
             />
             : <StyledTreeItem // non-leaf node
@@ -78,7 +92,7 @@ export default function LinkTree({links, selectedCategory, onSelect}) {
                 }}
                 disabled
                 key={link.id}
-                label={link.english_name}
+                label={name(link)}
                 nodeId={link.id.toString()}
             >
                 { mapLinks(link.children) }
