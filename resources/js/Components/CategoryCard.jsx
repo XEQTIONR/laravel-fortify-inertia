@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/inertia-react';
 import { Inertia } from '@inertiajs/inertia';
 import { Box, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 
 export default function CategoryCard ({category}) {
+
+    const { locale } = usePage().props;
 
     const [imgUrl, setImgUrl] = useState('none');
     useEffect(() => {
@@ -14,6 +17,17 @@ export default function CategoryCard ({category}) {
             setImgUrl("url('" + img.src + "')")
         }
     }, []);
+
+    function name() {
+        switch(locale) {
+            case 'en':
+                return category.english_name;
+            case 'bn':
+                return category.bangla_name;
+            default:
+                return category.english_name;
+        }
+    }
 
     return  imgUrl === 'none'
         ? <ProductCardSkeleton />
@@ -33,7 +47,7 @@ export default function CategoryCard ({category}) {
                 }}
             />
                 <Typography className="mt-1" variant="body1" align="center">
-                    {category.english_name}
+                    { name() }
                 </Typography>
         </Box>
         )

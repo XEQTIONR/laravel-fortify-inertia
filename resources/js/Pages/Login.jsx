@@ -34,7 +34,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                 <Stack
                     sx={{ minWidth: "300px"}}
                     spacing={2}>
-                        <Typography  align="center">Log in to continue</Typography>
+                        <Typography  align="center">{trans('labels.Log in to continue')}</Typography>
 
 
                         { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
@@ -75,17 +75,17 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             { trans('labels.Log in') }
                         </Button>
 
-                        <Link className="underline" href={route('password.request')}>Forgot my password</Link>
+                        <Link className="underline" href={route('password.request')}>{trans('labels.Forgot my password')}</Link>
                 </Stack>
             </form>
             </Paper>
-            <Typography className="mt-4" align="center">or</Typography>
+            <Typography className="mt-4" align="center">{ trans('labels.or') }</Typography>
             <Paper className="p-5 mt-5" elevation={5}>
                 <form onSubmit={handleRegister}>
                     <Stack
                         sx={{ maxWidth: "300px"}}
                         spacing={2}>
-                        <Typography  align="center">Register with your mobile number</Typography>
+                        <Typography  align="center">{trans('labels.Register with your mobile number')}</Typography>
 
 
                         { errors.primary_contact_number &&  <Typography variant="caption" className="text-red-400">{ errors.primary_contact_number }</Typography> }
@@ -102,7 +102,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             defaultValue={RegisterForm.data.primary_contact_number}
                             onChange={e => RegisterForm.setData('primary_contact_number', e.target.value)}
                         />
-                            <Button type="submit" variant="contained">Submit</Button>
+                            <Button className="flex-shrink-0" type="submit" variant="contained">{trans('labels.Submit')}</Button>
                         </Stack>
 
                     </Stack>

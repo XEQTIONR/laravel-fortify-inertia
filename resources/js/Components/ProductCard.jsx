@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { usePage } from '@inertiajs/inertia-react';
 import { Box, Button, ButtonGroup, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 import {Add, Remove, InsertPhoto} from '@mui/icons-material/';
 
 export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
+
+    const { locale } = usePage().props;
 
     const [imgUrl, setImgUrl] = useState('none');
     const [ imgUnavailable, setImgUnavailable ] = useState(false)
@@ -20,6 +23,28 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
             setImgUrl("url('/image-unavailable.jpeg')");
         }
     }, []);
+
+    function name() {
+        switch(locale) {
+            case 'en':
+                return product.english_name;
+            case 'bn':
+                return product.bangla_name;
+            default:
+                return product.english_name;
+        }
+    }
+
+    function uom() {
+        switch(locale) {
+            case 'en':
+                return product.uom;
+            case 'bn':
+                return product.uomBangla;
+            default:
+                return product.uom;
+        }
+    }
 
     return  imgUrl === 'none'
         ? <ProductCardSkeleton />
@@ -44,10 +69,10 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                     variant="body1"
                     align="center"
                 >
-                    {product.english_name}
+                    {name()}
                 </Typography>
             </Box>
-            <Typography className="my-2" variant="caption"  align="center">{ product.amount } {product.uom}</Typography>
+            <Typography className="my-2" variant="caption"  align="center">{ product.amount } { uom() }</Typography>
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
             {
                 cartItem
@@ -68,7 +93,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                                     cbAdd();
                                 }}
                             >
-                                {cartItem.qty} in cart
+                                { trans('labels.N in cart', { N: cartItem.qty }) }
                             </Button>
                             <Button
                                 className="p-0"
@@ -88,7 +113,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                         className="mt-2 border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
                         variant="outlined"
                     >
-                        Add to cart
+                        { trans('labels.Add to cart') }
                     </Button>)
             }
 

@@ -38,6 +38,20 @@ class Product extends Model
         'ml'     => 'ml',
     ];
 
+    public static $unitsOfMeasurementBangla = [
+        'pc'     => 'টুকরা',
+        'dz'     => 'ডজন',
+        'pk'     => 'প্যাক',
+        'box'    => 'বাক্স',
+        'bottle' => 'বোতল',
+        'mg'     => 'মিলিগ্রাম',
+        'gm'     => 'গ্রাম',
+        'oz'     => 'আউন্স',
+        'kg'     => 'কেজি',
+        'ltr'    => 'লিটার',
+        'ml'     => 'মিলিলিটার',
+    ];
+
     /**
      * A Product may be added as an order item to many orders.
      *

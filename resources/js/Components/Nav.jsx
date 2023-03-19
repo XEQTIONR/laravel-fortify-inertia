@@ -4,6 +4,8 @@ import {
     AppBar,
     Badge,
     Box,
+    Button,
+    ButtonGroup,
     createTheme,
     CssBaseline,
     Divider,
@@ -238,6 +240,14 @@ export default function Nav({
                                     />
                                 </> : null
                         }
+                        {/*<IconButton>*/}
+                        {/*    /!*<Typography className="px-1 text-white">En</Typography>*!/*/}
+                        {/*    <Typography className="px-1 text-white">বা</Typography>*/}
+                        {/*</IconButton>*/}
+                        <ButtonGroup size="small" variant="text">
+                            <Button className="text-white border-white hover:font-bold">বা</Button>
+                            <Button className="text-white hover:font-bold">En</Button>
+                        </ButtonGroup>
                     </Toolbar>
                 </Stack>
             </AppBar>

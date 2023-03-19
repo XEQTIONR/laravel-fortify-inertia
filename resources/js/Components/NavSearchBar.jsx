@@ -45,7 +45,7 @@ export default function NavSearchBar ({onChange, value}) {
                 value={value}
                 onChange={onChange}
                 className="w-full"
-                placeholder="Search…"
+                placeholder={ trans('labels.Search') }
                 inputProps={{ 'aria-label': 'search' }}
             />
         </SearchInput>

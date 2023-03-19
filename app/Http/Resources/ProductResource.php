@@ -22,6 +22,7 @@ class ProductResource extends JsonResource
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'suppliers' => SupplierWithoutProductsResource::collection($this->whenLoaded('suppliers')),
             'uom' => Product::$unitsOfMeasurement[$this->uom],
+            'uomBangla' => Product::$unitsOfMeasurementBangla[$this->uom],
             'amount' => $this->amount,
             'current_selling_price' => $this->current_selling_price,
             'in_stock' => $this->in_stock,

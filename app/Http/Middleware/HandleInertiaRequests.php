@@ -97,6 +97,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'status'  => fn () => $request->session()->get('status'),
             ],
+            'locale' => config('app.locale'),
             'user' => $user,
             'shopping_cart' => $items
         ]);
