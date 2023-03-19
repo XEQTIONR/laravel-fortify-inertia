@@ -39,19 +39,19 @@ export default function MyOrders ({ shopping_cart, categories, user, orders }) {
              user
         >
             <Box className="w-full flex flex-col m-0 p-6">
-                <Typography variant="h5">My orders</Typography>
+                <Typography variant="h5">{trans('labels.My orders')}</Typography>
                 <TableContainer className="my-3" component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
                                 <TableCell align="center">#</TableCell>
-                                <TableCell>Order ID</TableCell>
-                                <TableCell align="center">Order at</TableCell>
-                                <TableCell align="right">Order Total</TableCell>
-                                <TableCell>Delivery Date</TableCell>
-                                <TableCell>Time slot</TableCell>
-                                <TableCell>Status</TableCell>
-                                <TableCell align="center">Actions</TableCell>
+                                <TableCell>{trans('labels.Order ID')}</TableCell>
+                                <TableCell align="center">{trans('labels.Order at')}</TableCell>
+                                <TableCell align="right">{trans('labels.Order total')}</TableCell>
+                                <TableCell>{trans('labels.Delivery date')}</TableCell>
+                                <TableCell>{trans('labels.Time slot')}</TableCell>
+                                <TableCell>{trans('labels.Status')}</TableCell>
+                                <TableCell align="center">{trans('labels.Actions')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -66,12 +66,12 @@ export default function MyOrders ({ shopping_cart, categories, user, orders }) {
                                     <TableCell>{order.time_slot}</TableCell>
                                     <TableCell>{order.status.charAt(0).toUpperCase() + order.status.substring(1)}</TableCell>
                                     <TableCell align="center">
-                                        <IconButton onClick={() => Inertia.visit( route('orders.show', {order: order.id}))}><Tooltip title="View order"><Visibility /></Tooltip></IconButton>
-                                        <IconButton><Tooltip title="View receipt"><Receipt /></Tooltip></IconButton>
+                                        <IconButton onClick={() => Inertia.visit( route('orders.show', {order: order.id}))}><Tooltip title={trans('labels.View order')}><Visibility /></Tooltip></IconButton>
+                                        <IconButton><Tooltip title={trans('labels.View receipt')}><Receipt /></Tooltip></IconButton>
                                         {
                                             order.status === 'created'
                                             && <IconButton color="error">
-                                                <Tooltip title="Cancel order"><Cancel /></Tooltip>
+                                                <Tooltip title={trans('labels.Cancel order')}><Cancel /></Tooltip>
                                             </IconButton>
                                         }
                                     </TableCell>
