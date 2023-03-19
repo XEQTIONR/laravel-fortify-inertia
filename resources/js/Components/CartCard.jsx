@@ -1,16 +1,42 @@
-import { Inertia } from '@inertiajs/inertia';
 import React, { useState, Fragment } from 'react';
-import { useForm, usePage } from '@inertiajs/inertia-react'
+import { usePage } from '@inertiajs/inertia-react'
+import { Inertia } from '@inertiajs/inertia';
 import {Box, Button, Divider, IconButton, List, ListItem, Popover, Stack, Typography} from "@mui/material";
 import {Clear, KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
 import { red } from '@mui/material/colors';
 
 const col = red[300];
 export default function CartCard({anchor, items, setItems, open, setOpen, user}){
+
+    const { locale } = usePage().props;
+
     function submit(e) {
         e.preventDefault();
         Inertia.visit(route('orders.create'));
     }
+
+    function name(product) {
+        switch(locale) {
+            case 'en':
+                return product.english_name;
+            case 'bn':
+                return product.bangla_name;
+            default:
+                return product.english_name;
+        }
+    }
+
+    function uom(product) {
+        switch(locale) {
+            case 'en':
+                return product.uom;
+            case 'bn':
+                return product.uomBangla;
+            default:
+                return product.uom;
+        }
+    }
+
     return (
         <Popover
             onClose={() => setOpen(false)}
@@ -36,7 +62,7 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
                     textAlign: 'center',
                 }}
             >
-                Shopping Cart (<span>{items.reduce((total, {qty}) => total+qty, 0)}</span> Items)
+                { trans('labels.Shopping Cart') } ({ trans('labels.N items', { N:  items.reduce((total, {qty}) => total+qty, 0)}) })
             </Typography>
 
             <List sx={{ minWidth: 320 }}>
@@ -61,8 +87,8 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
                                     width: '33%'
                                 }}
                             >
-                                <Typography variant="body2">{item.product.english_name}</Typography>
-                                <Typography variant="subtitle2">{item.product.amount} {item.product.uom}</Typography>
+                                <Typography variant="body2">{name(item.product)}</Typography>
+                                <Typography variant="subtitle2">{item.product.amount} {uom(item.product)}</Typography>
                             </Stack>
                             <Box alignItems="center" justifyContent="space-between"
                                  sx={{

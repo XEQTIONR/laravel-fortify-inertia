@@ -17,6 +17,7 @@ return [
     'Phone number' => 'ফোন নম্বর',
     'Full name' => 'পুরো নাম',
     'N in cart' => 'কার্টে :N টি',
+    'N items' => ':N টি আইটেম',
     'New password' => 'নতুন পাসওয়ার্ড',
     'Other contact number' => 'অন্য যোগাযোগ নম্বর',
     'or' => 'অথবা',
@@ -27,6 +28,7 @@ return [
     'Resend verification code' => 'যাচাইকরণ কোড আবার পাঠান',
     'Save new address' => 'নতুন ঠিকানা সংরক্ষণ করুন',
     'Search' => 'অনুসন্ধান করুন',
+    'Shopping Cart' => 'বাজারের কার্ট',
     'Submit' => 'জমা দিন',
     'Verification code' => 'যাচাইকরণ কোড',
     'Verify' => 'যাচাই করুন'
