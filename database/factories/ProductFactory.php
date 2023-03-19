@@ -30,7 +30,11 @@ class ProductFactory extends Factory
             'current_selling_price' => rand(10, 500),
             'in_stock' => rand(0, 100),
             'status' => 'active',
-            'image' => fake()->imageUrl(500, 500, $name)
+            //'image' => fake()->imageUrl(500, 500, $name)
+            'image' => 'http://satyr.dev/500x500/'
+                . substr(fake()->hexColor(), 1)
+                .'?text='
+                . str_replace(' ', '+', $name),
         ];
     }
 }

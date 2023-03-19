@@ -64,6 +64,7 @@ class DatabaseSeeder extends Seeder
     ];
     private function traverse($tree, $parent = null) {
         $suppliers = Supplier::all();
+        $bangla_faker = new \Xeqtionr\BanglaFaker\BanglaFaker();
         foreach($tree as $key => $val) {
             $random = rand(1, 5);
             $random2 = rand(1, 10);
@@ -76,10 +77,13 @@ class DatabaseSeeder extends Seeder
                 ->create([
                     'english_name' => $key,
                     'slug' => str_replace(' ', '-', strtolower($key)),
-                    'bangla_name' => $key,
+                    'bangla_name' => $bangla_faker->words(rand(1,2), true),
                     'parent_id' => $parent,
-                    'image' => \Faker\Factory::create()
-                        ->imageUrl(500,500, $key, false, 'category', true),
+                    //'image' => \Faker\Factory::create()->imageUrl(500,500, $key, false, 'category', true),
+                    'image' => 'http://satyr.dev/500x500/'
+                        . substr(fake()->hexColor(), 1)
+                        .'?text=category+'
+                        . str_replace(' ', '+', $key),
                     'status' => 'active',
                 ]);
             $this->traverse($val, $category->id);
