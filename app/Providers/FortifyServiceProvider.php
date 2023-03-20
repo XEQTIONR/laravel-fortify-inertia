@@ -11,6 +11,8 @@ use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
@@ -77,7 +79,7 @@ class FortifyServiceProvider extends ServiceProvider
             ]);
 
             return Inertia::render('Register', [
-                'primary_contact_number' => $validated['primary_contact_number'],
+                'primary_contact_number' => $validated['primary_contact_number'] ?? null,
                 'categories' => app(HierarchicalCategories::class)
             ]);
         });
@@ -95,6 +97,7 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::authenticateUsing( function(Request $request) {
+            App::setLocale( Cache::get('locale'));
             $user = User::where('email', $request->email)->first();
 
             if (! $user) {

@@ -29,7 +29,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         sx={{ minWidth: "300px"}}
                         spacing={2}
                     >
-                        <Typography  align="center">Confirm your password to continue.</Typography>
+                        <Typography  align="center">{ trans('labels.Confirm your password to continue') }</Typography>
                         <TextField
                             size="small"
                             required

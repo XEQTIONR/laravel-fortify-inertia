@@ -17,6 +17,7 @@ return [
     'Confirm password' => 'Confirm password',
     'Confirm new password' => 'Confirm new password',
     'Confirm your items' => 'Confirm your items.',
+    'Confirm your password to continue' => 'Confirm your password to continue.',
     'Contact us' => 'Contact us.',
     'Current password' => 'Current password',
     'Customer service' => 'Customer service',

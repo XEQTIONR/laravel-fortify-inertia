@@ -17,6 +17,7 @@ return [
     'Confirm password' => 'পাসওয়ার্ড নিশ্চিত করুন',
     'Confirm new password' => 'নতুন পাসওয়ার্ড নিশ্চিত করুন',
     'Confirm your items' => 'আপনার আইটেম নিশ্চিত করুন।',
+    'Confirm your password to continue' => 'চালিয়ে যেতে আপনার পাসওয়ার্ড নিশ্চিত করুন।',
     'Contact us' => 'যোগাযোগ করুন।',
     'Current password' => 'বর্তমান পাসওয়ার্ড',
     'Customer service' => 'গ্রাহক সেবা',

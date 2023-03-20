@@ -14,7 +14,7 @@ export default function Register({shopping_cart, categories, primary_contact_num
         password_confirmation: '',
     });
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
 
 
     function handleSubmit(e) {
@@ -35,7 +35,7 @@ export default function Register({shopping_cart, categories, primary_contact_num
                 sx={{ minWidth: "300px"}}
                 spacing={2}
             >
-                <Typography align="center">Register</Typography>
+                <Typography align="center">{ trans('labels.Register') }</Typography>
                 <TextField
                     required
                     size="small"
