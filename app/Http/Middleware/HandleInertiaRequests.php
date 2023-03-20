@@ -6,6 +6,7 @@ use App\Http\Resources\ShoppingCartResource;
 use App\Models\ShoppingCart;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -98,7 +99,7 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'status'  => fn () => $request->session()->get('status'),
             ],
-            'locale' => config('app.locale'),
+            'locale' => Cache::get('locale') ?? 'en',
             'user' => $user,
             'shopping_cart' => ShoppingCartResource::collection($items)
         ]);

@@ -23,6 +23,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierListController;
 use App\Http\Controllers\SupplierProductsController;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
@@ -168,13 +169,21 @@ Route::middleware('auth')->group(function() {
 });
 
 Route::get('/forget', function() {
-   \Illuminate\Support\Facades\Cache::forget('lang_'.config('app.locale').'.js');
-   echo 'forgot';
-});
+    switch( request()->input( 'locale' ) ) {
+        case 'en':
+            Cache::forget(  'lang_bn.js' );
+            break;
+        case 'bn':
+            Cache::forget(  'lang_en.js' );
+            break;
+    }
+    Cache::put('locale', request()->input( 'locale' ) ?? 'en');
+    return redirect()->back();
+})->name('forget');
 
 Route::get('js/translations.js', function () {
-    $lang = config('app.locale');
-    $strings = \Illuminate\Support\Facades\Cache::rememberForever('lang_'.$lang.'.js', function () use($lang) {
+    $lang =  Cache::get( 'locale' ) ?? 'en';
+    $strings = Cache::rememberForever('lang_'.$lang.'.js', function () use($lang) {
         $files = [
             lang_path($lang . '/auth.php'),
             lang_path($lang . '/pagination.php'),
