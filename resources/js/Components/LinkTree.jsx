@@ -23,7 +23,16 @@ const StyledTreeItem = styled((props) => (
         borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
     },
     [`& .${treeItemClasses.disabled}`]: {
+        opacity: .5,
+    },
+    [`& .${treeItemClasses.expanded}`]: {
         opacity: 1,
+    },
+    [`& .${treeItemClasses.selected}`]: {
+        color: theme.palette.secondary.main,
+    },
+    [`& .${treeItemClasses.selected} .${treeItemClasses.label}`]: {
+        fontWeight: 'bold',
     },
 
 }));
@@ -101,6 +110,7 @@ export default function LinkTree({links, selectedCategory, onSelect}) {
     }
     return (
         <TreeView
+            color="secondary"
             aria-label="customized"
             expanded={expanded}
             selected={selected}

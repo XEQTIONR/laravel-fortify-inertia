@@ -37,9 +37,11 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         <Typography  align="center">{trans('labels.Log in to continue')}</Typography>
 
 
-                        { errors.email &&  <Typography variant="caption" className="text-red-400">{ errors.email }</Typography> }
+                        { errors.email &&  <Typography variant="caption" color="error">{ errors.email }</Typography> }
 
                         <TextField
+                            error={!! errors.email }
+                            color="secondary"
                             size="small"
                             required
                             autoFocus
@@ -48,6 +50,8 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             onChange={e => setData('email', e.target.value)}
                         />
                         <TextField
+
+                            color="secondary"
                             size="small"
                             required
                             label={trans('labels.Password')}
@@ -68,6 +72,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
 
 
                         <Button
+                            color="secondary"
                             variant="contained"
                             type="submit"
                             disabled={processing}
@@ -92,6 +97,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         <Stack spacing={1} direction="row">
 
                         <TextField
+                            color="secondary"
                             size="small"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">+88</InputAdornment>
@@ -102,7 +108,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             defaultValue={RegisterForm.data.primary_contact_number}
                             onChange={e => RegisterForm.setData('primary_contact_number', e.target.value)}
                         />
-                            <Button className="flex-shrink-0" type="submit" variant="contained">{trans('labels.Submit')}</Button>
+                            <Button color="secondary" className="flex-shrink-0" type="submit" variant="contained">{trans('labels.Submit')}</Button>
                         </Stack>
 
                     </Stack>

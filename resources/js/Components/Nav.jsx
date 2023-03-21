@@ -224,7 +224,7 @@ export default function Nav({
                                                 onClick={() => setCartMenuOpen(!cartMenuOpen)}
                                     >
                                         <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
-                                               color="error"
+                                               color="secondary" className="font-bold"
                                         >
                                             <ShoppingCart />
                                         </Badge>
@@ -243,13 +243,16 @@ export default function Nav({
                         {/*    /!*<Typography className="px-1 text-white">En</Typography>*!/*/}
                         {/*    <Typography className="px-1 text-white">বা</Typography>*/}
                         {/*</IconButton>*/}
-                        <ButtonGroup size="small" variant="text">
+                        <ButtonGroup color="secondary" size="small" variant="text">
                             <Button onClick={() => {
                                 window.location.href = route('forget',  { locale: 'bn' });
-                            }} className="text-white border-white hover:font-bold">বা</Button>
-                            <Button onClick={() => {
+                            }} className="border-gray-800 hover:font-bold">বা</Button>
+                            <Button
+                                onClick={() => {
                                 window.location.href = route('forget', { locale: 'en' })
-                            }} className="text-white hover:font-bold">En</Button>
+                            }}
+                                color="secondary_contrast"
+                                    className=" hover:font-bold">En</Button>
                         </ButtonGroup>
                     </Toolbar>
                 </Stack>

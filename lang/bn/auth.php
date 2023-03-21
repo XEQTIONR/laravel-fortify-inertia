@@ -14,7 +14,7 @@ return [
     */
 
     'failed' => 'এই শংসাপত্রগুলি আমাদের রেকর্ডের সাথে মেলে না।',
-    'password' => 'The provided password is incorrect.',
+    'password' => 'প্রদত্ত পাসওয়ার্ডটি ভুল।',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

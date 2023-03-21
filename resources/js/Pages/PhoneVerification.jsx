@@ -13,7 +13,7 @@ export default function PhoneVerification ({shopping_cart, categories}) {
         post(route('verify-phone-code'));
     }
 
-    const [cart, setCart] = useState(shopping_cart);
+    const [cart, setCart] = useState(shopping_cart.data);
     return (
             <Nav
                 navLinks={categories.data}

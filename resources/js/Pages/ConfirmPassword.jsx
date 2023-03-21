@@ -30,7 +30,9 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         spacing={2}
                     >
                         <Typography  align="center">{ trans('labels.Confirm your password to continue') }</Typography>
+                        { errors.password &&  <Typography variant="caption" className="text-red-400">{ errors.password }</Typography> }
                         <TextField
+                            color="secondary"
                             size="small"
                             required
                             label={trans('labels.Password')}
@@ -39,6 +41,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             onChange={e => setData('password', e.target.value)}
                         />
                         <Button
+                            color="secondary"
                             variant="contained"
                             type="submit"
                             disabled={processing}

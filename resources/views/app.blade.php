@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <script src="{{ route('translations') }}"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Serif+Bengali&display=swap" rel="stylesheet">
     <style>
         .order-created .MuiStepLabel-iconContainer.Mui-active.MuiStepLabel-alternativeLabel::after{
             content: '';

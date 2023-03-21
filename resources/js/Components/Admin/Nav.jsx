@@ -26,19 +26,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const drawerWidth = 240;
 
-const theme = createTheme({
-    transitions: {
-        easing: {
-            // The sharp curve is used by objects that may return to the screen at any time.
-            sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
-        },
-        duration: {
-            // recommended when something is leaving screen
-            leavingScreen: 195,
-        },
-    },
-});
-
 export default function Nav({ children, navLinks }) {
 
     const [ show, setShow ] = useState(window.innerWidth <= 800
@@ -99,7 +86,7 @@ export default function Nav({ children, navLinks }) {
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
-                    <List>
+                    <List style={{ bgcolor: 'background.paper'}}>
                         {navLinks.map((item, index) => (
                             <ListItem key={item.label} disablePadding>
                                 <ListItemButton

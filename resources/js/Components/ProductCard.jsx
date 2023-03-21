@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { usePage } from '@inertiajs/inertia-react';
-import { Box, Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 import {Add, Remove, InsertPhoto} from '@mui/icons-material/';
@@ -49,9 +49,9 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
     return  imgUrl === 'none'
         ? <ProductCardSkeleton />
         : (
-        <Box
+        <Paper
             key={product.id}
-            className="p-3 mt-2 mb-6 mx-1 flex flex-col border cursor-pointer hover:border-gray-300 hover:shadow-xl "
+            className="p-3 mt-2 mb-6 mx-1 flex flex-col border hover:bg-white hover:border-gray-300 hover:shadow-xl "
             sx={{ width: `${cardWidth}px` }}
         >
             <Box
@@ -76,7 +76,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
             {
                 cartItem
-                    ? (<ButtonGroup className="mt-2" variant="contained">
+                    ? (<ButtonGroup color="secondary" className="mt-2 font-bold" variant="contained">
                             <Button
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -87,7 +87,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                                 <Remove fontSize="small" />
                             </Button>
                             <Button
-                                className="lowercase flex-grow"
+                                className="lowercase font-bold flex-grow"
                                 onClick={ (e) => {
                                     e.stopPropagation();
                                     cbAdd();
@@ -96,7 +96,6 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                                 { trans('labels.N in cart', { N: cartItem.qty }) }
                             </Button>
                             <Button
-                                className="p-0"
                                 onClick={ (e) => {
                                     e.stopPropagation();
                                     cbAdd();
@@ -110,7 +109,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                             e.stopPropagation()
                             cbAdd();
                         }}
-                        className="mt-2 border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
+                        className="mt-2 font-bold border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
                         variant="outlined"
                     >
                         { trans('labels.Add to cart') }
@@ -118,6 +117,6 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
             }
 
 
-        </Box>
+        </Paper>
         )
 }
