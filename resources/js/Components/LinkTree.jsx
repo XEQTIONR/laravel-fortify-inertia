@@ -23,13 +23,16 @@ const StyledTreeItem = styled((props) => (
         borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
     },
     [`& .${treeItemClasses.disabled}`]: {
-        opacity: .5,
+        opacity: .65,
     },
     [`& .${treeItemClasses.expanded}`]: {
         opacity: 1,
     },
+    [`& .${treeItemClasses.expanded} .${treeItemClasses.label}`]: {
+        fontWeight: 'bold',
+    },
     [`& .${treeItemClasses.selected}`]: {
-        color: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
     },
     [`& .${treeItemClasses.selected} .${treeItemClasses.label}`]: {
         fontWeight: 'bold',

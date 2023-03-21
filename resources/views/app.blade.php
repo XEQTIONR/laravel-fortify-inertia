@@ -12,13 +12,13 @@
             content: '';
             display: block;
             position: absolute;
-            width:24px;
-            height:24px;
+            width:23px;
+            height:23px;
             top: 0;
             bottom: 0;
             animation: pulse2 4s infinite;
             border-radius: 50%;
-            border: 4px solid #1876D1;
+            border: 4px solid #0eb8f5;
         }
 
         @keyframes pulse2 {

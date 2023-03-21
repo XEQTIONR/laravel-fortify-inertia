@@ -38,28 +38,25 @@ const CustomFontTheme = createTheme({
     palette: {
         mode: 'light',
         text: {
-            primary: '#000',
+            primary: '#484747',
         },
         primary: {
-            main: '#ffffff',
-            contrastText: 'rgba(28,28,28,0.87)',
-        },
-
-        secondary_contrast: {
-            contrastText: '#ffffff',
-            main: 'rgba(28,28,28,0.87)',
+            main: '#0eb8f5',
+            contrastText: '#fff'
         },
         secondary: {
-            dark: '#36c5f0',
-            contrastText: '#fff',
-            main: '#5ed0f3',
+          main: '#fce500',
+          dark: '#faef83'
+        },
+        white: {
+          main: '#fff',
         },
         error: {
-            main: '#e01f5b',
+            main: '#e01f1f',
         },
         background: {
-            default: '#f6fafc',
-            paper: '#ffffff',
+            paper: '#f6fafc',
+            default: '#ffffff',
         },
     },
     components: {

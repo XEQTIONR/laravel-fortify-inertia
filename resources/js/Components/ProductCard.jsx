@@ -4,6 +4,7 @@ import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
 import {Add, Remove, InsertPhoto} from '@mui/icons-material/';
+import  {styled} from "@mui/material/styles";
 
 export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
 
@@ -46,12 +47,25 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
         }
     }
 
+    const StyledPaper = styled((props) => (
+        <Paper {...props} />
+    ))(({ theme}) =>({
+        backgroundColor: theme.palette.grey[100],
+        [`&:hover`]: {
+            //color: theme.palette.secondary.dark,
+            borderWidth: '1px',
+           //borderColor: theme.palette.grey[500],
+            backgroundColor: '#fff'
+        }
+    }));
+
     return  imgUrl === 'none'
         ? <ProductCardSkeleton />
         : (
-        <Paper
+        <StyledPaper
+            elevation={2}
             key={product.id}
-            className="p-3 mt-2 mb-6 mx-1 flex flex-col border hover:bg-white hover:border-gray-300 hover:shadow-xl "
+            className="p-3 mt-2 mb-6 mx-1 flex flex-col hover:shadow-2xl "
             sx={{ width: `${cardWidth}px` }}
         >
             <Box
@@ -109,7 +123,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                             e.stopPropagation()
                             cbAdd();
                         }}
-                        className="mt-2 font-bold border-gray-300 text-gray-400 hover:text-orange-500 hover:border-orange-500 hover:bg-white"
+                        className="mt-2 font-bold hover:border-yellow-400 hover:text-yellow-400 hover:bg-yellow-50"
                         variant="outlined"
                     >
                         { trans('labels.Add to cart') }
@@ -117,6 +131,6 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
             }
 
 
-        </Paper>
+        </StyledPaper>
         )
 }

@@ -41,7 +41,6 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
 
                         <TextField
                             error={!! errors.email }
-                            color="secondary"
                             size="small"
                             required
                             autoFocus
@@ -51,7 +50,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         />
                         <TextField
 
-                            color="secondary"
+                            // color="secondary"
                             size="small"
                             required
                             label={trans('labels.Password')}
@@ -72,7 +71,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
 
 
                         <Button
-                            color="secondary"
+                            color="primary"
                             variant="contained"
                             type="submit"
                             disabled={processing}
@@ -97,7 +96,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                         <Stack spacing={1} direction="row">
 
                         <TextField
-                            color="secondary"
+                            // color="secondary"
                             size="small"
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">+88</InputAdornment>
@@ -108,7 +107,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
                             defaultValue={RegisterForm.data.primary_contact_number}
                             onChange={e => RegisterForm.setData('primary_contact_number', e.target.value)}
                         />
-                            <Button color="secondary" className="flex-shrink-0" type="submit" variant="contained">{trans('labels.Submit')}</Button>
+                            <Button className="flex-shrink-0" type="submit" variant="contained">{trans('labels.Submit')}</Button>
                         </Stack>
 
                     </Stack>

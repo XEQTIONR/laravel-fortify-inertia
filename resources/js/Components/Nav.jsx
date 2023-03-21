@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Inertia } from '@inertiajs/inertia'
+import  {styled} from "@mui/material/styles";
+import { usePage } from '@inertiajs/inertia-react';
 import {
     AppBar,
     Badge,
@@ -35,6 +37,7 @@ import NavSearchBar from '@/Components/NavSearchBar'
 import CartCard from '@/Components/CartCard';
 
 import useSearch from '@/hooks/useSearch';
+import TreeItem from "@mui/lab/TreeItem";
 
 
 
@@ -52,6 +55,15 @@ const theme = createTheme({
         },
     },
 });
+
+const StyledButtonGroupButton = styled((props) => (
+    <Button {...props} />
+))(({ theme}) =>({
+    [`&:hover`]: {
+        //color: theme.palette.secondary.dark,
+        fontWeight: 'bold',
+    }
+}));
 
 function debounce( fn, timeout = 1000) {
     let timer;
@@ -108,6 +120,8 @@ export default function Nav({
         window.localStorage.setItem('showSidebar', show);
     }, [show]);
 
+    const { locale } = usePage().props;
+
     return (
         <>
         <CssBaseline />
@@ -129,6 +143,7 @@ export default function Nav({
                                 <MenuIcon />
                             </IconButton>
                             <Typography
+                                color="white"
                                 className={'flex-shrink-0 ' + (show ? '' : 'hidden') }
                                 variant="h6"
                                 noWrap component="div"
@@ -161,8 +176,8 @@ export default function Nav({
                             showUserMenu ?
                                 (<>
                                 <IconButton
-                                    className="mr-2"
                                     color="inherit"
+                                    className="mr-2"
                                     onMouseEnter={(e) => {
                                         setMenuAnchor(e.currentTarget);
                                     }}
@@ -217,13 +232,14 @@ export default function Nav({
                         {
                             shoppingCart
                                 ? <>
-                                    <IconButton color="inherit"
+                                    <IconButton
+                                        color="inherit"
                                                 onMouseEnter={(e) => {
                                                     setCartAnchor(e.currentTarget);
                                                 }}
                                                 onClick={() => setCartMenuOpen(!cartMenuOpen)}
                                     >
-                                        <Badge badgeContent={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}
+                                        <Badge badgeContent={<strong>{shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}</strong>}
                                                color="secondary" className="font-bold"
                                         >
                                             <ShoppingCart />
@@ -243,16 +259,20 @@ export default function Nav({
                         {/*    /!*<Typography className="px-1 text-white">En</Typography>*!/*/}
                         {/*    <Typography className="px-1 text-white">বা</Typography>*/}
                         {/*</IconButton>*/}
-                        <ButtonGroup color="secondary" size="small" variant="text">
-                            <Button onClick={() => {
-                                window.location.href = route('forget',  { locale: 'bn' });
-                            }} className="border-gray-800 hover:font-bold">বা</Button>
-                            <Button
+                        <ButtonGroup className="mx-3" color="white" size="small" variant="text">
+                            <StyledButtonGroupButton onClick={() => {
+                                    window.location.href = route('forget',  { locale: 'bn' });
+                                }}
+                                color={locale === 'bn' ? "secondary" : "white"}
+                                className={locale === 'bn' ? "font-bold" : null}
+                            >বা</StyledButtonGroupButton>
+                            <StyledButtonGroupButton
                                 onClick={() => {
-                                window.location.href = route('forget', { locale: 'en' })
-                            }}
-                                color="secondary_contrast"
-                                    className=" hover:font-bold">En</Button>
+                                    window.location.href = route('forget', { locale: 'en' })
+                                }}
+                                color={locale === 'en' ? "secondary" : "white"}
+                                className={locale === 'en' ? "font-bold" : null}
+                            >En</StyledButtonGroupButton>
                         </ButtonGroup>
                     </Toolbar>
                 </Stack>

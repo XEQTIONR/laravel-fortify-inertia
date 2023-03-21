@@ -26,10 +26,13 @@ const SearchInput = styled('div')(({ theme }) => ({
     //     width: 'auto',
     // },
     '& .MuiInputBase-root.Mui-focused': {
-        borderColor: theme.palette.secondary.main,
+        //borderColor: theme.palette.primary.main,
+        //color: theme.palette.secondary.main,
     },
     '& .MuiInputBase-root': {
-        borderWidth: '2px',
+        //borderWidth: '2px',
+        //borderColor: theme.palette.disabled,
+        // borderColor: theme.palette.common.red,
         borderRadius: theme.shape.borderRadius,
         //backgroundColor: theme.palette.common.white
 
@@ -56,7 +59,7 @@ export default function NavSearchBar ({onChange, value}) {
             <Box
                 className="h-full absolute pointer-events-none flex justify-center items-center px-4 py-0"
             >
-                <SearchIcon color={ isFocused ? "secondary" : "disabled"} />
+                <SearchIcon color={ isFocused ? "primary" : "disabled"} />
             </Box>
             <StyledInputBase
                 value={value}
