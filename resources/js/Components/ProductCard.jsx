@@ -51,19 +51,38 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
         <Paper {...props} />
     ))(({ theme}) =>({
         backgroundColor: theme.palette.grey[100],
+        borderWidth: '1px',
+        borderColor: theme.palette.grey[300],
         [`&:hover`]: {
             //color: theme.palette.secondary.dark,
             borderWidth: '1px',
-           //borderColor: theme.palette.grey[500],
+           borderColor: theme.palette.grey[400],
             backgroundColor: '#fff'
-        }
+        },
     }));
+
+    const StyledButton = styled( (props) => (
+        <Button {...props} />
+    ))(({ theme}) =>({
+        // backgroundColor: theme.palette.grey[100],
+        // [`&:hover`]: {
+        //     //color: theme.palette.secondary.dark,
+        //     borderWidth: '1px',
+        //     //borderColor: theme.palette.grey[500],
+        //     backgroundColor: '#fff'
+        // },
+        // [`&:`]: {
+            color: theme.palette.grey[500],
+            borderColor: theme.palette.grey[500]
+        // },
+    }));
+
 
     return  imgUrl === 'none'
         ? <ProductCardSkeleton />
         : (
         <StyledPaper
-            elevation={2}
+            elevation={0}
             key={product.id}
             className="p-3 mt-2 mb-6 mx-1 flex flex-col hover:shadow-2xl "
             sx={{ width: `${cardWidth}px` }}
@@ -118,16 +137,16 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                                 <Add fontSize="small" />
                             </Button>
                         </ButtonGroup>)
-                    : (<Button
+                    : (<StyledButton
                         onClick={ (e) => {
                             e.stopPropagation()
                             cbAdd();
                         }}
-                        className="mt-2 font-bold hover:border-yellow-400 hover:text-yellow-400 hover:bg-yellow-50"
+                        className="buy-button mt-2 font-bold hover:border-yellow-400 hover:text-yellow-400 hover:bg-yellow-50"
                         variant="outlined"
                     >
                         { trans('labels.Add to cart') }
-                    </Button>)
+                    </StyledButton>)
             }
 
 

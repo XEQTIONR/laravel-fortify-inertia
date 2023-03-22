@@ -240,6 +240,7 @@ export default function Nav({
                                                 onClick={() => setCartMenuOpen(!cartMenuOpen)}
                                     >
                                         <Badge badgeContent={<strong>{shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}</strong>}
+                                               invisible={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0) === 0}
                                                color="secondary" className="font-bold"
                                         >
                                             <ShoppingCart />
