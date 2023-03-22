@@ -21,6 +21,8 @@ export default function Products({ products }) {
     const [rows, setRows] = useState(products.data);
     const [meta, setMeta] = useState(products.meta);
     const [ selected, setSelected ] =  useState([]);
+    const [ selectedItems, setSelectedItems ] = useState(new Set());
+    const [ commonStatus, setCommonStatus ] = useState(false);
     const [ showSnackbar, setShowSnackbar ] = useState( false );
 
     const paginate = usePaginate( route('api.products.index'), setIsLoading, setRows, setMeta );
@@ -94,6 +96,25 @@ export default function Products({ products }) {
         return <Alert elevation={6} ref={ref} variant="filled" {...props} />;
     });
 
+    useEffect(() => {
+        const add = rows.filter( ({id}) => selected.includes(id) )
+        add.forEach(item => setSelectedItems(selectedItems.add(item)))
+
+        const remove = [...selectedItems.values()].filter(({id}) => ! selected.includes(id))
+        remove.forEach(item => {
+            selectedItems.delete(item)
+            setSelectedItems(selectedItems)
+        })
+        if ([...selectedItems.values()].every(({ status }) => status === 'active')
+            || [...selectedItems.values()].every(({ status }) => status === 'inactive')
+        ) {
+            setCommonStatus(true)
+        } else {
+            setCommonStatus( false )
+        }
+
+    }, [selected])
+
     useEffect( () => {
         if (flash.status === HTTP_CREATED || flash.status === HTTP_OK) {
             setShowSnackbar(true);
@@ -148,7 +169,7 @@ export default function Products({ products }) {
                     <Tooltip title="Activate/Deactivate selected products." placement="right">
                         <Fab
                             onClick={() => Inertia.post( route('admin.products.status'), { ids: selected } )}
-                            className={`transition duration-200 ${ selected.length ? 'hover:scale-125' : 'scale-0' }`}
+                            className={`transition duration-200 ${ (selected.length && commonStatus) ? 'hover:scale-125' : 'scale-0' }`}
                             color="success"
                             size="medium"
                             aria-label="add"

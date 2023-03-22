@@ -151,20 +151,20 @@ class ProductController extends Controller
         $inactiveKeys = $inactive->modelKeys();
 
         $countInactive = 0;
+        $countActive = 0;
+        $message = "No changes made.";
         if ($active->count() > 0) {
             $countInactive = Product::whereIn('id', $activeKeys)->update(['status' => 'inactive']);
             // manually delete from search because model events are not fired.
             $searchClient->updateMany($activeKeys, 'status', 'inactive');
-        }
+            $message = "$countInactive products deactivated.";
+        } else if ($inactive->count() > 0) {
+                $countActive = Product::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
+                // manually add items to search because model events are not fired.
+                $searchClient->updateMany($inactiveKeys, 'status', 'active');
+                $message = "$countActive products activated";
 
-        $countActive = 0;
-        if ($inactive->count() > 0) {
-            $countActive = Product::whereIn('id', $inactiveKeys)->update(['status' => 'active']);
-            // manually add items to search because model events are not fired.
-            $searchClient->updateMany($inactiveKeys, 'status', 'active');
         }
-
-        $message = "$countActive activated, $countInactive deactivated.";
 
         return compact('countActive', 'countInactive', 'message');
     }
