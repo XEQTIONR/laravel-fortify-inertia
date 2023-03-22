@@ -20,7 +20,7 @@ import {
     Typography,
     Toolbar,
 } from '@mui/material';
-
+import AppLogo from '@/Components/AppLogo'
 import {
     AccountBox,
     Close,
@@ -127,9 +127,9 @@ export default function Nav({
         <CssBaseline />
         <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                <Stack spacing={1} direction="row" justifyContent="flex-start">
+                <Stack direction="row" alignItems="center" justifyContent="flex-start">
                     <Toolbar className="pl-1 pr-0">
-                        <Box className="flex items-center"
+                        <Box className="flex items-center justify-between"
                              sx={{ width: show ? drawerWidth : '50px' }}
                         >
                             <IconButton
@@ -142,16 +142,13 @@ export default function Nav({
                             >
                                 <MenuIcon />
                             </IconButton>
-                            <Typography
-                                color="white"
-                                className={'flex-shrink-0 ' + (show ? '' : 'hidden') }
-                                variant="h6"
-                                noWrap component="div"
-                            >
-                                Clipped drawer
-                            </Typography>
+                        <Box sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
+                            <AppLogo show={show} />
+
+                        </Box>
                         </Box>
                     </Toolbar>
+                    <AppLogo className="mr-4" show={!show} />
                     <Toolbar className="w-full px-0">
                         {   setSearchItems
                             ? <NavSearchBar
