@@ -40,6 +40,7 @@ import {
     KeyboardArrowUp,
     Remove,
 } from "@mui/icons-material";
+import {styled} from "@mui/material/styles";
 
 export default function CreateOrder({addresses, categories, paymentConfig, shopping_cart, user}) {
 
@@ -175,7 +176,12 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                 </Button>
         }
     }
-
+    const TakaSymbol = styled( (props) => (
+        <Typography {...props} />
+    ))(({ theme}) =>({
+        color: theme.palette.success.main,
+        //borderColor: theme.palette.grey[500]
+    }));
     const SubtotalCard = function() {
         return (
             <Card className="w-full" variant="outlined">
@@ -199,9 +205,12 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                         <Typography align="center" className="font-bold mt-3 mb-2">
                             { trans( 'labels.Total' ) }
                         </Typography>
-                        <Typography align="center" className="font-bold text-2xl mt-3 mb-2">
-                            ৳ {subTotal() + serviceCharge()}
-                        </Typography>
+                        <Box className="flex justify-end items-center">
+                            <TakaSymbol align="center" className="font-bold text-2xl mt-3 mb-2 mr-2">৳ </TakaSymbol>
+                            <Typography color="kustom" align="center" className="font-bold text-2xl mt-3 mb-2">
+                                {subTotal() + serviceCharge()}
+                            </Typography>
+                        </Box>
                     </Stack>
                     <NextStep step={activeStep} />
                 </Stack>
@@ -577,6 +586,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                         </Select>
                                     </FormControl>
                                     <Button
+                                        color="success"
                                         disabled={!validate}
                                         variant={validate ? 'contained' : 'outlined'}
                                         onClick={() => {

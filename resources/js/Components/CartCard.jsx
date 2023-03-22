@@ -4,11 +4,19 @@ import { Inertia } from '@inertiajs/inertia';
 import {Box, Button, Divider, IconButton, List, ListItem, Popover, Stack, Typography} from "@mui/material";
 import {Clear, KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
 import { red } from '@mui/material/colors';
+import {styled} from "@mui/material/styles";
 
 const col = red[300];
 export default function CartCard({anchor, items, setItems, open, setOpen, user}){
 
     const { locale } = usePage().props;
+
+    const TakaSymbol = styled( (props) => (
+        <Typography {...props} />
+    ))(({ theme}) =>({
+        color: theme.palette.success.main,
+        //borderColor: theme.palette.grey[500]
+    }));
 
     function submit(e) {
         e.preventDefault();
@@ -187,11 +195,12 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
                 <Divider variant="middle" />
                 <ListItem key="total">
                     <Typography sx={{ width: '60%', ml: 2, fontWeight: 'bolder' }}>{trans('labels.Subtotal')}</Typography>
-                    <Typography sx={{ width: '40%', mr: 1, textAlign: 'right', fontWeight: 'bold' }}>৳
-                        <Typography component="span" sx={{ mx: 2, fontWeight: 'bold' }}>{
-                        items.reduce((total, {qty, product}) => total+(product.current_selling_price*qty), 0)
-                        }</Typography>
-                    /-</Typography>
+                    <Box sx={{ width: '40%', display: 'flex', justifyContent: 'center'}}>
+                        <TakaSymbol component="span" sx={{ mr: 1, fontWeight: 'bold' }}>৳</TakaSymbol>
+                        <Typography  component="span" sx={{ fontWeight: 'bold' }}>{
+                            items.reduce((total, {qty, product}) => total+(product.current_selling_price*qty), 0)
+                        + ' /-'}</Typography>
+                    </Box>
                 </ListItem>
                 <ListItem>
                     <Button

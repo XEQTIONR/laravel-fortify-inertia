@@ -36,7 +36,7 @@ const CustomFontTheme = createTheme({
         fontSize: 13,
         button: {
             fontWeight: 'bold',
-        }
+        },
     },
     palette: {
         mode: 'light',
@@ -52,7 +52,7 @@ const CustomFontTheme = createTheme({
             //contrastText: '#000'
         },
         gray: {
-            main: '#868686',
+            main: '#656565',
             light: '#cbcbcb',
             //contrastText: '#000'
         },
@@ -61,15 +61,16 @@ const CustomFontTheme = createTheme({
           contrastText: '#fff',
             dark: '#faab6d'
         },
-        white: {
-          main: '#fff',
-        },
         success: {
           main: '#1ED161',
+          dark: '#4ad37d',
           contrastText: '#fff',
         },
+        white: {
+            main: '#fff',
+        },
         error: {
-            main: '#F2405D',
+            main: '#FF0099',
         },
         background: {
             paper: '#f6fafc',

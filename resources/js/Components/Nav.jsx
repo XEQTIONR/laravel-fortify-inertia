@@ -152,7 +152,7 @@ export default function Nav({
                     <AppLogo
                         color="#868686"
                         className="relative -left-2 mr-4"
-                        show={!show}
+                        show={(!show) && window.innerWidth > 600 }
                     />
                     <Toolbar className="w-full px-0">
                         {   setSearchItems

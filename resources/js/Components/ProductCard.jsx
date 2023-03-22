@@ -26,6 +26,20 @@ const StyledButton = styled( (props) => (
     borderColor: theme.palette.grey[500]
 }));
 
+const TakaSymbol = styled( (props) => (
+    <Typography {...props} />
+))(({ theme}) =>({
+    color: theme.palette.success.main,
+    //borderColor: theme.palette.grey[500]
+}));
+
+const TakaAmount = styled( (props) => (
+    <Typography {...props} />
+))(({ theme}) =>({
+    color: theme.palette.gray.main,
+    //borderColor: theme.palette.grey[500]
+}));
+
 export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
 
     const { locale } = usePage().props;
@@ -96,7 +110,10 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                 </Typography>
             </Box>
             <Typography className="my-2" variant="caption"  align="center">{ product.amount } { uom() }</Typography>
-            <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
+            <Box className="flex justify-center">
+                <TakaSymbol  className="font-bold mr-1 text-lg" variant="body1"  align="center">৳</TakaSymbol>
+                <TakaAmount className="font-bold text-lg" variant="body1"  align="center">{product.current_selling_price}</TakaAmount>
+            </Box>
             {
                 cartItem
                     ? (<ButtonGroup color="primary" className="mt-2 font-bold" variant="contained">
