@@ -18,7 +18,7 @@ const SearchInput = styled('div')(({ theme }) => ({
     // '&:hover': {
     //     borderColor: theme.palette.secondary.main,
     // },
-    marginRight: 0,
+    marginRight: 6,
     marginLeft: 0,
     width: '100%',
     // [theme.breakpoints.up('sm')]: {

@@ -17,6 +17,7 @@ import {
     ListItemText,
     Toolbar
 } from '@mui/material';
+import AppLogo from '@/Components/AppLogo';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -68,9 +69,8 @@ export default function Nav({ children, navLinks }) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Clipped drawer
-                    </Typography>
+                    <AppLogo show={true} />
+                    <Typography color="secondary"> Admin </Typography>
                 </Toolbar>
             </AppBar>
 

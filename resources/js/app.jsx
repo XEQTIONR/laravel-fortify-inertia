@@ -41,11 +41,11 @@ const CustomFontTheme = createTheme({
             primary: '#484747',
         },
         primary: {
-            main: '#0e53d3',
+            main: '#006b4b',
             contrastText: '#fff'
         },
         secondary: {
-          main: '#FFDB23',
+          main: '#00eea4',
             contrastText: '#1b2133',
           //dark: '#faef83'
         },

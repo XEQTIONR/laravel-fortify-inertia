@@ -128,8 +128,8 @@ export default function Nav({
         <Box sx={{ display: 'flex' }}>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Stack direction="row" alignItems="center" justifyContent="flex-start">
-                    <Toolbar className="pl-1 pr-0">
-                        <Box className="flex items-center justify-between"
+                    <Toolbar className="px-1">
+                        <Box className="flex items-center justify-start"
                              sx={{ width: show ? drawerWidth : '50px' }}
                         >
                             <IconButton
@@ -142,10 +142,10 @@ export default function Nav({
                             >
                                 <MenuIcon />
                             </IconButton>
-                        <Box sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>
+                        {/*<Box sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>*/}
                             <AppLogo show={show} />
 
-                        </Box>
+                        {/*</Box>*/}
                         </Box>
                     </Toolbar>
                     <AppLogo className="mr-4" show={!show} />
