@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef}  from 'react';
 import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
 import { Button, Box, Checkbox, FormGroup, FormControlLabel, InputAdornment, Paper, Stack, TextField, Typography } from '@mui/material';
+import AppLogo from "../Components/AppLogo";
 
 export default function Login ({ loginRoute, shopping_cart, categories, errors }) {
 
@@ -29,6 +30,7 @@ export default function Login ({ loginRoute, shopping_cart, categories, errors }
 
     return (
         <Box className="w-full h-screen flex flex-col justify-center items-center">
+            <AppLogo height="3rem" color="#ff7d17" show={true} />
             <Paper className="p-5 mt-5" elevation={5}>
             <form onSubmit={handleLogin}>
                 <Stack

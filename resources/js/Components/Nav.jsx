@@ -126,7 +126,7 @@ export default function Nav({
         <>
         <CssBaseline />
         <Box sx={{ display: 'flex' }}>
-            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <AppBar color="secondary" position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Stack direction="row" alignItems="center" justifyContent="flex-start">
                     <Toolbar className="px-1">
                         <Box className="flex items-center justify-start"
@@ -137,18 +137,23 @@ export default function Nav({
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
                                 aria-haspopup="true"
-                                color="inherit"
+                                color={show ? "primary" : "gray"}
                                 onClick={() => { setShow( !show )}}
                             >
                                 <MenuIcon />
                             </IconButton>
-                        {/*<Box sx={{ flexGrow: 1, justifyContent: 'flex-start' }}>*/}
-                            <AppLogo show={show} />
 
-                        {/*</Box>*/}
+                            <AppLogo
+                                color="#868686"
+                                show={show}
+                            />
                         </Box>
                     </Toolbar>
-                    <AppLogo className="mr-4" show={!show} />
+                    <AppLogo
+                        color="#868686"
+                        className="relative -left-2 mr-4"
+                        show={!show}
+                    />
                     <Toolbar className="w-full px-0">
                         {   setSearchItems
                             ? <NavSearchBar
@@ -173,7 +178,7 @@ export default function Nav({
                             showUserMenu ?
                                 (<>
                                 <IconButton
-                                    color="inherit"
+                                    color="gray"
                                     className="mr-2"
                                     onMouseEnter={(e) => {
                                         setMenuAnchor(e.currentTarget);
@@ -230,7 +235,7 @@ export default function Nav({
                             shoppingCart
                                 ? <>
                                     <IconButton
-                                        color="inherit"
+                                        color="gray"
                                                 onMouseEnter={(e) => {
                                                     setCartAnchor(e.currentTarget);
                                                 }}
@@ -238,7 +243,7 @@ export default function Nav({
                                     >
                                         <Badge badgeContent={<strong>{shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}</strong>}
                                                invisible={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0) === 0}
-                                               color="secondary" className="font-bold"
+                                               color="primary" className="font-bold"
                                         >
                                             <ShoppingCart />
                                         </Badge>
@@ -257,18 +262,18 @@ export default function Nav({
                         {/*    /!*<Typography className="px-1 text-white">En</Typography>*!/*/}
                         {/*    <Typography className="px-1 text-white">বা</Typography>*/}
                         {/*</IconButton>*/}
-                        <ButtonGroup className="mx-3" color="white" size="small" variant="text">
+                        <ButtonGroup className="mx-3" color="primary" size="small" variant="text">
                             <StyledButtonGroupButton onClick={() => {
                                     window.location.href = route('forget',  { locale: 'bn' });
                                 }}
-                                color={locale === 'bn' ? "secondary" : "white"}
+                                color={locale === 'bn' ? "primary" : "disabled"}
                                 className={locale === 'bn' ? "font-bold" : null}
                             >বা</StyledButtonGroupButton>
                             <StyledButtonGroupButton
                                 onClick={() => {
                                     window.location.href = route('forget', { locale: 'en' })
                                 }}
-                                color={locale === 'en' ? "secondary" : "white"}
+                                color={locale === 'en' ? "primary" : "disabled"}
                                 className={locale === 'en' ? "font-bold" : null}
                             >En</StyledButtonGroupButton>
                         </ButtonGroup>

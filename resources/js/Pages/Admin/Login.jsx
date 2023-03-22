@@ -1,6 +1,7 @@
 import React  from 'react';
 import { useForm } from '@inertiajs/inertia-react';
 import { Button, Box, Checkbox, FormGroup, FormControlLabel, Paper, Stack, TextField, Typography } from '@mui/material';
+import AppLogo from "@/Components/AppLogo";
 
 export default function Login ({ loginRoute }) {
 
@@ -18,7 +19,11 @@ export default function Login ({ loginRoute }) {
     }
 
     return (
-            <Box className="w-full h-full flex flex-col items-center">
+            <Box className="w-full h-screen flex flex-col items-center justify-center">
+                <Box className="flex flex-col items-center">
+                    <AppLogo height="3rem" color="#ff7d17" show={true} />
+                    <Typography className="text-gray-500">Admin</Typography>
+                </Box>
                 <Paper className="p-5 mt-5" elevation={5}>
                     <form onSubmit={handleLogin}>
                         <Stack

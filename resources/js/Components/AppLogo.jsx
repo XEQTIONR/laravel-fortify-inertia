@@ -1,15 +1,17 @@
 import React from 'react';
+import { Link } from '@inertiajs/inertia-react';
 
-export default function AppLogo ({show, className}) {
-    // return <img className={className} style={{ display:  show ? 'block' : 'none', height: '2rem'}} src="/stripekart-wordmark.svg" alt="stripekart" />;
-    return<svg
+export default function AppLogo ({show, className, color, height}) {
+    return <Link href="/">
+
+    <svg
         className={className}
-        style={{ display:  show ? 'block' : 'none', height: '2rem'}} version="1.0" xmlns="http://www.w3.org/2000/svg"
-      width="140" height="auto" viewBox="0 0 1348.000000 326.000000"
+        style={{ display:  show ? 'block' : 'none', height: height ?? '2rem'}} version="1.0" xmlns="http://www.w3.org/2000/svg"
+        height="auto" viewBox="0 0 1348.000000 326.000000"
       preserveAspectRatio="xMidYMid meet">
 
         <g transform="translate(0.000000,326.000000) scale(0.100000,-0.100000)"
-           fill="#fff" stroke="none">
+           fill={color ?? "currentColor"} stroke="none">
             <path d="M4154 3191 c-153 -70 -221 -241 -151 -383 69 -141 225 -201 364 -139
 59 26 136 102 160 159 24 56 21 147 -6 210 -29 65 -104 134 -168 156 -63 21
 -148 20 -199 -3z"/>
@@ -82,5 +84,6 @@ l-43 -66 -6 109 c-9 192 -29 208 -261 213 -148 4 -158 3 -158 -15 -1 -10 -45
 -1360 0 -10 55 -13 240 -13 132 0 240 2 240 4 0 3 43 361 95 798 52 436 95
 801 95 810 0 10 -3 18 -7 18 -5 -1 -116 -57 -247 -125z"/>
         </g>
-    </svg>;
+    </svg>
+    </Link>;
 }

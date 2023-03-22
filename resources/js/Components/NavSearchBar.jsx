@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
 import SearchIcon from '@mui/icons-material/Search';
@@ -26,12 +26,12 @@ const SearchInput = styled('div')(({ theme }) => ({
     //     width: 'auto',
     // },
     '& .MuiInputBase-root.Mui-focused': {
-        //borderColor: theme.palette.primary.main,
+        borderColor: theme.palette.primary.main,
         //color: theme.palette.secondary.main,
     },
     '& .MuiInputBase-root': {
-        //borderWidth: '2px',
-        //borderColor: theme.palette.disabled,
+        borderWidth: '2px',
+        borderColor: theme.palette.gray.light,
         // borderColor: theme.palette.common.red,
         borderRadius: theme.shape.borderRadius,
         //backgroundColor: theme.palette.common.white

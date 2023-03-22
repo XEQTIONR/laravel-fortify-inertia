@@ -195,7 +195,7 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
                 </ListItem>
                 <ListItem>
                     <Button
-                        color="secondary"
+                        color="primary"
                         type="submit"
                         variant="contained"
                         sx={{ display: 'block', width: '100%', mt: 2  }}

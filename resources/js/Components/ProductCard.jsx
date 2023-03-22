@@ -99,7 +99,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
             <Typography className="font-bold" variant="body1"  align="center">৳ {product.current_selling_price}</Typography>
             {
                 cartItem
-                    ? (<ButtonGroup color="secondary" className="mt-2 font-bold" variant="contained">
+                    ? (<ButtonGroup color="primary" className="mt-2 font-bold" variant="contained">
                             <Button
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -132,7 +132,7 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                             e.stopPropagation()
                             cbAdd();
                         }}
-                        className="buy-button mt-2 font-bold hover:border-yellow-400 hover:text-yellow-400 hover:bg-yellow-50"
+                        className="buy-button mt-2 font-bold hover:border-orange-400 hover:text-orange-400 hover:bg-orange-50"
                         variant="outlined"
                     >
                         { trans('labels.Add to cart') }

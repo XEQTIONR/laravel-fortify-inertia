@@ -34,26 +34,42 @@ const CustomFontTheme = createTheme({
     typography: {
         fontFamily: [  "'Noto Sans Bengali'" ,"'Hind Siliguri'",  "'Noto Serif Bengali'"].join(","),
         fontSize: 13,
+        button: {
+            fontWeight: 'bold',
+        }
     },
     palette: {
         mode: 'light',
         text: {
             primary: '#484747',
         },
-        primary: {
-            main: '#006b4b',
-            contrastText: '#fff'
-        },
         secondary: {
-          main: '#00eea4',
-            contrastText: '#1b2133',
-          //dark: '#faef83'
+            main: '#ffffff',
+            //contrastText: '#000'
+        },
+        disabled: {
+            main: '#b7b7b7',
+            //contrastText: '#000'
+        },
+        gray: {
+            main: '#868686',
+            light: '#cbcbcb',
+            //contrastText: '#000'
+        },
+        primary: {
+          main: '#ff7d17',
+          contrastText: '#fff',
+            dark: '#faab6d'
         },
         white: {
           main: '#fff',
         },
+        success: {
+          main: '#1ED161',
+          contrastText: '#fff',
+        },
         error: {
-            main: '#e01f1f',
+            main: '#F2405D',
         },
         background: {
             paper: '#f6fafc',
