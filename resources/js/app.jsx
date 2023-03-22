@@ -32,7 +32,7 @@ const appName =
 
 const CustomFontTheme = createTheme({
     typography: {
-        fontFamily: [  "'Noto Sans Bengali'" ,"'Hind Siliguri'",  "'Noto Serif Bengali'"].join(","),
+        fontFamily: ["'Noto Sans Bengali'" ,"'Hind Siliguri'",   "'Noto Serif Bengali'"].join(","),
         fontSize: 13,
         button: {
             fontWeight: 'bold',

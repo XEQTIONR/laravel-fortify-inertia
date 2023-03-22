@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Inertia } from '@inertiajs/inertia'
-
+import { usePage } from '@inertiajs/inertia-react';
+import { blue, purple, indigo, grey } from '@mui/material/colors';
 import {
     AppBar,
+    Avatar,
     Box,
     createTheme,
     CssBaseline,
@@ -15,12 +17,14 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
+    Stack,
     Toolbar
 } from '@mui/material';
 import AppLogo from '@/Components/AppLogo';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
+import {Logout, Face} from '@mui/icons-material';
 
 
 
@@ -28,6 +32,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 const drawerWidth = 240;
 
 export default function Nav({ children, navLinks }) {
+
+    const { user } = usePage().props;
 
     const [ show, setShow ] = useState(window.innerWidth <= 800
         ? false
@@ -57,7 +63,11 @@ export default function Nav({ children, navLinks }) {
         <>
         <CssBaseline />
         <Box sx={{ display: 'flex' }}>
-            <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <AppBar color="disabled" position="fixed" sx={{
+                zIndex: (theme) => theme.zIndex.drawer + 1,
+            }}
+            >
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
                 <Toolbar className="px-1">
                     <IconButton
                         size="large"
@@ -70,8 +80,15 @@ export default function Nav({ children, navLinks }) {
                         <MenuIcon />
                     </IconButton>
                     <AppLogo show={true} />
-                    <Typography color="secondary"> Admin </Typography>
+                    <Typography> Admin </Typography>
                 </Toolbar>
+                <Toolbar>
+                    <Avatar sx={{ width: 30, height: 30, bgcolor: blue[300], mx: 1 }}>{ user.name.charAt(0) }</Avatar>
+                    <IconButton>
+                        <Logout onClick={() => Inertia.post( route('logout') )} />
+                    </IconButton>
+                </Toolbar>
+                </Stack>
             </AppBar>
 
             <Drawer

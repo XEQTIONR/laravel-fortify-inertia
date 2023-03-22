@@ -189,25 +189,31 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                     <Stack justifyContent="space-between" direction="row">
                         <Typography align="center">{trans('labels.Subtotal')} ({ trans( 'labels.N items', { N: qtyTotal() } ) } )
                         </Typography>
-                        <Typography align="center" className="font-bold">
-                            ৳ {subTotal()}
-                        </Typography>
+                        <Box className="flex justify-end items-center">
+                            <TakaSymbol align="center" className="font-bold mr-1 text-2xl">৳ </TakaSymbol>
+                            <Typography align="center" className="font-bold">
+                                {subTotal().toFixed(2)}
+                            </Typography>
+                        </Box>
                     </Stack>
                     <Stack justifyContent="space-between" direction="row">
                         <Typography align="center">
                             { trans('labels.Service charge') }
                         </Typography>
-                        <Typography align="center" className="font-bold">
-                            ৳ {serviceCharge()}
-                        </Typography>
+                        <Box className="flex justify-end items-center">
+                            <TakaSymbol align="center" className="font-bold mr-1">৳ </TakaSymbol>
+                            <Typography align="center" className="font-bold">
+                                {serviceCharge()}
+                            </Typography>
+                        </Box>
                     </Stack>
-                    <Stack className="border-t-2" justifyContent="space-between" direction="row">
-                        <Typography align="center" className="font-bold mt-3 mb-2">
+                    <Stack space={1} className="border-t-2 pt-2" justifyContent="space-between" direction="row">
+                        <Typography align="center" className="font-bold">
                             { trans( 'labels.Total' ) }
                         </Typography>
                         <Box className="flex justify-end items-center">
-                            <TakaSymbol align="center" className="font-bold text-2xl mt-3 mb-2 mr-2">৳ </TakaSymbol>
-                            <Typography color="kustom" align="center" className="font-bold text-2xl mt-3 mb-2">
+                            <TakaSymbol align="center" className="font-bold text-2xl mr-2">৳ </TakaSymbol>
+                            <Typography align="center" className="font-bold text-2xl">
                                 {subTotal() + serviceCharge()}
                             </Typography>
                         </Box>
@@ -345,7 +351,10 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 </TableCell>
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
-                                                    <Typography className="font-bold" variant="subtitle2">৳ {subTotal()}</Typography>
+                                                    <Box className=" w-full flex flex-row justify-end items-center">
+                                                    <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                    <Typography className="font-bold" variant="subtitle2"> {subTotal()}</Typography>
+                                                    </Box>
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
@@ -361,7 +370,10 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 </TableCell>
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
-                                                    <Typography className="font-bold" variant="subtitle2">৳ {serviceCharge()}</Typography>
+                                                    <Box className=" w-full flex flex-row justify-end items-center">
+                                                        <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                        <Typography className="font-bold" variant="subtitle2"> {serviceCharge()}</Typography>
+                                                    </Box>
                                                 </TableCell>
                                             </TableRow>
                                             <TableRow>
@@ -372,7 +384,10 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 </TableCell>
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
-                                                    <Typography className="font-bold" variant="subtitle2">৳ {subTotal() + serviceCharge()}</Typography>
+                                                    <Box className=" w-full flex flex-row justify-end items-center">
+                                                        <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                        <Typography className="font-bold" variant="subtitle2"> {subTotal() + serviceCharge()}</Typography>
+                                                    </Box>
                                                 </TableCell>
                                             </TableRow>
                                         </TableFooter>
