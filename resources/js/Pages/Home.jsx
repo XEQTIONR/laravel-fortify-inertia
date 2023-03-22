@@ -21,7 +21,9 @@ export default function Home ({ categories, products, shopping_cart, user }) {
     const container = useRef(null);
 
     const setRows = (rows) => {
-        setItems([...items, ...rows]);
+        const existingIDs = items.map(({id}) => id);
+        const toAdd = rows.filter(({id}) => ! existingIDs.includes(id))
+        setItems([...items, ...toAdd]);
     }
 
     const findCartItem = (product_id) => cart.find((item) => item.product_id === product_id);
@@ -135,11 +137,13 @@ export default function Home ({ categories, products, shopping_cart, user }) {
         >
             <Box ref={container} className="flex flex-wrap justify-start mt-3 pl-4">
                 {
-                    ( selectedCategory && searchItems.length === 0 && !isSearching )
-                        ? flatten(categories.data)
-                            .filter((children) => children.parent_id === selectedCategory.id)
-                            .map(item => <CategoryCard key={item.id} category={item} />)
-                        : ( categories.data.map((item) => <CategoryCard key={item.id} category={item} />))
+                    ( isSearching || searchItems.length > 0 )
+                        ?
+                        null : ( ( selectedCategory && searchItems.length === 0 )
+                            ? flatten(categories.data)
+                                .filter((children) => children.parent_id === selectedCategory.id)
+                                .map(item => <CategoryCard key={item.id} category={item} />)
+                            : ( categories.data.map( ( item ) => <CategoryCard key={item.id} category={item} /> ) ) )
                 }
                 {
                     isSearching

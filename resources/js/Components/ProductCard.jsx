@@ -3,8 +3,28 @@ import { usePage } from '@inertiajs/inertia-react';
 import { Box, Button, ButtonGroup, Paper, Typography } from "@mui/material";
 import ProductCardSkeleton from "@/Components/ProductCardSkeleton";
 import { cardWidth } from "@/constants/card";
-import {Add, Remove, InsertPhoto} from '@mui/icons-material/';
-import  {styled} from "@mui/material/styles";
+import { Add, Remove, InsertPhoto } from '@mui/icons-material/';
+import  { styled } from "@mui/material/styles";
+
+const StyledPaper = styled((props) => (
+    <Paper {...props} />
+))(({ theme}) =>({
+    backgroundColor: theme.palette.grey[100],
+    borderWidth: '1px',
+    borderColor: theme.palette.grey[300],
+    [`&:hover`]: {
+        borderWidth: '1px',
+        borderColor: theme.palette.grey[400],
+        backgroundColor: '#fff'
+    },
+}));
+
+const StyledButton = styled( (props) => (
+    <Button {...props} />
+))(({ theme}) =>({
+    color: theme.palette.grey[500],
+    borderColor: theme.palette.grey[500]
+}));
 
 export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
 
@@ -46,36 +66,6 @@ export default function ProductCard ({product, cartItem, cbAdd, cbSubtract }) {
                 return product.uom;
         }
     }
-
-    const StyledPaper = styled((props) => (
-        <Paper {...props} />
-    ))(({ theme}) =>({
-        backgroundColor: theme.palette.grey[100],
-        borderWidth: '1px',
-        borderColor: theme.palette.grey[300],
-        [`&:hover`]: {
-            //color: theme.palette.secondary.dark,
-            borderWidth: '1px',
-           borderColor: theme.palette.grey[400],
-            backgroundColor: '#fff'
-        },
-    }));
-
-    const StyledButton = styled( (props) => (
-        <Button {...props} />
-    ))(({ theme}) =>({
-        // backgroundColor: theme.palette.grey[100],
-        // [`&:hover`]: {
-        //     //color: theme.palette.secondary.dark,
-        //     borderWidth: '1px',
-        //     //borderColor: theme.palette.grey[500],
-        //     backgroundColor: '#fff'
-        // },
-        // [`&:`]: {
-            color: theme.palette.grey[500],
-            borderColor: theme.palette.grey[500]
-        // },
-    }));
 
 
     return  imgUrl === 'none'
