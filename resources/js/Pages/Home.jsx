@@ -139,7 +139,7 @@ export default function Home ({ categories, products, shopping_cart, user }) {
                         ? flatten(categories.data)
                             .filter((children) => children.parent_id === selectedCategory.id)
                             .map(item => <CategoryCard key={item.id} category={item} />)
-                        : null
+                        : ( categories.data.map((item) => <CategoryCard key={item.id} category={item} />))
                 }
                 {
                     isSearching

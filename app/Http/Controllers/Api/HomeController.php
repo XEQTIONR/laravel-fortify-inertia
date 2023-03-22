@@ -44,7 +44,8 @@ class HomeController extends Controller
                     $query->whereIn('categories.id', $ids );
                 })->paginate($perPage);
             }
-
+        } else {
+            $products = Product::inRandomOrder()->paginate($perPage);
         }
 
 
