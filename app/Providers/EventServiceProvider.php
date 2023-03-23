@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
 use App\Models\Product;
+use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -18,6 +20,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $observers = [
         Product::class => [ ProductObserver::class ],
+        Order::class => [ OrderObserver::class ],
     ];
     /**
      * The event to listener mappings for the application.

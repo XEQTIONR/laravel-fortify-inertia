@@ -70,8 +70,11 @@ class OrderController extends Controller
             'status' => [ 'required', Rule::in(Order::$statuses) ]
         ]);
 
-        Order::whereIn('id', $validated['ids'])
-            ->update([ 'status' => $validated['status']]);
+        foreach ($validated['ids'] as $id) {
+            $order = Order::find($id);
+            $order->status = $validated['status'];
+            $order->save();
+        }
 
         return [
             'message' => 'Status updated to `'
