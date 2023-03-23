@@ -148,6 +148,7 @@ export default function Categories({ categories }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    sx={{ backgroundColor: '#fff' }}
                     keepNonExistentRowsSelected
                     checkboxSelection
                     columns={ columns }

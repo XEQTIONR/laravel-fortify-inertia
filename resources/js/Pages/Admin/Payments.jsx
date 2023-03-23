@@ -81,6 +81,7 @@ export default function Payments({ payments }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    sx={{ backgroundColor: '#fff' }}
                     getRowHeight={() => 'auto'}
                     keepNonExistentRowsSelected
                     checkboxSelection

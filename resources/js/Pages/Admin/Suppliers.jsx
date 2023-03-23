@@ -165,6 +165,7 @@ export default function Suppliers({ suppliers }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    sx={{ backgroundColor: '#fff' }}
                     keepNonExistentRowsSelected
                     checkboxSelection
                     columns={ columns }

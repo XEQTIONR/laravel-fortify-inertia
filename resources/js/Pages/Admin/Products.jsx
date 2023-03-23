@@ -204,6 +204,7 @@ export default function Products({ products }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    sx={{ backgroundColor: '#fff' }}
                     getRowHeight={() => 'auto'}
                     keepNonExistentRowsSelected
                     checkboxSelection

@@ -156,6 +156,7 @@ export default function Staff({ staff }) {
                     </Tooltip>
                 </Box>
                 <DataGrid
+                    sx={{ backgroundColor: '#fff' }}
                     getRowHeight={() => 'auto'}
                     keepNonExistentRowsSelected
                     checkboxSelection

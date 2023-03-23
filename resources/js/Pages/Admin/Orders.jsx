@@ -409,6 +409,7 @@ export default function Orders({ orders, statuses }) {
                         }
                     </Box>
                     <DataGrid
+                        sx={{ backgroundColor: '#fff' }}
                         getRowHeight={() => 'auto'}
                         keepNonExistentRowsSelected
                         checkboxSelection
