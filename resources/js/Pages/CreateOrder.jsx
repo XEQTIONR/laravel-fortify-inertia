@@ -135,7 +135,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
         return (
             <Card variant="outlined">
                 <Stack spacing={0} className="p-3">
-                    <Typography key="deliver-label" variant="caption" gutterBottom={true}>{ trans( 'labels.Deliver to' ) }:</Typography>
+                    <GreenFont className="font-bold" key="deliver-label" variant="button" gutterBottom={true}>{ trans( 'labels.Deliver to' ) }:</GreenFont>
                     <Typography variant="body1" gutterBottom={true}>{selectedAddress.full_name}</Typography>
                     {
                         selectedAddress.business_name && selectedAddress.business_name.length
@@ -176,7 +176,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                 </Button>
         }
     }
-    const TakaSymbol = styled( (props) => (
+    const GreenFont = styled( (props) => (
         <Typography {...props} />
     ))(({ theme}) =>({
         color: theme.palette.success.main,
@@ -190,7 +190,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                         <Typography align="center">{trans('labels.Subtotal')} ({ trans( 'labels.N items', { N: qtyTotal() } ) } )
                         </Typography>
                         <Box className="flex justify-end items-center">
-                            <TakaSymbol align="center" className="font-bold mr-1 text-2xl">৳ </TakaSymbol>
+                            <GreenFont align="center" className="font-bold mr-1 text-2xl">৳ </GreenFont>
                             <Typography align="center" className="font-bold">
                                 {subTotal().toFixed(2)}
                             </Typography>
@@ -201,7 +201,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                             { trans('labels.Service charge') }
                         </Typography>
                         <Box className="flex justify-end items-center">
-                            <TakaSymbol align="center" className="font-bold mr-1">৳ </TakaSymbol>
+                            <x align="center" className="font-bold mr-1">৳ </x>
                             <Typography align="center" className="font-bold">
                                 {serviceCharge()}
                             </Typography>
@@ -212,7 +212,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                             { trans( 'labels.Total' ) }
                         </Typography>
                         <Box className="flex justify-end items-center">
-                            <TakaSymbol align="center" className="font-bold text-2xl mr-2">৳ </TakaSymbol>
+                            <GreenFont align="center" className="font-bold text-2xl mr-2">৳ </GreenFont>
                             <Typography align="center" className="font-bold text-2xl">
                                 {subTotal() + serviceCharge()}
                             </Typography>
@@ -352,7 +352,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
                                                     <Box className=" w-full flex flex-row justify-end items-center">
-                                                    <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                    <GreenFont align="center" className="font-bold mr-2">৳ </GreenFont>
                                                     <Typography className="font-bold" variant="subtitle2"> {subTotal()}</Typography>
                                                     </Box>
                                                 </TableCell>
@@ -371,7 +371,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
                                                     <Box className=" w-full flex flex-row justify-end items-center">
-                                                        <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                        <GreenFont align="center" className="font-bold mr-2">৳ </GreenFont>
                                                         <Typography className="font-bold" variant="subtitle2"> {serviceCharge()}</Typography>
                                                     </Box>
                                                 </TableCell>
@@ -385,7 +385,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                                                 <TableCell sx={{ width: '20%'}} align="right"/>
                                                 <TableCell sx={{ width: '20%'}} align="right">
                                                     <Box className=" w-full flex flex-row justify-end items-center">
-                                                        <TakaSymbol align="center" className="font-bold mr-2">৳ </TakaSymbol>
+                                                        <GreenFont align="center" className="font-bold mr-2">৳ </GreenFont>
                                                         <Typography className="font-bold" variant="subtitle2"> {subTotal() + serviceCharge()}</Typography>
                                                     </Box>
                                                 </TableCell>
