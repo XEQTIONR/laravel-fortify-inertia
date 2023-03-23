@@ -143,6 +143,11 @@ return [
         // 'store'  => 'redis',
     ],
 
+    'sms' => [
+      'api_key' => env('SMS_API_KEY'),
+      'endpoint' => env('SMS_ENDPOINT'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

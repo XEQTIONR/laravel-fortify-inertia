@@ -4,6 +4,6 @@ namespace App\Contracts;
 
 interface SMSClient {
 
-    public function sms( string $text, string $to );
+    public function send( string $text, string $to );
 }
 

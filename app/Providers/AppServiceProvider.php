@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Contracts\HierarchicalCategories;
 use App\Contracts\PDF;
+use App\Contracts\SMSClient;
 use App\Models\Category;
 use App\Services\HierarchicalCategoriesService;
 use App\Services\PDF\FPDF;
+use App\Services\SMS\SMSNetBDClient;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
         app()->singleton(HierarchicalCategories::class, function() {
             $service = new HierarchicalCategoriesService();
             return $service->categoryTree(Category::all());
+        });
+
+        app()->singleton(SMSClient::class, function() {
+           return new SMSNetBDClient();
         });
 
         app()->bind(PDF::class, function() {
