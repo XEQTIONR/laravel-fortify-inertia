@@ -7,6 +7,7 @@ use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Contracts\HierarchicalCategories;
+use App\Http\Responses\FailedPasswordConfirmationResponse;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\JsonResponse;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\FailedPasswordConfirmationResponse as FailedPasswordConfirmationResponseContract;
 use Laravel\Fortify\Contracts\LogoutResponse as LogoutResponseContract;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Http\Responses\LogoutResponse;
@@ -55,6 +57,10 @@ class FortifyServiceProvider extends ServiceProvider
 
         app()->bind(PasswordUpdateResponse::class, function() {
             return redirect(route('security.index'));
+        });
+
+        app()->singleton(FailedPasswordConfirmationResponseContract::class, function() {
+            return new FailedPasswordConfirmationResponse();
         });
     }
 
