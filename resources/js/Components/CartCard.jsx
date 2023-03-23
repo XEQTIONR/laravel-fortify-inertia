@@ -161,12 +161,10 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
                                     </IconButton>
 
                                 </Stack>
-                                <Typography
-                                    variant="caption"
-                                    sx={{ ml: 2 }}
-                                >
-                                    ৳ <span>{item.qty * item.product.current_selling_price}</span>
-                                </Typography>
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end'}}>
+                                    <TakaSymbol component="span">৳</TakaSymbol>
+                                    <Typography sx={{ ml: .5 }}>{item.qty * item.product.current_selling_price}</Typography>
+                                </Box>
                                 <IconButton
                                     onClick={() => {
                                         axios.delete(route('api.carts.destroy', {  cart: item.id }))
@@ -194,10 +192,10 @@ export default function CartCard({anchor, items, setItems, open, setOpen, user})
 
                 <Divider variant="middle" />
                 <ListItem key="total">
-                    <Typography sx={{ width: '60%', ml: 2, fontWeight: 'bolder' }}>{trans('labels.Subtotal')}</Typography>
-                    <Box sx={{ width: '40%', display: 'flex', justifyContent: 'center'}}>
-                        <TakaSymbol component="span" sx={{ mr: 1, fontWeight: 'bold' }}>৳</TakaSymbol>
-                        <Typography  component="span" sx={{ fontWeight: 'bold' }}>{
+                    <Typography sx={{ width: '60%', ml: 2, fontWeight: 'bolder', fontSize: '1.1rem' }}>{trans('labels.Subtotal')}</Typography>
+                    <Box sx={{ width: '40%', display: 'flex', justifyContent: 'flex-start'}}>
+                        <TakaSymbol component="span" sx={{ mr: 1, ml:2, fontWeight: 'bold', fontSize: '1.1rem' }}>৳</TakaSymbol>
+                        <Typography  component="span" sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{
                             items.reduce((total, {qty, product}) => total+(product.current_selling_price*qty), 0)
                         + ' /-'}</Typography>
                     </Box>

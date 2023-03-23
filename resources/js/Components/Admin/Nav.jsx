@@ -83,10 +83,12 @@ export default function Nav({ children, navLinks }) {
                     <Typography> Admin </Typography>
                 </Toolbar>
                 <Toolbar>
-                    <Avatar sx={{ width: 30, height: 30, bgcolor: blue[300], mx: 1 }}>{ user.name.charAt(0) }</Avatar>
-                    <IconButton>
-                        <Logout onClick={() => Inertia.post( route('logout') )} />
-                    </IconButton>
+                    <Avatar
+                        className="cursor-pointer text-sm font-bold"
+                        onClick={() => Inertia.post( route('logout') )}
+                        sx={{ width: 30, height: 30, bgcolor: blue[300] }}>
+                        { user.name.charAt(0) }
+                    </Avatar>
                 </Toolbar>
                 </Stack>
             </AppBar>

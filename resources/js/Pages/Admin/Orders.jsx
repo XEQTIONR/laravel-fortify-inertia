@@ -286,7 +286,7 @@ export default function Orders({ orders, statuses }) {
                     <ToggleButtonGroup
                         orientation="vertical"
                         color="primary"
-                        className="mb-1"
+                        className="mb-1 mr-1"
                         size="small"
                         value={filters}
                         onChange={(e, value) => filterState(value)}

@@ -18,7 +18,7 @@
             bottom: 0;
             animation: pulse2 4s infinite;
             border-radius: 50%;
-            border: 4px solid #0eb8f5;
+            border: 4px solid #faab6d;
         }
 
         @keyframes pulse2 {

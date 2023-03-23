@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Account settings' => 'অ্যাকাউন্ট সেটিংস',
     'Actions' => 'ক্রিয়া',
     'Add a new address' => 'একটি নতুন ঠিকানা যোগ করুন',
     'Add to cart' => 'কার্টে যোগ করুন',
@@ -37,6 +38,7 @@ return [
     'Manage your login information and password' => 'আপনার লগইন তথ্য এবং পাসওয়ার্ড পরিচালনা করুন।',
     'Mobile number' => 'মোবাইল নম্বর',
     'My account' => 'আমার অ্যাকাউন্ট',
+    'My account and settings' => 'আমার অ্যাকাউন্ট এবং সেটিংস',
     'My addresses' => 'আমার ঠিকানা',
     'My orders' => 'আমার অর্ডার',
     'My payments' => 'আমার পেমেন্ট',

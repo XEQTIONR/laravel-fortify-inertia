@@ -73,8 +73,8 @@ const CustomFontTheme = createTheme({
             main: '#FF0099',
         },
         background: {
-            paper: '#f6fafc',
-            default: '#ffffff',
+            paper: '#ffffff',
+            default: '#f1f1f1',
         },
     },
     components: {

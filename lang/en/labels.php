@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'Account settings' => 'Account settings',
     'Actions' => 'Actions',
     'Add a new address' => 'Add a new address',
     'Add to cart' => 'Add to cart',
@@ -37,6 +38,7 @@ return [
     'Manage your login information and password' => 'Manage your login information and password.',
     'Mobile number' => 'Mobile number',
     'My account' => 'My account',
+    'My account and settings' => 'My account and settings',
     'My addresses' => 'My addresses',
     'My orders' => 'My orders',
     'My payments' => 'My payments',

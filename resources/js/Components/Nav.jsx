@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Inertia } from '@inertiajs/inertia'
 import  {styled} from "@mui/material/styles";
 import { usePage } from '@inertiajs/inertia-react';
+import AccountMenu from '@/Components/AccountMenu';
 import {
     AppBar,
     Badge,
@@ -14,10 +15,13 @@ import {
     Drawer,
     IconButton,
     List,
+    ListItemText,
     Menu,
+    MenuList,
     MenuItem,
+    Paper,
     Stack,
-    Typography,
+    Tooltip,
     Toolbar,
 } from '@mui/material';
 import AppLogo from '@/Components/AppLogo'
@@ -173,81 +177,59 @@ export default function Nav({
                         }
 
                     </Toolbar>
-                    <Toolbar className="pl-0 pr-4">
+                    <Toolbar className="pl-2 pr-4">
+                        <Stack spacing={1} direction="row">
                         {
                             showUserMenu ?
                                 (<>
-                                <IconButton
-                                    color="gray"
-                                    className="mr-2"
-                                    onMouseEnter={(e) => {
-                                        setMenuAnchor(e.currentTarget);
-                                    }}
-                                    onClick={(e) => {
-                                        if (!user) {
-                                            Inertia.visit(route('login'));
-                                        } else {
-                                            // setMenuAnchor(e.currentTarget);
-                                            setUserMenuOpen(!userMenuOpen);
-                                        }
-                                    }}>
-                                    {user ? <AccountBox/> : <Login/>}
-                                </IconButton>
 
-                                <Menu
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    className="mr-2"
-                                    id="user-menu"
-                                    anchorEl={menuAnchor}
-                                    open={userMenuOpen}
-                                    onClose={() => setUserMenuOpen(false)}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'basic-button',
-                                    }}
-                                >
-                                    <MenuItem onClick={() => {
-                                        setShow(false);
-                                        setUserMenuOpen(false)
-                                        Inertia.visit(route('account'))
-                                    }} >{trans('labels.My account')}</MenuItem>
-                                    <MenuItem onClick={() => {
-                                        setShow(false);
-                                        setUserMenuOpen(false)
-                                        Inertia.visit(route('orders.index'))
-                                    }}
-                                    >{trans('labels.My orders')}</MenuItem>
-                                    <MenuItem onClick={() => {
-                                        setUserMenuOpen(false)
-                                        Inertia.post(route('logout') )
+                                    {
+                                        user
+                                            ? <AccountMenu />
+                                            : (
+                                                <Tooltip title={trans("labels.Log in")}>
+                                                <IconButton
+                                                    color="gray"
+                                                    onMouseEnter={(e) => {
+                                                        setMenuAnchor(e.currentTarget);
+                                                    }}
+                                                    onClick={(e) => {
+                                                        if (!user) {
+                                                            Inertia.visit(route('login'));
+                                                        } else {
+                                                            // setMenuAnchor(e.currentTarget);
+                                                            setUserMenuOpen(!userMenuOpen);
+                                                        }
+                                                    }}>
+                                                    <Login/>
+                                                </IconButton>
+                                                </Tooltip>
 
-                                    }} >{trans('labels.Log out')}</MenuItem>
-                                </Menu>
-                                </>) : null
+                                            )
+                                    }
+                                </>): null
                         }
                         {
                             shoppingCart
                                 ? <>
-                                    <IconButton
-                                        color="gray"
-                                                onMouseEnter={(e) => {
-                                                    setCartAnchor(e.currentTarget);
-                                                }}
-                                                onClick={() => setCartMenuOpen(!cartMenuOpen)}
-                                    >
-                                        <Badge badgeContent={<strong>{shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}</strong>}
-                                               invisible={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0) === 0}
-                                               color="primary" className="font-bold"
+                                    <Tooltip title={trans("labels.Shopping Cart")}>
+                                        <IconButton
+                                            className=""
+                                            color="gray"
+                                            onMouseEnter={(e) => {
+                                                setCartAnchor(e.currentTarget);
+                                            }}
+                                            onClick={() => setCartMenuOpen(!cartMenuOpen)}
                                         >
-                                            <ShoppingCart />
-                                        </Badge>
-                                    </IconButton>
+                                            <Badge
+                                                badgeContent={<strong>{shoppingCart.reduce( ((total, {qty}) => total+qty ), 0)}</strong>}
+                                                invisible={shoppingCart.reduce( ((total, {qty}) => total+qty ), 0) === 0}
+                                                color="primary" className="font-bold"
+                                            >
+                                                <ShoppingCart />
+                                            </Badge>
+                                        </IconButton>
+                                    </Tooltip>
                                     <CartCard
                                         user={user}
                                         open={cartMenuOpen}
@@ -256,27 +238,25 @@ export default function Nav({
                                         items={shoppingCart}
                                         setItems={setShoppingCart}
                                     />
-                                </> : null
+                                </>
+                                : null
                         }
-                        {/*<IconButton>*/}
-                        {/*    /!*<Typography className="px-1 text-white">En</Typography>*!/*/}
-                        {/*    <Typography className="px-1 text-white">বা</Typography>*/}
-                        {/*</IconButton>*/}
-                        <ButtonGroup className="mx-3" color="primary" size="small" variant="text">
-                            <StyledButtonGroupButton onClick={() => {
-                                    window.location.href = route('forget',  { locale: 'bn' });
-                                }}
-                                color={locale === 'bn' ? "primary" : "disabled"}
-                                className={locale === 'bn' ? "font-bold" : null}
-                            >বা</StyledButtonGroupButton>
-                            <StyledButtonGroupButton
-                                onClick={() => {
-                                    window.location.href = route('forget', { locale: 'en' })
-                                }}
-                                color={locale === 'en' ? "primary" : "disabled"}
-                                className={locale === 'en' ? "font-bold" : null}
-                            >En</StyledButtonGroupButton>
-                        </ButtonGroup>
+                            <ButtonGroup className="mr-3" color="primary" size="small" variant="text">
+                                <StyledButtonGroupButton onClick={() => {
+                                        window.location.href = route('forget',  { locale: 'bn' });
+                                    }}
+                                    color={locale === 'bn' ? "primary" : "disabled"}
+                                    className={locale === 'bn' ? "font-bold" : null}
+                                >বা</StyledButtonGroupButton>
+                                <StyledButtonGroupButton
+                                    onClick={() => {
+                                        window.location.href = route('forget', { locale: 'en' })
+                                    }}
+                                    color={locale === 'en' ? "primary" : "disabled"}
+                                    className={locale === 'en' ? "font-bold" : null}
+                                >En</StyledButtonGroupButton>
+                            </ButtonGroup>
+                        </Stack>
                     </Toolbar>
                 </Stack>
             </AppBar>

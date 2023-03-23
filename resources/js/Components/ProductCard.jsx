@@ -9,9 +9,9 @@ import  { styled } from "@mui/material/styles";
 const StyledPaper = styled((props) => (
     <Paper {...props} />
 ))(({ theme}) =>({
-    backgroundColor: theme.palette.grey[100],
+    //backgroundColor: theme.palette.grey[100],
     borderWidth: '1px',
-    borderColor: theme.palette.grey[300],
+    //borderColor: theme.palette.grey[300],
     [`&:hover`]: {
         borderWidth: '1px',
         borderColor: theme.palette.grey[400],

@@ -29,12 +29,13 @@ const StyledTreeItem = styled((props) => (
         opacity: 1,
     },
     [`& .${treeItemClasses.expanded} .${treeItemClasses.label}`]: {
-        fontWeight: 'bold',
-    },
-    [`& .${treeItemClasses.selected}`]: {
-        color: theme.palette.primary.main,
+        //fontWeight: 'bold',
+        color: theme.palette.primary.main
     },
     [`& .${treeItemClasses.selected} .${treeItemClasses.label}`]: {
+        fontWeight: 'bold',
+    },
+    [`& :hover`]: {
         fontWeight: 'bold',
     },
 
