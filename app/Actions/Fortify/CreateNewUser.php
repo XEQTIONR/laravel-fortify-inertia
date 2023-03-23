@@ -42,7 +42,7 @@ class CreateNewUser implements CreatesNewUsers
             'primary_contact_number' => 'This mobile number is already registered.'
         ])->validate();
 
-        $code = 123456; //strval( random_int(100000, 999999) );
+        $code =  ( config('app.env') === 'production' ) ? strval( random_int(100000, 999999) ) : 123456;
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
@@ -52,6 +52,10 @@ class CreateNewUser implements CreatesNewUsers
             'sms_verification_code' => $code,
         ]);
         //TODO: text the code to the users primary_contact_number;
+        $verification_code = config('app.env') === 'production' ? strval( random_int(10000000, 99999999) ) : 123456;
+
+        $smsClient = app()->make(\App\Contracts\SMSClient::class);
+        $smsClient->send("Your account verification code is : $verification_code", $input['primary_contact_number']);
 
         return $user;
     }

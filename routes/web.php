@@ -75,8 +75,11 @@ Route::post('/forgot-password-request', function(Request $request) {
         'primary_contact_number' => trans('validation.exists', ['attribute' => strtolower(trans('labels.Mobile number'))])
     ]);
 
-//    $verification_code = strval( random_int(10000000, 99999999) );
-    $verification_code = 123456;
+    $verification_code = config('app.env') === 'production' ? strval( random_int(10000000, 99999999) ) : 123456;
+
+    $smsClient = app()->make(\App\Contracts\SMSClient::class);
+    $smsClient->send("Your password reset code is : $verification_code", $validated['primary_contact_number'] );
+
     DB::table('password_resets')->insert([
         'email'      => $validated['primary_contact_number'],
         'token'      => Hash::make( $verification_code ),
