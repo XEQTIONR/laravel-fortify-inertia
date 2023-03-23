@@ -16,6 +16,11 @@ class OrderObserver
      */
     public function created(Order $order)
     {
+        $smsClient = app()->make(SMSClient::class);
+        $smsClient->send(
+            "Your order $order->id was created.",
+            $order->user->primary_contact_number,
+        );
 
     }
 
