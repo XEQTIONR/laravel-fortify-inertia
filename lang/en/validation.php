@@ -113,6 +113,13 @@ return [
         'numbers' => 'The :attribute must contain at least one number.',
         'symbols' => 'The :attribute must contain at least one symbol.',
         'uncompromised' => 'The given :attribute has appeared in a data leak. Please choose a different :attribute.',
+
+        'uppercase' => 'The :attribute must be at least :length characters and contain at least one uppercase character.',
+        'alphanum' => 'The :attribute must be at least :length characters and contain at least one number.',
+        'sc' => 'The :attribute must be at least :length characters and contain at least one special character.',
+        'alphanum_uc' => 'The :attribute must be at least :length characters and contain at least one uppercase character and one number.',
+        'uc_sc' => 'The :attribute must be at least :length characters and contain at least one uppercase character and one special character.',
+        'alphanum_uc_sc' => 'The :attribute must be at least :length characters and contain at least one uppercase character, one number, and one special character.',
     ],
     'present' => 'The :attribute field must be present.',
     'prohibited' => 'The :attribute field is prohibited.',
