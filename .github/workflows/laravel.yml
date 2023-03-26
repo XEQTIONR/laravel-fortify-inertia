@@ -59,7 +59,7 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
           PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           IP: ${{ vars.IP_ADDR }}
-        uses: Creepios/sftp-action@v1.0.3
+        uses: wangyucode/sftp-upload-action@v2.0.2
         with:
           username: 'root'
           password: ''
@@ -69,7 +69,7 @@ jobs:
           remotePath: '/var/www/stripekart_dev'
           #sftp_only: true
           privateKey: ${{ secrets.SSH_KEY }}
-          privateKeyIsFile: false
+          #privateKeyIsFile: false
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
 #            ./ => /var/www/stripekart_dev/
