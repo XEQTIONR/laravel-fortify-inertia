@@ -61,7 +61,7 @@ jobs:
           IP: ${{ vars.IP_ADDR }}
         uses: Creepios/sftp-action@v1.0.3
         with:
-          server: '159.89.169.144'
+          host: '159.89.169.144'
           username: 'root'
           password: '',
           privateKey: ${{ secrets.SSH_KEY }}
