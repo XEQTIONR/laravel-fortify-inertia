@@ -25,7 +25,7 @@ jobs:
         env:
           KEY: ${{ secrets.SSH_KEY }}
           PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
-          IP: ${{ env.IP_ADDR }}
+          IP: ${{ vars.IP_ADDR }}
 
 #      - name: Copy .env
 #        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
