@@ -67,7 +67,7 @@ jobs:
           privateKey: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
-          localPath: '.'
+          localPath: './'
           remotePath: '/var/www/stripekart_dev'
 #          uploads: |
 #            ./ => /var/www/stripekart_dev/
