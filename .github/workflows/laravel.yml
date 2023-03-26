@@ -52,8 +52,8 @@ jobs:
           outPath: vendor.tar.gz
       - name: Remove vendor dir
         run: rm -R vendor
-      - name: Remove node_modules.dir
-        run: rm -R node_modules
+#      - name: Remove node_modules.dir
+#        run: rm -R node_modules
       - name: Upload to server
         env:
           KEY: ${{ secrets.SSH_KEY }}
