@@ -59,16 +59,17 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
           PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           IP: ${{ vars.IP_ADDR }}
-        uses: wangyucode/sftp-upload-action@v2.0.2
+        uses: swillner/sftp-sync-action@v1.0
         with:
-          username: 'root'
+          user: 'root'
           password: ''
-          host: ${{ vars.IP_ADDR }}
+          server: ${{ vars.IP_ADDR }}
           port: 22
-          localDir: './'
-          remoteDir: '/var/www/stripekart_dev'
+          local: './'
+          remote: '/var/www/stripekart_dev'
           #sftp_only: true
-          privateKey: ${{ secrets.SSH_KEY }}
+          user_private_key: ${{ secrets.SSH_KEY }}
+          host_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
           #privateKeyIsFile: false
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
