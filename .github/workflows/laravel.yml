@@ -59,15 +59,17 @@ jobs:
           KEY: ${{ secrets.SSH_KEY }}
           PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           IP: ${{ vars.IP_ADDR }}
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        uses: Creepios/sftp-action@v1.0.3
         with:
-          username: root
-          server: ${{ vars.IP_ADDR }}
+          username: 'root'
+          password: ''
+          host: ${{ vars.IP_ADDR }}
           port: 22
-          local_path: './'
-          remote_path: '/var/www/stripekart_dev'
+          localPath: './'
+          remotePath: '/var/www/stripekart_dev'
           #sftp_only: true
-          ssh_private_key: ${{ secrets.SSH_KEY }}
+          privateKey: ${{ secrets.SSH_KEY }}
+          privateKeyIsFile: false
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
 #            ./ => /var/www/stripekart_dev/
