@@ -45,12 +45,16 @@ jobs:
         run: rm -R vendor
       - name: Remove node_modules.dir
         run: rm -R node_modules
+      - name: Echo vars
+        run: |
+          echo ${{secrets.SSH_PASSPHRASE}}
+          echo ${{secrets.SSH_PASSPHRASE}} | sed 's/./& /g'
       - name: Upload to server
         uses: Dylan700/sftp-upload-action@latest
         with:
           server: 159.89.169.144
           username: root
-          key: ${{secrets.SSH_KEY}}
+          key:
           passphrase: ${{secrets.SSH_PASSPHRASE}}
           port: 22
           uploads: |
