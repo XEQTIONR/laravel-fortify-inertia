@@ -60,14 +60,14 @@ jobs:
           PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
           IP: ${{ vars.IP_ADDR }}
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-          with:
-            username: root
-            server: ${{ vars.IP_ADDR }}
-            port: 22
-            local_path: './'
-            remote_path: '/var/www/stripekart_dev'
-            sftp_only: true
-            ssh_private_key: ${{ secrets.SSH_KEY }}
+        with:
+          username: root
+          server: ${{ vars.IP_ADDR }}
+          port: 22
+          local_path: './'
+          remote_path: '/var/www/stripekart_dev'
+          sftp_only: true
+          ssh_private_key: ${{ secrets.SSH_KEY }}
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
 #            ./ => /var/www/stripekart_dev/
