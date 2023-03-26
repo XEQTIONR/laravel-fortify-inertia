@@ -28,8 +28,8 @@ jobs:
 #          IP: ${{ vars.IP_ADDR }}
 #      - name: Copy .env
 #        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-#      - name: Install Dependencies
-#        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 #      - name: Generate key
 #        run: php artisan key:generate
 #      - name: Directory Permissions
@@ -41,19 +41,19 @@ jobs:
 #        run: npm ci
 #      - name: NPM run build
 #        run: npm run build
-#      - name: Compress vendor files
-#        uses: a7ul/tar-action@v1.1.0
-#        id: compress
-#        with:
-#          command: c
-#          cwd: ./
-#          files: |
-#            ./vendor
-#          outPath: vendor.tar.gz
-#      - name: Remove vendor dir
-#        run: rm -R vendor
-#      - name: Remove node_modules.dir
-#        run: rm -R node_modules
+      - name: Compress vendor files
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: ./
+          files: |
+            ./vendor
+          outPath: vendor.tar.gz
+      - name: Remove vendor dir
+        run: rm -R vendor
+      - name: Remove node_modules.dir
+        run: rm -R node_modules
       - name: Upload to server
         env:
           KEY: ${{ secrets.SSH_KEY }}
@@ -66,13 +66,7 @@ jobs:
           port: 22
           local_path: './'
           remote_path: '/var/www/stripekart_dev'
-          #sftp_only: true
           ssh_private_key: ${{ secrets.SSH_KEY }}
-#          host_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
-          #privateKeyIsFile: false
-            #password: ${{ secrets.FTP_PASSWORD }}
-#          uploads: |
-#            ./ => /var/www/stripekart_dev/
 
 
 #      - name: Create Database
