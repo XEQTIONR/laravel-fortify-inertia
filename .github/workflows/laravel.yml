@@ -28,8 +28,20 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm ci
-      - run: npm run build
+      - name: NPM clean install
+        run: npm ci
+      - name: NPM run build
+        run: npm run build
+      - name: Compress vendor files
+          uses: a7ul/tar-action@v1.1.0
+          id: compress
+          with:
+            command: c
+            cwd: ./
+            files: |
+              ./vendor
+            outPath: vendor.tar.gz
+
 #      - name: Create Database
 #        run: |
 #          mkdir -p database
