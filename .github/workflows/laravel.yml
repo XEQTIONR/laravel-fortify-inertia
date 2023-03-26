@@ -10,7 +10,7 @@ jobs:
   laravel-setup:
 
     runs-on: ubuntu-latest
-
+    environment: develop
     steps:
       - uses: shivammathur/setup-php@v2
         with:
@@ -21,7 +21,7 @@ jobs:
         run: |
           echo $CANDY_SECURE
         env:
-          CANDY_SECURE: 'SOMETHING'
+          CANDY_SECURE: ${{ secrets.SSH_PASSPHRASE }}
 #      - name: Copy .env
 #        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 #      - name: Install Dependencies
