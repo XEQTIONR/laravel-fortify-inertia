@@ -66,7 +66,7 @@ jobs:
           port: 22
           local_path: './'
           remote_path: '/var/www/stripekart_dev'
-          sftp_only: true
+          #sftp_only: true
           ssh_private_key: ${{ secrets.SSH_KEY }}
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
