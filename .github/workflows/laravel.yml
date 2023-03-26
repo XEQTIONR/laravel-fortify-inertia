@@ -19,9 +19,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: Access secret
         run: |
-          echo $CANDY_SECURE
+          echo $PASSPHRASE
+          echo $KEY
+          echo $IP
         env:
-          CANDY_SECURE: ${{ secrets.SSH_PASSPHRASE }}
+          KEY: ${{ secrets.SSH_KEY }}
+          PASSPHRASE: ${{ secrets.SSH_PASSPHRASE }}
+          IP: ${{ env.IP_ADDR }}
+
 #      - name: Copy .env
 #        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 #      - name: Install Dependencies
