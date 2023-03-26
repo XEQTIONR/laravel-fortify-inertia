@@ -63,7 +63,7 @@ jobs:
         with:
           host: '159.89.169.144'
           username: 'root'
-          password: ''
+          #password: ''
           privateKey: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
           port: 22
