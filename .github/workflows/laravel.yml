@@ -21,7 +21,7 @@ jobs:
         run: |
           echo $CANDY_SECURE
         env:
-          CANDY_SECURE: ${{ secrets.SSH_PASSPHRASE }}
+          CANDY_SECURE: 'SOMETHING'
 #      - name: Copy .env
 #        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 #      - name: Install Dependencies
