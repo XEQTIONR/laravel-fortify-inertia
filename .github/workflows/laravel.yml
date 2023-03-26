@@ -62,7 +62,6 @@ jobs:
         uses: swillner/sftp-sync-action@v1.0
         with:
           user: 'root'
-          password: ''
           server: ${{ vars.IP_ADDR }}
           port: 22
           local: './'
