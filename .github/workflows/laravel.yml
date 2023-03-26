@@ -65,8 +65,8 @@ jobs:
           password: ''
           host: ${{ vars.IP_ADDR }}
           port: 22
-          localPath: './'
-          remotePath: '/var/www/stripekart_dev'
+          localDir: './'
+          remoteDir: '/var/www/stripekart_dev'
           #sftp_only: true
           privateKey: ${{ secrets.SSH_KEY }}
           #privateKeyIsFile: false
