@@ -45,6 +45,17 @@ jobs:
         run: rm -R vendor
       - name: Remove node_modules.dir
         run: rm -R node_modules
+      - name: Upload to server
+        uses: Dylan700/sftp-upload-action@latest
+        with:
+          server: 159.89.169.144
+          username: root
+          key: ${{secrets.SSH_KEY}}
+          passphrase: ${{secrets.SSH_PASSPHRASE}}
+          port: 22
+          uploads: |
+            ./ => /var/www/stripekart_dev/
+
 
 #      - name: Create Database
 #        run: |
