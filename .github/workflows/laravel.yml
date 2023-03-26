@@ -33,14 +33,14 @@ jobs:
       - name: NPM run build
         run: npm run build
       - name: Compress vendor files
-          uses: a7ul/tar-action@v1.1.0
-          id: compress
-          with:
-            command: c
-            cwd: ./
-            files: |
-              ./vendor
-            outPath: vendor.tar.gz
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: ./
+          files: |
+            ./vendor
+          outPath: vendor.tar.gz
 
 #      - name: Create Database
 #        run: |
