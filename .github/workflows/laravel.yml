@@ -68,7 +68,7 @@ jobs:
           remote_path: '/var/www/stripekart_dev'
           #sftp_only: true
           ssh_private_key: ${{ secrets.SSH_KEY }}
-          host_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
+#          host_public_key: ${{ secrets.SSH_PUBLIC_KEY }}
           #privateKeyIsFile: false
             #password: ${{ secrets.FTP_PASSWORD }}
 #          uploads: |
