@@ -201,7 +201,7 @@ export default function CreateOrder({addresses, categories, paymentConfig, shopp
                             { trans('labels.Service charge') }
                         </Typography>
                         <Box className="flex justify-end items-center">
-                            <x align="center" className="font-bold mr-1">৳ </x>
+                            <GreenFont align="center" className="font-bold mr-1">৳ </GreenFont>
                             <Typography align="center" className="font-bold">
                                 {serviceCharge()}
                             </Typography>
