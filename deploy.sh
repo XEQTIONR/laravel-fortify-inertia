@@ -1,6 +1,5 @@
 #! /bin/bash
 
-cd /var/www/stripekart_dev
 tar -xf vendor.tar.gz
 rm vendor.tar.gz
 
