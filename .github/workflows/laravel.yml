@@ -23,6 +23,8 @@ jobs:
         run: php artisan route:cache
       - name: Cache views
         run: php artisan view:cache
+      - name: Config cache
+        run: php artisan config:cache
       - uses: actions/setup-node@v3
         with:
           node-version: 16
