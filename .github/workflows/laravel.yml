@@ -60,7 +60,8 @@ jobs:
           port: 22
           script: |
             cd /var/www/stripekart_dev
-            ls -la | grep "deploy.sh"
+            chmod 755 deploy.sh
+            ./deploy.sh
 
 
 #      - name: Create Database
