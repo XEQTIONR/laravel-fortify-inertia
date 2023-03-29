@@ -12,45 +12,45 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     steps:
-#      - uses: shivammathur/setup-php@v2
-#        with:
-#          php-version: '8.1'
-#          extensions: bcmath
-#      - uses: actions/checkout@v3
-#      - name: Install Dependencies
-#        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --no-dev
-#      - uses: actions/setup-node@v3
-#        with:
-#          node-version: 16
-#      - name: NPM clean install
-#        run: npm ci
-#      - name: NPM run build
-#        run: npm run build
-#      - name: Compress vendor files
-#        uses: a7ul/tar-action@v1.1.0
-#        id: compress
-#        with:
-#          command: c
-#          cwd: ./
-#          files: |
-#            ./vendor
-#          outPath: vendor.tar.gz
-#      - name: Remove vendor dir
-#        run: rm -R vendor
-#      - name: Remove node_modules.dir
-#        run: rm -R node_modules
-#      - name: Upload to server
-#        env:
-#          KEY: ${{ secrets.SSH_KEY }}
-#          IP: ${{ vars.IP_ADDR }}
-#        uses: ChenjxJames/SFTP-Deploy-Action@v1.3.2
-#        with:
-#          username: 'root'
-#          server: ${{ vars.IP_ADDR }}
-#          port: 22
-#          local_path: './'
-#          remote_path: '/var/www/stripekart_dev'
-#          ssh_private_key: ${{ secrets.SSH_KEY }}
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: bcmath
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader --no-dev
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: NPM clean install
+        run: npm ci
+      - name: NPM run build
+        run: npm run build
+      - name: Compress vendor files
+        uses: a7ul/tar-action@v1.1.0
+        id: compress
+        with:
+          command: c
+          cwd: ./
+          files: |
+            ./vendor
+          outPath: vendor.tar.gz
+      - name: Remove vendor dir
+        run: rm -R vendor
+      - name: Remove node_modules.dir
+        run: rm -R node_modules
+      - name: Upload to server
+        env:
+          KEY: ${{ secrets.SSH_KEY }}
+          IP: ${{ vars.IP_ADDR }}
+        uses: ChenjxJames/SFTP-Deploy-Action@v1.3.2
+        with:
+          username: 'root'
+          server: ${{ vars.IP_ADDR }}
+          port: 22
+          local_path: './'
+          remote_path: '/var/www/stripekart_dev'
+          ssh_private_key: ${{ secrets.SSH_KEY }}
       - name: Run build script
         uses: appleboy/ssh-action@v0.1.8
         with:
