@@ -35,7 +35,7 @@ import {
     Visibility,
 } from "@mui/icons-material";
 import usePaginate from '@/hooks/usePaginate';
-import * as moment from 'moment';
+import moment from 'moment';
 
 const HTTP_CREATED = 201;
 const HTTP_OK = 200;

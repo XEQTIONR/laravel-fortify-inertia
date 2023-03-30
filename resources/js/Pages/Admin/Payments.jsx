@@ -3,7 +3,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Nav from '@/Components/Admin/Nav';
 import navItems from  '@/Components/data/AdminNavItems';
 import { DataGrid } from '@mui/x-data-grid';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import usePaginate from '@/hooks/usePaginate';
 import { Box, Fab, Tooltip } from "@mui/material";

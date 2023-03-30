@@ -5,7 +5,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { Add, CheckCircle, Cancel, Edit, ToggleOn, ToggleOff } from "@mui/icons-material";
 import { Alert, AlertTitle, Box, Fab, Tooltip, Snackbar } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid';
-import * as moment from 'moment';
+import moment from 'moment';
 
 import usePaginate from '@/hooks/usePaginate';
 import { usePage } from "@inertiajs/inertia-react";

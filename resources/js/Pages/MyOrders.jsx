@@ -2,7 +2,7 @@ import React, { useEffect, useState }  from 'react';
 import { Inertia } from '@inertiajs/inertia';
 import Cookies from 'js-cookie'
 import Nav from '@/Components/Nav';
-import * as moment from 'moment';
+import moment from 'moment';
 import {
     Box,
     IconButton,

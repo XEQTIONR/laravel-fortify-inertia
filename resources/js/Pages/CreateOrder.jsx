@@ -3,7 +3,7 @@ import { usePage } from '@inertiajs/inertia-react';
 import { useForm, Link } from '@inertiajs/inertia-react';
 import Nav from '@/Components/Nav';
 import useInput from '@/hooks/useInput';
-import * as moment from 'moment';
+import moment from 'moment';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
